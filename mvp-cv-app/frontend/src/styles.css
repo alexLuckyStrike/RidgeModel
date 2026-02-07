@@ -1,0 +1,13 @@
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:#0b1020;color:#e9ecf1}
+.container{max-width:1100px;margin:0 auto;padding:24px}
+.card{background:#101a33;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px;margin-bottom:14px}
+.btn{background:#2a7fff;border:0;color:white;padding:10px 14px;border-radius:12px;font-weight:600;cursor:pointer}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.zone{border:1px dashed rgba(255,255,255,.25);border-radius:12px;padding:14px;min-height:86px;display:flex;flex-direction:column;gap:8px;justify-content:center}
+.zone.drag{background:rgba(42,127,255,.12);border-color:rgba(42,127,255,.8)}
+.row{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:900px){.row{grid-template-columns:1fr 1fr}}
+.thumb{max-width:100%;border-radius:10px;border:1px solid rgba(255,255,255,.12)}
+.table{width:100%;border-collapse:collapse;font-size:13px}
+.table th,.table td{border-bottom:1px solid rgba(255,255,255,.10);padding:8px;vertical-align:top}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;background:rgba(255,255,255,.10);font-size:12px}
