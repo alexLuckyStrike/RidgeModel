@@ -1,0 +1,25 @@
+{
+  "name": "powerlift-model-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev --port 3000",
+    "build": "nuxt build",
+    "preview": "nuxt preview --port 3000"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.1",
+    "dompurify": "^3.0.11",
+    "markdown-it": "^14.1.0",
+    "nuxt": "^3.12.0",
+    "powerlift-load-model": "file:..",
+    "vue": "^3.4.0",
+    "vue-router": "^4.4.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "sass": "^1.77.8",
+    "typescript": "^5.5.4"
+  }
+}

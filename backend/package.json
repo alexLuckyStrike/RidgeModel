@@ -1,0 +1,15 @@
+{
+  "name": "powerlift-backend",
+  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "node index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "powerlift-load-model": "file:.."
+  }
+}
