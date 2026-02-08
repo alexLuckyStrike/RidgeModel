@@ -118,11 +118,339 @@
           </div>
           <div class="mt-3 flex gap-2 flex-wrap">
             <NuxtLink class="px-3 py-2 rounded-xl border hover:bg-slate-50 text-sm" to="/markers">Маркеры</NuxtLink>
-            <NuxtLink class="px-3 py-2 rounded-xl border hover:bg-slate-50 text-sm" to="/models">Модели</NuxtLink>
+            <NuxtLink class="px-3 py-2 rounded-xl border hover:bg-сlate-50 text-sm" to="/models">Модели</NuxtLink>
             <NuxtLink class="px-3 py-2 rounded-xl border hover:bg-slate-50 text-sm" to="/regression">Логарифмическая регрессия</NuxtLink>
             <NuxtLink class="px-3 py-2 rounded-xl border hover:bg-slate-50 text-sm" to="/algorithm">Алгоритм размышлений</NuxtLink>
           </div>
         </UiCard>
+      </div>
+
+      <div class="rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+        <button
+          type="button"
+          class="flex w-full items-center justify-between gap-3 px-6 py-5 text-left transition hover:bg-slate-50"
+          @click="toggleMvp"
+        >
+          <div>
+            <div class="text-lg font-semibold text-slate-900">MVP 0.1 — Индикаторные полоски</div>
+            <p class="mt-1 text-sm text-slate-600">
+              Загрузите шкалы, фото полосок и описание нагрузки, чтобы автоматически распознать цвета и текст.
+            </p>
+          </div>
+          <span class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white">
+            <svg
+              class="h-5 w-5 text-slate-600 transition-transform duration-300"
+              :class="mvpCollapsed ? '' : 'rotate-180'"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 9л6 6 6-6" />
+            </svg>
+          </span>
+        </button>
+        <transition name="mvp-collapse">
+          <div v-show="!mvpCollapsed" class="border-t border-slate-100 bg-slate-50/60 overflow-hidden">
+            <div class="space-y-6 px-6 py-6">
+              <div class="grid gap-6 lg:grid-cols-2 xl:grid-cols-4">
+                <div class="rounded-2xl border border-slate-200 bg-white p-5">
+                  <h3 class="text-base font-semibold text-slate-900">Эталоны (шкалы)</h3>
+                  <p class="mt-1 text-sm text-slate-600">Фотографии эталонных шкал для полосок.</p>
+                  <div class="mt-4 space-y-4">
+                    <label class="block">
+                      <input class="hidden" type="file" accept="image/*" @change="handleMvpFileChange($event, 'scale2')" />
+                      <div class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 bg-slate-50/60 px-4 py-6 text-center transition hover:border-slate-400 hover:bg-slate-100">
+                        <span class="text-base font-medium text-slate-800">Шкала ×2</span>
+                        <span class="text-xs text-slate-500">Нажмите, чтобы выбрать фото</span>
+                      </div>
+                    </label>
+                    <div v-if="mvpFiles.scale2" class="grid grid-cols-1 gap-3">
+                      <div class="relative overflow-hidden rounded-xl border border-slate-200">
+                        <img :src="mvpFiles.scale2.url" :alt="mvpFiles.scale2.name" class="h-32 w-full object-cover" />
+                        <button
+                          type="button"
+                          class="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-slate-600 shadow"
+                          @click.stop="removeMvpFile('scale2')"
+                        >
+                          <span class="sr-only">Удалить изображение</span>
+                          ×
+                        </button>
+                      </div>
+                    </div>
+
+                    <label class="block">
+                      <input class="hidden" type="file" accept="image/*" @change="handleMvpFileChange($event, 'scale5')" />
+                      <div class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 bg-slate-50/60 px-4 py-6 text-center transition hover:border-slate-400 hover:bg-slate-100">
+                        <span class="text-base font-medium text-slate-800">Шкала ×5</span>
+                        <span class="text-xs text-slate-500">Нажмите, чтобы выбрать фото</span>
+                      </div>
+                    </label>
+                    <div v-if="mvpFiles.scale5" class="grid grid-cols-1 gap-3">
+                      <div class="relative overflow-hidden rounded-xl border border-slate-200">
+                        <img :src="mvpFiles.scale5.url" :alt="mvpFiles.scale5.name" class="h-32 w-full object-cover" />
+                        <button
+                          type="button"
+                          class="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-slate-600 shadow"
+                          @click.stop="removeMvpFile('scale5')"
+                        >
+                          <span class="sr-only">Удалить изображение</span>
+                          ×
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 bg-white p-5">
+                  <h3 class="text-base font-semibold text-slate-900">Покой</h3>
+                  <p class="mt-1 text-sm text-slate-600">Полоски с 2 зонами, снятые в состоянии покоя.</p>
+                  <label class="mt-4 block">
+                    <input class="hidden" type="file" accept="image/*" multiple @change="handleMvpFileChange($event, 'rest2')" />
+                    <div class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 bg-slate-50/60 px-4 py-6 text-center transition hover:border-slate-400 hover:bg-slate-100">
+                      <span class="text-base font-medium text-slate-800">Добавить полоски ×2</span>
+                      <span class="text-xs text-slate-500">Можно выбрать несколько изображений</span>
+                    </div>
+                  </label>
+                  <p v-if="mvpFiles.rest2.length" class="mt-2 text-xs text-slate-500">
+                    Загружено: {{ mvpFiles.rest2.length }}
+                  </p>
+                  <div v-if="mvpFiles.rest2.length" class="mt-4 grid grid-cols-2 gap-3">
+                    <div v-for="item in mvpFiles.rest2" :key="item.id" class="relative overflow-hidden rounded-xl border border-slate-200">
+                      <img :src="item.url" :alt="item.name" class="h-28 w-full object-cover" />
+                      <button
+                        type="button"
+                        class="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-slate-600 shadow"
+                        @click.stop="removeMvpFile('rest2', item.id)"
+                      >
+                        <span class="sr-only">Удалить изображение</span>
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 bg-white p-5">
+                  <h3 class="text-base font-semibold text-slate-900">После нагрузки</h3>
+                  <p class="mt-1 text-sm text-slate-600">Полоски с 5 зонами после физической нагрузки.</p>
+                  <label class="mt-4 block">
+                    <input class="hidden" type="file" accept="image/*" multiple @change="handleMvpFileChange($event, 'load5')" />
+                    <div class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 bg-slate-50/60 px-4 py-6 text-center transition hover:border-slate-400 hover:bg-slate-100">
+                      <span class="text-base.font-medium text-slate-800">Добавить полоски ×5</span>
+                      <span class="text-xs text-slate-500">Можно выбрать несколько изображений</span>
+                    </div>
+                  </label>
+                  <p v-if="mvpFiles.load5.length" class="mt-2 text-xs text-slate-500">
+                    Загружено: {{ mvpFiles.load5.length }}
+                  </p>
+                  <div v-if="mvpFiles.load5.length" class="mt-4 grid grid-cols-2 gap-3">
+                    <div v-for="item in mvpFiles.load5" :key="item.id" class="relative overflow-hidden rounded-xl border border-slate-200">
+                      <img :src="item.url" :alt="item.name" class="h-28 w-full object-cover" />
+                      <button
+                        type="button"
+                        class="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-slate-600 shadow"
+                        @click.stop="removeMvpFile('load5', item.id)"
+                      >
+                        <span class="sr-only">Удалить изображение</span>
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 bg-white p-5">
+                  <h3 class="text-base font-semibold text-slate-900">Нагрузка (контекст)</h3>
+                  <p class="mt-1 text-sm text-slate-600">Фото выполнения и текстовая схема тренировки.</p>
+                  <div class="mt-4 space-y-4">
+                    <label class="block">
+                      <input class="hidden" type="file" accept="image/*" @change="handleMvpFileChange($event, 'workoutPhoto')" />
+                      <div class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 bg-slate-50/60 px-4 py-6 text-center transition hover:border-slate-400 hover:bg-slate-100">
+                        <span class="text-base font-medium text-slate-800">Фото нагрузки</span>
+                        <span class="text-xs text-slate-500">Например, выполнение упражнения</span>
+                      </div>
+                    </label>
+                    <div v-if="mvpFiles.workoutPhoto" class="grid grid-cols-1 gap-3">
+                      <div class="relative overflow-hidden rounded-xl border border-slate-200">
+                        <img :src="mvpFiles.workoutPhoto.url" :alt="mvpFiles.workoutPhoto.name" class="h-32 w-full object-cover" />
+                        <button
+                          type="button"
+                          class="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-slate-600 shadow"
+                          @click.stop="removeMvpFile('workoutPhoto')"
+                        >
+                          <span class="sr-only">Удалить изображение</span>
+                          ×
+                        </button>
+                      </div>
+                    </div>
+
+                    <label class="block">
+                      <input class="hidden" type="file" accept="image/*" @change="handleMvpFileChange($event, 'workoutText')" />
+                      <div class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 bg-slate-50/60 px-4 py-6 text-center transition hover:border-slate-400 hover:bg-slate-100">
+                        <span class="text-base font-medium text-slate-800">Фото с текстом (OCR)</span>
+                        <span class="text-xs text-slate-500">Схема тренировки, заметки, правила</span>
+                      </div>
+                    </label>
+                    <div v-if="mvpFiles.workoutText" class="grid grid-cols-1 gap-3">
+                      <div class="relative overflow-hidden rounded-xl border border-slate-200">
+                        <img :src="mvpFiles.workoutText.url" :alt="mvpFiles.workoutText.name" class="h-32 w-full object-cover" />
+                        <button
+                          type="button"
+                          class="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-slate-600 shadow"
+                          @click.stop="removeMvpFile('workoutText')"
+                        >
+                          <span class="sr-only">Удалить изображение</span>
+                          ×
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex flex-col items-center gap-4">
+                <button
+                  type="button"
+                  class="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
+                  :disabled="!hasMvpFiles || mvpLoading"
+                  @click="analyzeMvp"
+                >
+                  <span
+                    v-if="mvpLoading"
+                    class="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
+                  />
+                  <span>{{ mvpLoading ? 'Анализируем...' : 'Запустить анализ' }}</span>
+                </button>
+                <p class="text-center text-xs text-slate-500">
+                  Поддерживаются изображения JPG, PNG, HEIC до 10 МБ.
+                </p>
+              </div>
+
+              <div v-if="mvpError" class="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">
+                {{ mvpError }}
+              </div>
+
+              <div v-if="mvpResult" class="space-y-6">
+                <div
+                  v-if="Array.isArray(mvpResult.medical_tests) && mvpResult.medical_tests.length"
+                  class="space-y-4"
+                >
+                  <div class="text-base font-semibold text-slate-900">Результаты тест-полосок</div>
+                  <div
+                    v-for="(test, index) in mvpResult.medical_tests"
+                    :key="`medical-${index}`"
+                    class="rounded-2xl border border-slate-200 bg-white p-5"
+                  >
+                    <div class="flex items-center justify-between gap-3">
+                      <div class="font-medium text-slate-900">Полоска {{ index + 1 }}</div>
+                      <div v-if="test?.type" class="text-xs uppercase tracking-wide text-slate-500">{{ test.type }}</div>
+                    </div>
+                    <div class="mt-4 overflow-x-auto">
+                      <table class="min-w-full text-sm">
+                        <thead>
+                          <tr class="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
+                            <th class="px-3 py-2 font-medium">Параметр</th>
+                            <th class="px-3 py-2.font-medium">Значение</th>
+                            <th class="px-3 py-2 font-medium">Единицы</th>
+                            <th class="px-3 py-2 font-medium">Статус</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr
+                            v-for="(value, paramKey) in test?.parameters"
+                            :key="paramKey"
+                            class="border-t"
+                          >
+                            <td class="px-3 py-2 font-medium capitalize text-slate-700">{{ paramKey }}</td>
+                            <td class="px-3 py-2 text-slate-900">{{ value?.value ?? '—' }}</td>
+                            <td class="px-3 py-2 text-slate-600">{{ value?.unit ?? '—' }}</td>
+                            <td class="px-3 py-2">
+                              <span
+                                v-if="value?.status"
+                                :class="[
+                                  'inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium',
+                                  value.status === 'норма' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700',
+                                ]"
+                              >
+                                <span
+                                  class="h-2 w-2 rounded-full"
+                                  :class="value.status === 'норма' ? 'bg-emerald-400' : 'bg-amber-400'"
+                                />
+                                {{ value.status }}
+                              </span>
+                              <span v-else class="text-xs text-slate-500">—</span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  v-if="mvpResult.workout"
+                  class="space-y-4 rounded-2xl border border-slate-200 bg-white p-5"
+                >
+                  <div>
+                    <div class="text-base font-semibold text-slate-900">Распознанная тренировка</div>
+                    <p v-if="mvpResult.workout.name" class="mt-1 text-sm text-slate-600">
+                      {{ mvpResult.workout.name }}
+                    </p>
+                    <p v-if="mvpResult.workout.type" class="text-xs uppercase tracking-wide text-slate-500">
+                      {{ mvpResult.workout.type }}
+                    </p>
+                  </div>
+                  <div
+                    v-if="Array.isArray(mvpResult.workout.exercises) && mvpResult.workout.exercises.length"
+                    class="space-y-2"
+                  >
+                    <div
+                      v-for="(exercise, idx) in mvpResult.workout.exercises"
+                      :key="`exercise-${idx}`"
+                      class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3"
+                    >
+                      <div class="flex items-start justify-between gap-3">
+                        <div>
+                          <div class="text-sm font-semibold text-slate-900">{{ exercise?.name }}</div>
+                          <div v-if="exercise?.minute" class="text-xs text-slate-500">
+                            Минута {{ exercise.minute }}
+                          </div>
+                        </div>
+                        <div class="text-sm text-slate-700">
+                          <span v-if="exercise?.reps">{{ exercise.reps }}</span>
+                          <span v-if="exercise?.unit" class="ml-1 text-xs uppercase text-slate-500">
+                            {{ exercise.unit }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    v-if="Array.isArray(mvpResult.workout.notes) && mvpResult.workout.notes.length"
+                    class="rounded-xl border border-dashed border-slate-300 bg-white px-4 py-3"
+                  >
+                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Примечания</div>
+                    <ul class="mt-2 list-disc space-y-1 pl-4 text-sm text-slate-600">
+                      <li v-for="(note, idx) in mvpResult.workout.notes" :key="`note-${idx}`">
+                        {{ note }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div
+                  v-if="Array.isArray(mvpResult.notes) && mvpResult.notes.length"
+                  class="rounded-2xl border border-dashed border-slate-300 bg-white p-5"
+                >
+                  <div class="text-sm font-semibold.uppercase tracking-wide text-slate-500">Дополнительно</div>
+                  <ul class="mt-3 list-disc space-y-1 pl-4 text-sm text-slate-600">
+                    <li v-for="(note, idx) in mvpResult.notes" :key="`extra-note-${idx}`">
+                      {{ note }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </transition>
       </div>
     </section>
 
@@ -293,7 +621,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import UiCard from '~/components/UiCard.vue'
 import Field from '~/components/UiField.vue'
 import Chart from 'chart.js/auto'
@@ -788,6 +1116,248 @@ const uid = () => {
   }
 }
 
+const MVP_COLLAPSE_KEY = 'planner:mvp-collapsed'
+const MVP_MAX_FILE_SIZE = 10 * 1024 * 1024
+const MVP_MAX_FILE_SIZE_MB = 10
+
+type MvpPreview = {
+  id: string
+  file: File
+  url: string
+  name: string
+  size: number
+}
+
+type MvpSingleKey = 'scale2' | 'scale5' | 'workoutPhoto' | 'workoutText'
+type MvpMultiKey = 'rest2' | 'load5'
+type MvpKey = MvpSingleKey | MvpMultiKey
+
+type MvpTestParameter = {
+  value?: number | string
+  unit?: string
+  status?: string
+}
+
+type MvpMedicalTest = {
+  type?: string
+  parameters?: Record<string, MvpTestParameter>
+}
+
+type MvpWorkoutExercise = {
+  minute?: number | string
+  name?: string
+  reps?: number | string
+  unit?: string
+}
+
+type MvpWorkoutResult = {
+  name?: string
+  type?: string
+  exercises?: MvpWorkoutExercise[]
+  notes?: string[]
+}
+
+type MvpAnalysisResult = {
+  status?: string
+  message?: string
+  error?: string
+  notes?: string[]
+  medical_tests?: MvpMedicalTest[]
+  workout?: MvpWorkoutResult
+}
+
+const mvpCollapsed = ref(true)
+const mvpLoading = ref(false)
+const mvpError = ref<string | null>(null)
+const mvpResult = ref<MvpAnalysisResult | null>(null)
+
+const mvpFiles = reactive<{
+  scale2: MvpPreview | null
+  scale5: MvpPreview | null
+  rest2: MvpPreview[]
+  load5: MvpPreview[]
+  workoutPhoto: MvpPreview | null
+  workoutText: MvpPreview | null
+}>({
+  scale2: null,
+  scale5: null,
+  rest2: [],
+  load5: [],
+  workoutPhoto: null,
+  workoutText: null,
+})
+
+const hasMvpFiles = computed(() => {
+  return Boolean(
+    mvpFiles.scale2 ||
+      mvpFiles.scale5 ||
+      mvpFiles.workoutPhoto ||
+      mvpFiles.workoutText ||
+      mvpFiles.rest2.length ||
+      mvpFiles.load5.length
+  )
+})
+
+const toggleMvp = () => {
+  mvpCollapsed.value = !mvpCollapsed.value
+}
+
+const createMvpPreview = (file: File): MvpPreview => ({
+  id: uid(),
+  file,
+  url: process.client ? URL.createObjectURL(file) : '',
+  name: file.name,
+  size: file.size,
+})
+
+const revokeMvpPreview = (preview: MvpPreview | null) => {
+  if (!process.client || !preview?.url) return
+  URL.revokeObjectURL(preview.url)
+}
+
+const handleMvpFileChange = (event: Event, key: MvpKey) => {
+  if (!process.client) return
+  const input = event.target as HTMLInputElement | null
+  if (!input?.files?.length) return
+
+  if (!mvpLoading.value) {
+    mvpError.value = null
+  }
+
+  const selectedFiles = Array.from(input.files)
+  const oversize = selectedFiles.filter((file) => file.size > MVP_MAX_FILE_SIZE)
+  const validFiles = selectedFiles.filter((file) => file.size <= MVP_MAX_FILE_SIZE)
+
+  if (oversize.length) {
+    const names = oversize.map((file) => `«${file.name}»`).join(', ')
+    mvpError.value = `Файлы ${names} превышают ${MVP_MAX_FILE_SIZE_MB} МБ и не были добавлены.`
+  }
+
+  if (!validFiles.length) {
+    input.value = ''
+    return
+  }
+
+  if (key === 'rest2' || key === 'load5') {
+    const list = mvpFiles[key]
+    validFiles.forEach((file) => {
+      list.push(createMvpPreview(file))
+    })
+  } else {
+    const singleKey = key as MvpSingleKey
+    const current = mvpFiles[singleKey]
+    if (current) revokeMvpPreview(current)
+    const [file] = validFiles
+    mvpFiles[singleKey] = file ? createMvpPreview(file) : null
+  }
+
+  input.value = ''
+}
+
+const removeMvpFile = (key: MvpKey, id?: string) => {
+  if (key === 'rest2' || key === 'load5') {
+    const list = mvpFiles[key]
+    const index = list.findIndex((item) => item.id === id)
+    if (index !== -1) {
+      const [removed] = list.splice(index, 1)
+      revokeMvpPreview(removed)
+    }
+    return
+  }
+
+  const singleKey = key as MvpSingleKey
+  const current = mvpFiles[singleKey]
+  if (current) {
+    revokeMvpPreview(current)
+    mvpFiles[singleKey] = null
+  }
+}
+
+const clearAllMvpPreviews = () => {
+  if (!process.client) return
+
+  ;(['scale2', 'scale5', 'workoutPhoto', 'workoutText'] as MvpSingleKey[]).forEach((singleKey) => {
+    const preview = mvpFiles[singleKey]
+    if (preview) revokeMvpPreview(preview)
+    mvpFiles[singleKey] = null
+  })
+
+  ;(['rest2', 'load5'] as MvpMultiKey[]).forEach((multiKey) => {
+    const list = mvpFiles[multiKey]
+    list.forEach((item) => revokeMvpPreview(item))
+    list.splice(0, list.length)
+  })
+}
+
+const analyzeMvp = async () => {
+  if (!hasMvpFiles.value || mvpLoading.value) return
+
+  const formData = new FormData()
+
+  if (mvpFiles.scale2) formData.append('scale2', mvpFiles.scale2.file)
+  if (mvpFiles.scale5) formData.append('scale5', mvpFiles.scale5.file)
+
+  mvpFiles.rest2.forEach((item, index) => {
+    formData.append(`rest2_${index}`, item.file)
+  })
+
+  mvpFiles.load5.forEach((item, index) => {
+    formData.append(`load5_${index}`, item.file)
+  })
+
+  if (mvpFiles.workoutPhoto) formData.append('workout_photo', mvpFiles.workoutPhoto.file)
+  if (mvpFiles.workoutText) formData.append('workout_text', mvpFiles.workoutText.file)
+
+  mvpLoading.value = true
+  mvpError.value = null
+  mvpResult.value = null
+
+  try {
+    const response = await fetch('/api/cv-analyze', {
+      method: 'POST',
+      body: formData,
+    })
+
+    if (!response.ok) {
+      let message = 'Не удалось выполнить анализ. Попробуйте ещё раз.'
+      try {
+        const errorPayload = await response.json()
+        message = errorPayload?.message || errorPayload?.error || message
+      } catch {
+        const text = await response.text()
+        if (text) message = text
+      }
+      throw new Error(message)
+    }
+
+    const payload = await response.json()
+
+    if (payload?.status === 'error' || payload?.error) {
+      mvpError.value = payload.message || payload.error || 'Сервис вернул ошибку анализа.'
+      return
+    }
+
+    if (payload && typeof payload === 'object') {
+      mvpResult.value = payload as MvpAnalysisResult
+    } else {
+      mvpError.value = 'Сервис вернул пустой ответ.'
+    }
+  } catch (error) {
+    mvpError.value = error instanceof Error ? error.message : 'Произошла неизвестная ошибка анализа.'
+  } finally {
+    mvpLoading.value = false
+  }
+}
+
+watch(mvpCollapsed, (value) => {
+  if (!process.client) return
+  localStorage.setItem(MVP_COLLAPSE_KEY, value ? 'true' : 'false')
+})
+
+onBeforeUnmount(() => {
+  clearAllMvpPreviews()
+})
+
 const buildPlan = (variantId: PlanVariantId): Plan | null => {
   const base = baseline.value
   const total = planWeeks.value
@@ -1062,6 +1632,15 @@ const exportPdf = async () => {
 
 onMounted(() => {
   if (!process.client) return
+
+  const storedCollapse = localStorage.getItem(MVP_COLLAPSE_KEY)
+  if (storedCollapse === null) {
+    mvpCollapsed.value = true
+    localStorage.setItem(MVP_COLLAPSE_KEY, 'true')
+  } else {
+    mvpCollapsed.value = storedCollapse === 'true'
+  }
+
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return
@@ -1095,6 +1674,20 @@ onMounted(() => {
     flex-direction: column !important;
     gap: 1.25rem !important;
   }
+}
+:deep(.mvp-collapse-enter-active),
+:deep(.mvp-collapse-leave-active) {
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+:deep(.mvp-collapse-enter-from),
+:deep(.mvp-collapse-leave-to) {
+  max-height: 0;
+  opacity: 0;
+}
+:deep(.mvp-collapse-enter-to),
+:deep(.mvp-collapse-leave-from) {
+  max-height: 4000px;
+  opacity: 1;
 }
 .input {
   width: 100%;

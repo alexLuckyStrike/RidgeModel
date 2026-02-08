@@ -1,0 +1,20 @@
+{
+  "ok": true,
+  "meta": {
+    "session_id": "NOoca3epjt",
+    "scale2": "1770567541444_photo_2026-02-08_19.17.59.jpeg",
+    "scale5": "1770567541446_photo_2026-02-08_19.18.06.jpeg",
+    "palette2_size": 8,
+    "palette5_size": 10,
+    "note": "MVP 0.1: шкала извлекается эвристически (кластеризация цветов) и уровни маркируются L1..Ln."
+  },
+  "rest": {
+    "items": []
+  },
+  "load": {
+    "items": []
+  },
+  "ocr": {
+    "items": []
+  }
+}
