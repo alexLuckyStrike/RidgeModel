@@ -457,7 +457,30 @@
     <section class="grid gap-6">
       <div>
         <UiCard title="Ввод данных по неделям" subtitle="Каждая тренировка: V, P, R и маркеры">
-          <div class="space-y-4">
+          <div class="flex items-center justify-between gap-3">
+            <div class="text-sm text-slate-600">
+              Нажмите, чтобы скрыть или раскрыть блок ввода.
+            </div>
+            <button
+              type="button"
+              class="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
+              @click="toggleWeeksInput"
+            >
+              <span>{{ weeksInputCollapsed ? 'Показать' : 'Скрыть' }}</span>
+              <svg
+                class="h-4 w-4 transition-transform"
+                :class="weeksInputCollapsed ? '' : 'rotate-180'"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+          </div>
+
+          <transition name="mvp-collapse">
+            <div v-show="!weeksInputCollapsed" class="space-y-4 mt-4">
             <details
               v-for="w in observationWeeks"
               :key="w"
@@ -527,7 +550,8 @@
                 </div>
               </div>
             </details>
-          </div>
+            </div>
+          </transition>
         </UiCard>
       </div>
 
@@ -1119,6 +1143,7 @@ const uid = () => {
 const MVP_COLLAPSE_KEY = 'planner:mvp-collapsed'
 const MVP_MAX_FILE_SIZE = 10 * 1024 * 1024
 const MVP_MAX_FILE_SIZE_MB = 10
+const WEEKS_INPUT_COLLAPSE_KEY = 'planner:weeks-input-collapsed'
 
 type MvpPreview = {
   id: string
@@ -1170,6 +1195,7 @@ const mvpCollapsed = ref(true)
 const mvpLoading = ref(false)
 const mvpError = ref<string | null>(null)
 const mvpResult = ref<MvpAnalysisResult | null>(null)
+const weeksInputCollapsed = ref(false)
 
 const mvpFiles = reactive<{
   scale2: MvpPreview | null
@@ -1200,6 +1226,10 @@ const hasMvpFiles = computed(() => {
 
 const toggleMvp = () => {
   mvpCollapsed.value = !mvpCollapsed.value
+}
+
+const toggleWeeksInput = () => {
+  weeksInputCollapsed.value = !weeksInputCollapsed.value
 }
 
 const createMvpPreview = (file: File): MvpPreview => ({
@@ -1352,6 +1382,11 @@ const analyzeMvp = async () => {
 watch(mvpCollapsed, (value) => {
   if (!process.client) return
   localStorage.setItem(MVP_COLLAPSE_KEY, value ? 'true' : 'false')
+})
+
+watch(weeksInputCollapsed, (value) => {
+  if (!process.client) return
+  localStorage.setItem(WEEKS_INPUT_COLLAPSE_KEY, value ? 'true' : 'false')
 })
 
 onBeforeUnmount(() => {
@@ -1639,6 +1674,14 @@ onMounted(() => {
     localStorage.setItem(MVP_COLLAPSE_KEY, 'true')
   } else {
     mvpCollapsed.value = storedCollapse === 'true'
+  }
+
+  const storedWeeksCollapse = localStorage.getItem(WEEKS_INPUT_COLLAPSE_KEY)
+  if (storedWeeksCollapse === null) {
+    weeksInputCollapsed.value = false
+    localStorage.setItem(WEEKS_INPUT_COLLAPSE_KEY, 'false')
+  } else {
+    weeksInputCollapsed.value = storedWeeksCollapse === 'true'
   }
 
   try {
