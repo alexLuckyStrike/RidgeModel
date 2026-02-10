@@ -118,13 +118,12 @@
           </div>
           <div class="mt-3 flex gap-2 flex-wrap">
             <NuxtLink class="px-3 py-2 rounded-xl border hover:bg-slate-50 text-sm" to="/markers">Маркеры</NuxtLink>
-            <NuxtLink class="px-3 py-2 rounded-xl border hover:bg-сlate-50 text-sm" to="/models">Модели</NuxtLink>
+            <NuxtLink class="px-3 py-2 rounded-xl border hover:bg-slate-50 text-sm" to="/models">Модели</NuxtLink>
             <NuxtLink class="px-3 py-2 rounded-xl border hover:bg-slate-50 text-sm" to="/regression">Логарифмическая регрессия</NuxtLink>
             <NuxtLink class="px-3 py-2 rounded-xl border hover:bg-slate-50 text-sm" to="/algorithm">Алгоритм размышлений</NuxtLink>
           </div>
         </UiCard>
       </div>
-
       <div class="rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden">
         <button
           type="button"
@@ -1392,7 +1391,6 @@ watch(weeksInputCollapsed, (value) => {
 onBeforeUnmount(() => {
   clearAllMvpPreviews()
 })
-
 const buildPlan = (variantId: PlanVariantId): Plan | null => {
   const base = baseline.value
   const total = planWeeks.value
@@ -1683,7 +1681,6 @@ onMounted(() => {
   } else {
     weeksInputCollapsed.value = storedWeeksCollapse === 'true'
   }
-
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return
