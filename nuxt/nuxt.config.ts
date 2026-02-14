@@ -3,6 +3,7 @@ import { defineNuxtConfig } from 'nuxt/config'
 export default defineNuxtConfig({
   ssr: false, // SPA mode
   css: ['~/assets/main.scss'],
+  modules: ['@pinia/nuxt'],
   typescript: { strict: true },
   runtimeConfig: {
     public: {
