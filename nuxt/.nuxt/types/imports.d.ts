@@ -205,7 +205,7 @@ declare global {
   export type { PlannerDisplayDeps } from '../../composables/usePlannerDisplay'
   import('../../composables/usePlannerDisplay')
   // @ts-ignore
-  export type { MvpKey, MvpAnalysisResult } from '../../composables/usePlannerMvp'
+  export type { MvpKey } from '../../composables/usePlannerMvp'
   import('../../composables/usePlannerMvp')
   // @ts-ignore
   export type { PlannerProcessingDeps } from '../../composables/usePlannerProcessing'
@@ -220,7 +220,7 @@ declare global {
   export type { Row, RestBaseline, Athlete } from '../../stores/athletes'
   import('../../stores/athletes')
   // @ts-ignore
-  export type { MvpPreview, MvpLoad5Set } from '../../stores/mvp'
+  export type { MvpPreview, MvpLoad5Set, MvpTestParameter, MvpMedicalTest, MvpWorkoutExercise, MvpWorkoutResult, MvpAnalysisResult } from '../../stores/mvp'
   import('../../stores/mvp')
 }
 // for vue template auto import

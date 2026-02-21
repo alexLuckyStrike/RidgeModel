@@ -1114,7 +1114,22 @@ const plugins = [
 _5dMbW_cMEknrRqFgXyd_iofZqDNW9jtdmHekcsbUE
 ];
 
-const assets = {};
+const assets = {
+  "/index.mjs": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"131ac-c+SQeRaOnZhrq4D11YOtyyvXFjY\"",
+    "mtime": "2026-02-21T14:29:31.695Z",
+    "size": 78252,
+    "path": "index.mjs"
+  },
+  "/index.mjs.map": {
+    "type": "application/json",
+    "etag": "\"463a3-WAO9sFGhJsIpdruYp5Lx4jkK97c\"",
+    "mtime": "2026-02-21T14:29:31.695Z",
+    "size": 287651,
+    "path": "index.mjs.map"
+  }
+};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(import.meta.url));
@@ -1881,6 +1896,111 @@ const _slug__get = /*#__PURE__*/Object.freeze({
   __proto__: null
 });
 
+const asRecord = (value) => value && typeof value === "object" && !Array.isArray(value) ? value : null;
+const asString = (value) => typeof value === "string" && value.trim() ? value : null;
+const asNumber = (value) => typeof value === "number" && Number.isFinite(value) ? value : null;
+const asArray = (value) => Array.isArray(value) ? value : [];
+const mapIncomingFieldName = (fieldName) => {
+  if (fieldName.startsWith("rest2_")) return "rest2";
+  if (fieldName.startsWith("load5_")) return "load5";
+  if (fieldName.startsWith("workout_photo_")) return "workout";
+  if (fieldName.startsWith("workout_text_")) return "text";
+  return fieldName;
+};
+const statusByDelta = (delta) => delta === null || delta <= 20 ? "\u043D\u043E\u0440\u043C\u0430" : "\u0432\u043D\u0438\u043C\u0430\u043D\u0438\u0435";
+const itemToMedicalTest = (rawItem, sourceLabel) => {
+  const item = asRecord(rawItem) || {};
+  const scaleType = asString(item.scale_type) || "unknown";
+  const zones = asArray(item.zones);
+  const parameters = {};
+  zones.forEach((zoneRaw, index) => {
+    const zone = asRecord(zoneRaw) || {};
+    const nearest = asRecord(zone.nearest) || {};
+    const label = asString(nearest.label) || "\u2014";
+    const delta = asNumber(nearest.delta_e);
+    parameters[`zone_${index + 1}`] = {
+      value: label,
+      unit: "level",
+      status: statusByDelta(delta)
+    };
+  });
+  if (!zones.length) {
+    parameters.result = {
+      value: "\u043D\u0435\u0442 \u0434\u0430\u043D\u043D\u044B\u0445",
+      unit: "",
+      status: "\u0432\u043D\u0438\u043C\u0430\u043D\u0438\u0435"
+    };
+  }
+  return {
+    type: `${sourceLabel} (${scaleType})`,
+    parameters
+  };
+};
+const buildWorkoutFromOcr = (ocrItemsRaw) => {
+  const notes = [];
+  ocrItemsRaw.forEach((itemRaw, index) => {
+    const item = asRecord(itemRaw) || {};
+    const filename = asString(item.filename) || `image_${index + 1}`;
+    const text = asString(item.text);
+    const warning = asString(item.warning);
+    if (text) notes.push(`[${filename}] ${text}`);
+    if (warning) notes.push(`[${filename}] warning: ${warning}`);
+  });
+  if (!notes.length) return void 0;
+  return {
+    name: "OCR \u0440\u0430\u0441\u043F\u043E\u0437\u043D\u0430\u0432\u0430\u043D\u0438\u0435",
+    type: "text",
+    exercises: [],
+    notes
+  };
+};
+const normalizeForPlanner = (rawResponse) => {
+  var _a, _b, _c;
+  const root = asRecord(rawResponse) || {};
+  const payload = asRecord(root.result) || root;
+  const rootError = asString(root.error);
+  const payloadError = asString(payload.error);
+  const rootMessage = asString(root.message);
+  const payloadMessage = asString(payload.message);
+  const isError = root.ok === false || payload.ok === false || Boolean(rootError || payloadError);
+  if (isError) {
+    const message = payloadError || rootError || payloadMessage || rootMessage || "CV analyze failed";
+    return {
+      status: "error",
+      error: message,
+      message
+    };
+  }
+  const existingMedical = asArray(payload.medical_tests);
+  const existingWorkout = asRecord(payload.workout);
+  if (existingMedical.length || existingWorkout) {
+    return {
+      status: asString(payload.status) || "ok",
+      notes: asArray(payload.notes),
+      medical_tests: existingMedical,
+      workout: existingWorkout || void 0
+    };
+  }
+  const restItems = asArray((_a = asRecord(payload.rest)) == null ? void 0 : _a.items);
+  const loadItems = asArray((_b = asRecord(payload.load)) == null ? void 0 : _b.items);
+  const ocrItems = asArray((_c = asRecord(payload.ocr)) == null ? void 0 : _c.items);
+  const medical_tests = [
+    ...restItems.map((item) => itemToMedicalTest(item, "\u041F\u043E\u043A\u043E\u0439")),
+    ...loadItems.map((item) => itemToMedicalTest(item, "\u041F\u043E\u0441\u043B\u0435 \u043D\u0430\u0433\u0440\u0443\u0437\u043A\u0438"))
+  ];
+  const notes = [];
+  const meta = asRecord(payload.meta);
+  const metaNote = asString(meta == null ? void 0 : meta.note);
+  if (metaNote) notes.push(metaNote);
+  const sessionId = asString(meta == null ? void 0 : meta.session_id) || asString(root.sessionId);
+  if (sessionId) notes.push(`session: ${sessionId}`);
+  return {
+    status: "ok",
+    notes,
+    medical_tests,
+    workout: buildWorkoutFromOcr(ocrItems)
+  };
+};
 const cvAnalyze_post = defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
   const base = config.cvBackendBase || "http://localhost:4000";
@@ -1891,14 +2011,24 @@ const cvAnalyze_post = defineEventHandler(async (event) => {
   const form = new FormData();
   for (const part of parts) {
     if (!part.name) continue;
+    const mappedName = mapIncomingFieldName(part.name);
     const blob = new Blob([part.data], { type: part.type || "application/octet-stream" });
-    form.append(part.name, blob, part.filename || part.name);
+    form.append(mappedName, blob, part.filename || mappedName);
   }
-  const res = await $fetch.raw(`${base}/api/analyze`, {
-    method: "POST",
-    body: form
-  });
-  return res._data;
+  try {
+    const res = await $fetch.raw(`${base}/api/analyze`, {
+      method: "POST",
+      body: form
+    });
+    return normalizeForPlanner(res._data);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "CV backend request failed";
+    throw createError({
+      statusCode: 502,
+      statusMessage: "CV backend error",
+      message
+    });
+  }
 });
 
 const cvAnalyze_post$1 = /*#__PURE__*/Object.freeze({

@@ -1,46 +1,16 @@
 import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
-import { useMvpStore, type MvpPreview } from "~/stores/mvp";
+import {
+  useMvpStore,
+  type MvpAnalysisResult,
+  type MvpPreview,
+} from "~/stores/mvp";
 
 type MvpSingleKey = "scale2" | "scale5";
 type MvpMultiKey = "rest2";
 export type MvpKey = MvpSingleKey | MvpMultiKey;
 
 type Load5SetField = "first" | "second" | "workoutPhoto" | "workoutText";
-
-type MvpTestParameter = {
-  value?: number | string;
-  unit?: string;
-  status?: string;
-};
-
-type MvpMedicalTest = {
-  type?: string;
-  parameters?: Record<string, MvpTestParameter>;
-};
-
-type MvpWorkoutExercise = {
-  minute?: number | string;
-  name?: string;
-  reps?: number | string;
-  unit?: string;
-};
-
-type MvpWorkoutResult = {
-  name?: string;
-  type?: string;
-  exercises?: MvpWorkoutExercise[];
-  notes?: string[];
-};
-
-export type MvpAnalysisResult = {
-  status?: string;
-  message?: string;
-  error?: string;
-  notes?: string[];
-  medical_tests?: MvpMedicalTest[];
-  workout?: MvpWorkoutResult;
-};
 
 const MVP_COLLAPSE_KEY = "planner:mvp-collapsed";
 const WEEKS_INPUT_COLLAPSE_KEY = "planner:weeks-input-collapsed";
@@ -54,16 +24,18 @@ export function usePlannerMvp(uid: () => string) {
   const mvpCollapsed = ref(true);
   const mvpLoading = ref(false);
   const mvpError = ref<string | null>(null);
-  const mvpResult = ref<MvpAnalysisResult | null>(null);
   const weeksInputCollapsed = ref(false);
 
   const mvpStore = useMvpStore();
-  const { load5Sets } = storeToRefs(mvpStore);
+  const { load5Sets, analysisResult } = storeToRefs(mvpStore);
   const {
     addLoad5Set: addLoad5SetRaw,
     removeLoad5Set: removeLoad5SetRaw,
     resetLoad5Sets,
+    setAnalysisResult,
+    clearAnalysisResult,
   } = mvpStore;
+  const mvpResult = analysisResult;
 
   const mvpFiles = reactive<{
     scale2: MvpPreview | null;
@@ -281,7 +253,7 @@ export function usePlannerMvp(uid: () => string) {
 
     mvpLoading.value = true;
     mvpError.value = null;
-    mvpResult.value = null;
+    clearAnalysisResult();
 
     try {
       const response = await fetch("/api/cv-analyze", {
@@ -306,19 +278,23 @@ export function usePlannerMvp(uid: () => string) {
       if (payload?.status === "error" || payload?.error) {
         mvpError.value =
           payload.message || payload.error || "Сервис вернул ошибку анализа.";
+        clearAnalysisResult();
         return;
       }
 
       if (payload && typeof payload === "object") {
-        mvpResult.value = payload as MvpAnalysisResult;
+        setAnalysisResult(payload as MvpAnalysisResult);
+        console.log("[MVP] analysis result saved to store", payload);
       } else {
         mvpError.value = "Сервис вернул пустой ответ.";
+        clearAnalysisResult();
       }
     } catch (error) {
       mvpError.value =
         error instanceof Error
           ? error.message
           : "Произошла неизвестная ошибка анализа.";
+      clearAnalysisResult();
     } finally {
       mvpLoading.value = false;
     }
