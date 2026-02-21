@@ -82,13 +82,48 @@
       </div>
 
       <div class="lg:col-span-5 space-y-6">
-        <UiCard title="4 постулата (что даёт модель)">
-          <ol class="list-decimal pl-5 space-y-2 text-slate-700">
-            <li><b>Индивидуальная чувствительность:</b> сравнение |коэф.| показывает, к чему спортсмен наиболее восприимчив (V, P или R).</li>
-            <li><b>Скорость изменения:</b> коэффициент задаёт процентное изменение маркера при изменении параметра на 1 единицу.</li>
-            <li><b>Приоритет коррекции:</b> самый большой |коэф.| — лучший «рычаг» для быстрых правок без разрушения плана.</li>
-            <li><b>Взаимодействие параметров:</b> рост одного параметра можно компенсировать другими, удерживая маркер в целевой зоне.</li>
-          </ol>
+        <UiCard
+          title="4 постулата управления нагрузкой"
+          subtitle="Якоря для ссылок из планировщика"
+        >
+          <div class="text-sm text-slate-700 space-y-4">
+            <div :id="postulateIds.p1">
+              <div class="font-medium text-slate-900">
+                Постулат 1 — Индивидуальная чувствительность
+              </div>
+              <div class="text-slate-600">
+                Абсолютная величина коэффициентов |b| показывает, какой параметр
+                V/P/R сильнее влияет на маркер у конкретного спортсмена.
+              </div>
+            </div>
+            <div :id="postulateIds.p2">
+              <div class="font-medium text-slate-900">
+                Постулат 2 — Скорость изменения маркеров
+              </div>
+              <div class="text-slate-600">
+                Лог-модель позволяет интерпретировать b как относительные
+                изменения; %ΔY ≈ (exp(b)−1)·100%.
+              </div>
+            </div>
+            <div :id="postulateIds.p3">
+              <div class="font-medium text-slate-900">
+                Постулат 3 — Приоритет коррекции
+              </div>
+              <div class="text-slate-600">
+                При выходе маркера из зоны корректируем параметр с наибольшим
+                |b| и минимальной практической стоимостью (часто R).
+              </div>
+            </div>
+            <div :id="postulateIds.p4">
+              <div class="font-medium text-slate-900">
+                Постулат 4 — Компенсация параметров
+              </div>
+              <div class="text-slate-600">
+                Изменения V/P/R могут компенсировать друг друга: b1·ΔV + b2·ΔP +
+                b3·ΔR ≈ 0.
+              </div>
+            </div>
+          </div>
         </UiCard>
 
         <UiCard title="Референсные зоны (как в работе)">
@@ -136,6 +171,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import UiCard from '~/components/UiCard.vue'
+import { postulateIds } from '~/utils/plannerVariants'
 
 const cta = ref<'planner' | 'model'>('planner')
 

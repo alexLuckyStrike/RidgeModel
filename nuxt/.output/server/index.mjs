@@ -1,7 +1,6 @@
 import process from 'node:process';globalThis._importMeta_={url:import.meta.url,env:process.env};import 'node:http';
 import 'node:https';
-import './chunks/_/nitro.mjs';
-export { n as default } from './chunks/routes/api/content/_slug_.get.mjs';
+export { n as default } from './chunks/nitro/nitro.mjs';
 import 'node:events';
 import 'node:buffer';
 import 'node:fs';

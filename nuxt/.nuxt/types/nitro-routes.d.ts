@@ -9,6 +9,9 @@ declare module "nitropack/types" {
     '/api/content/:slug': {
       'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/content/[slug].get').default>>>>
     }
+    '/api/cv-analyze': {
+      'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/cv-analyze.post').default>>>>
+    }
     '/api/pdf': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/pdf.post').default>>>>
     }

@@ -1,0 +1,40 @@
+mvp-cv-app — это уже фактически отдельное приложение с 3 слоями:
+
+mvp-cv-app/
+├── backend/    → Express (порт 4000), принимает файлы, запускает Python
+├── frontend/   → Vue 3 + Vite (порт 5173) — UI загрузки полосок
+├── vision/     → Python (OpenCV + K-means + OCR)
+└── data/       → uploads/ + results/
+
+Проблемы сейчас:
+
+Не включён в docker-compose.yml — запускается вручную
+Frontend из Nuxt обращается напрямую к localhost:4000 (CORS, нет проксирования через BFF)
+Нет единой точки входа через nginx
+Python-зависимости не управляются в общей инфраструктуре
+Рекомендуемый путь: Docker-микросервис + проксирование через nginx
+Это самый практичный вариант для вашей архитектуры, потому что:
+
+У вас уже есть docker-compose + nginx
+mvp-cv-app уже изолирован по коду
+Не нужно менять код бэкенда основного проекта
+Frontend mvp-cv-app уже интегрирован в planner.vue через компоненты
+Целевая архитектура:
+nginx:8080
+  ├─ /            → nuxt:3000        (основной фронт + SSR)
+  ├─ /api/*       → backend:3001     (основной API)
+  └─ /cv-api/*    → cv-backend:4000  (CV-микросервис)
+
+docker-compose.yml
+  ├─ nuxt
+  ├─ backend
+  ├─ cv-backend   ← НОВЫЙ (Express + Python в одном контейнере)
+  └─ nginx
+
+Что нужно сделать (план по шагам):
+1. Dockerfile для cv-backend — один контейнер с Node + Python
+2. Обновить docker-compose.yml — добавить сервис cv-backend
+3. Обновить nginx/default.conf — добавить маршрут /cv-api/
+4. Обновить вызовы из Nuxt — перенаправить запросы через BFF (Nuxt server route) или напрямую через nginx
+
+Хочешь, чтобы я реализовал этот план? Или тебя интересует другой вариант — например, объединить cv-backend с основным backend?

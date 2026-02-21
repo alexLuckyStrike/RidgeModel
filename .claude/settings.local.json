@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(xargs:*)",
+      "Bash(for d in *loadTrain*/nuxt)",
+      "Bash(do test -d \"$d\")",
+      "Bash(echo:*)",
+      "Bash(done)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(npx nuxi typecheck:*)",
+      "Bash(timeout 30 npx nuxi dev:*)",
+      "Bash(timeout 30 npm:*)",
+      "Bash(npm --prefix nuxt run build)",
+      "Bash(npx nuxi build:*)"
+    ]
+  }
+}

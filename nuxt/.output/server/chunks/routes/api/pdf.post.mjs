@@ -1,4 +1,4 @@
-import { d as defineEventHandler, r as readBody, u as useRuntimeConfig, s as setResponseHeader } from '../../_/nitro.mjs';
+import { d as defineEventHandler, a as readBody, u as useRuntimeConfig, s as setResponseHeader } from '../../nitro/nitro.mjs';
 import 'node:http';
 import 'node:https';
 import 'node:events';

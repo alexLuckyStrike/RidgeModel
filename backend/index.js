@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const { createPdf } = require('./pdfGenerator');
 
 const app = express();
 app.use(cors());
@@ -34,25 +35,14 @@ app.get('/api/notes/:name', (req, res) => {
 });
 
 app.post('/pdf', async (req, res) => {
+  console.log('listen')
   try {
-    // пока просто проверяем, что данные доходят
-    const payload = req.body;
+    const payload = req.body || {};
+    const pdf = await createPdf(payload);
 
-    console.log('PDF payload received, size:',
-      JSON.stringify(payload).length / 1024, 'kb'
-    );
-
-    // ВРЕМЕННАЯ ЗАГЛУШКА PDF
-    // Отдаем пустой PDF, чтобы Nuxt не падал
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename="plan.pdf"');
-
-    // минимальный валидный PDF
-    const emptyPdf = Buffer.from(
-      '%PDF-1.4\n1 0 obj\n<<>>\nendobj\ntrailer\n<<>>\n%%EOF'
-    );
-
-    res.send(emptyPdf);
+    res.send(pdf);
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: 'PDF generation failed' });

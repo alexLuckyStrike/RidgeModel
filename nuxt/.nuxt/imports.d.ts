@@ -29,6 +29,16 @@ export { withCtx, withDirectives, withKeys, withMemo, withModifiers, withScopeId
 export { requestIdleCallback, cancelIdleCallback } from '#app/compat/idle-callback';
 export { setInterval } from '#app/compat/interval';
 export { useAlgorithmAuth, PendingRoute } from '../composables/useAlgorithmAuth';
+export { usePlannerData, PlannerDataDeps } from '../composables/usePlannerData';
+export { usePlannerDisplay, PlannerDisplayDeps } from '../composables/usePlannerDisplay';
+export { MVP_LOAD5_MAX_SETS, usePlannerMvp, MvpKey, MvpAnalysisResult } from '../composables/usePlannerMvp';
+export { usePlannerProcessing, PlannerProcessingDeps } from '../composables/usePlannerProcessing';
 export { olsFit, OlsResult } from '../utils/ols';
+export { isFilled, keyOf, uid } from '../utils/plannerHelpers';
+export { PlannedSession, PlannedWeek, Plan, MarkerKey, Coeffs, VariantSettings, PlanVariantId, PlanVariant } from '../utils/plannerTypes';
+export { postulateIds, planVariants } from '../utils/plannerVariants';
+export { useAthletesStore, Row, RestBaseline, Athlete } from '../stores/athletes';
+export { useMvpStore, MvpPreview, MvpLoad5Set } from '../stores/mvp';
+export { defineStore, acceptHMRUpdate, usePinia, storeToRefs } from '../node_modules/@pinia/nuxt/dist/runtime/composables';
 export { useNuxtDevTools } from '../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools';
 export { definePageMeta } from '../node_modules/nuxt/dist/pages/runtime/composables';

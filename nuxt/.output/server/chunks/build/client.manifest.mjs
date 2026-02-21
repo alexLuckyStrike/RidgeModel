@@ -7,13 +7,13 @@ const client_manifest = {
     "module": true,
     "resourceType": "script"
   },
-  "C:/Users/mgafk/Desktop/LoadModeling/nuxt/node_modules/nuxt/dist/app/entry.js": {
+  "/Users/admin/Documents/loadTrainPlan — копия/nuxt/node_modules/nuxt/dist/app/entry.js": {
     "resourceType": "script",
     "module": true,
     "prefetch": true,
     "preload": true,
     "isEntry": true,
-    "file": "C:/Users/mgafk/Desktop/LoadModeling/nuxt/node_modules/nuxt/dist/app/entry.js"
+    "file": "/Users/admin/Documents/loadTrainPlan — копия/nuxt/node_modules/nuxt/dist/app/entry.js"
   }
 };
 
