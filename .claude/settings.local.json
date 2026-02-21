@@ -13,7 +13,9 @@
       "Bash(timeout 30 npx nuxi dev:*)",
       "Bash(timeout 30 npm:*)",
       "Bash(npm --prefix nuxt run build)",
-      "Bash(npx nuxi build:*)"
+      "Bash(npx nuxi build:*)",
+      "Bash(while read d)",
+      "Bash(do echo \"=== $d ===\")"
     ]
   }
 }
