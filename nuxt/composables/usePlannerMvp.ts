@@ -12,6 +12,22 @@ export type MvpKey = MvpSingleKey | MvpMultiKey;
 
 type Load5SetField = "first" | "second" | "workoutPhoto" | "workoutText";
 
+type DemoFileItem = {
+  name: string;
+  path: string;
+};
+
+type MvpDemoPayload = {
+  status?: string;
+  notes?: string[];
+  scales?: DemoFileItem[];
+  rest?: DemoFileItem[];
+  load?: DemoFileItem[];
+  workout?: DemoFileItem[];
+};
+
+const imageExtRegex = /\.(jpg|jpeg|png|heic|webp)$/i;
+
 const MVP_COLLAPSE_KEY = "planner:mvp-collapsed";
 const WEEKS_INPUT_COLLAPSE_KEY = "planner:weeks-input-collapsed";
 
@@ -23,6 +39,7 @@ export const MVP_LOAD5_MAX_SETS = 20;
 export function usePlannerMvp(uid: () => string) {
   const mvpCollapsed = ref(true);
   const mvpLoading = ref(false);
+  const mvpDemoLoading = ref(false);
   const mvpError = ref<string | null>(null);
   const weeksInputCollapsed = ref(false);
 
@@ -300,6 +317,97 @@ export function usePlannerMvp(uid: () => string) {
     }
   };
 
+  const fetchDemoFile = async (item: DemoFileItem): Promise<File> => {
+    const url = `/api/mvp-demo-file?path=${encodeURIComponent(item.path)}`;
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Не удалось загрузить файл: ${item.name}`);
+    }
+    const blob = await response.blob();
+    return new File([blob], item.name, {
+      type: blob.type || "application/octet-stream",
+    });
+  };
+
+  const loadMvpDemoData = async () => {
+    if (mvpLoading.value || mvpDemoLoading.value) return;
+
+    mvpDemoLoading.value = true;
+    mvpError.value = null;
+    clearAnalysisResult();
+
+    try {
+      const dataset = await $fetch<MvpDemoPayload>("/api/mvp-demo-data");
+      if (!dataset || dataset.status === "error") {
+        throw new Error("Сервер не вернул демоданные для MVP.");
+      }
+
+      clearAllMvpPreviews();
+
+      const [scale2Item, scale5Item] = (dataset.scales || []).slice(0, 2);
+      if (scale2Item) {
+        mvpFiles.scale2 = createMvpPreview(await fetchDemoFile(scale2Item));
+      }
+      if (scale5Item) {
+        mvpFiles.scale5 = createMvpPreview(await fetchDemoFile(scale5Item));
+      }
+
+      const restItems = (dataset.rest || []).slice(0, MVP_MULTI_LIMIT);
+      for (const restItem of restItems) {
+        mvpFiles.rest2.push(createMvpPreview(await fetchDemoFile(restItem)));
+      }
+
+      const loadItems = (dataset.load || []).slice(0, MVP_LOAD5_MAX_SETS);
+      const workoutItems = dataset.workout || [];
+
+      const setCount = Math.max(
+        1,
+        loadItems.length,
+        workoutItems.length
+      );
+
+      for (let i = 0; i < setCount; i += 1) {
+        if (i > 0) addLoad5SetRaw();
+        const set = load5Sets.value[i];
+        if (!set) continue;
+
+        const afterLoad = loadItems[i];
+        if (afterLoad) {
+          set.second = createMvpPreview(await fetchDemoFile(afterLoad));
+        }
+
+        const workoutItem = workoutItems[i];
+        if (workoutItem) {
+          const workoutFile = await fetchDemoFile(workoutItem);
+          set.workoutText = createMvpPreview(workoutFile);
+          if (imageExtRegex.test(workoutItem.name)) {
+            set.workoutPhoto = createMvpPreview(workoutFile);
+          }
+        }
+      }
+
+      if (!hasMvpFiles.value) {
+        mvpError.value = "Не удалось найти подходящие файлы демоданных MVP.";
+      }
+
+      if (dataset.notes?.length) {
+        console.log("[MVP] demo data notes", dataset.notes);
+      }
+      console.log("[MVP] demo data loaded", {
+        scales: Number(Boolean(mvpFiles.scale2)) + Number(Boolean(mvpFiles.scale5)),
+        rest: mvpFiles.rest2.length,
+        loadSets: load5Sets.value.filter((set) => Boolean(set.first || set.second)).length,
+      });
+    } catch (error) {
+      mvpError.value =
+        error instanceof Error
+          ? error.message
+          : "Не удалось загрузить MVP демоданные.";
+    } finally {
+      mvpDemoLoading.value = false;
+    }
+  };
+
   watch(mvpCollapsed, (value) => {
     if (!process.client) return;
     localStorage.setItem(MVP_COLLAPSE_KEY, value ? "true" : "false");
@@ -338,6 +446,7 @@ export function usePlannerMvp(uid: () => string) {
     // state
     mvpCollapsed,
     mvpLoading,
+    mvpDemoLoading,
     mvpError,
     mvpResult,
     weeksInputCollapsed,
@@ -350,6 +459,7 @@ export function usePlannerMvp(uid: () => string) {
     handleMvpFileChange,
     removeMvpFile,
     analyzeMvp,
+    loadMvpDemoData,
     // load5
     addLoad5Set,
     removeLoad5Set,

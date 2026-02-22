@@ -4,9 +4,12 @@ import multer from 'multer';
 import { nanoid } from 'nanoid';
 import path from 'path';
 import fs from 'fs/promises';
+import fsSync from 'fs';
 import { spawn } from 'child_process';
+import { fileURLToPath } from 'url';
 
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors());
@@ -97,7 +100,8 @@ app.post(
         results_dir: RESULTS_DIR
       };
 
-      const py = process.env.PYTHON || 'python3';
+      const venvPy = path.join(VISION_DIR, '.venv', 'bin', 'python');
+      const py = process.env.PYTHON || (fsSync.existsSync(venvPy) ? venvPy : 'python3');
       const script = path.join(VISION_DIR, 'analyze.py');
 
       const out = await runPython(py, script, payload);

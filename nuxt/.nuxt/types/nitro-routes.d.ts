@@ -12,6 +12,12 @@ declare module "nitropack/types" {
     '/api/cv-analyze': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/cv-analyze.post').default>>>>
     }
+    '/api/mvp-demo-data': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/mvp-demo-data.get').default>>>>
+    }
+    '/api/mvp-demo-file': {
+      'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/mvp-demo-file.get').default>>>>
+    }
     '/api/pdf': {
       'post': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/api/pdf.post').default>>>>
     }

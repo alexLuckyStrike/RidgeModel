@@ -1,10 +1,11 @@
 import process from 'node:process';globalThis._importMeta_={url:import.meta.url,env:process.env};import { tmpdir } from 'node:os';
 import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, getRequestURL, getResponseHeader, appendResponseHeader, removeResponseHeader, createError, getQuery as getQuery$1, readBody, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, getRouterParam, readMultipartFormData, getResponseStatusText } from 'file:///Users/admin/Documents/loadTrainPlan%C2%A0%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F/nuxt/node_modules/h3/dist/index.mjs';
 import { Server } from 'node:http';
-import { resolve, dirname, join } from 'node:path';
+import path, { resolve, dirname, join } from 'node:path';
 import nodeCrypto from 'node:crypto';
 import { parentPort, threadId } from 'node:worker_threads';
 import { escapeHtml } from 'file:///Users/admin/Documents/loadTrainPlan%C2%A0%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F/nuxt/node_modules/@vue/shared/dist/shared.cjs.js';
+import fs, { readFile } from 'node:fs/promises';
 import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file:///Users/admin/Documents/loadTrainPlan%C2%A0%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F/nuxt/node_modules/vue-bundle-renderer/dist/runtime.mjs';
 import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, decodePath, withLeadingSlash, withoutTrailingSlash, joinRelativeURL } from 'file:///Users/admin/Documents/loadTrainPlan%C2%A0%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F/nuxt/node_modules/ufo/dist/index.mjs';
 import { renderToString } from 'file:///Users/admin/Documents/loadTrainPlan%C2%A0%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F/nuxt/node_modules/vue/server-renderer/index.mjs';
@@ -20,7 +21,6 @@ import defu, { defuFn } from 'file:///Users/admin/Documents/loadTrainPlan%C2%A0%
 import { snakeCase } from 'file:///Users/admin/Documents/loadTrainPlan%C2%A0%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F/nuxt/node_modules/scule/dist/index.mjs';
 import { getContext } from 'file:///Users/admin/Documents/loadTrainPlan%C2%A0%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F/nuxt/node_modules/unctx/dist/index.mjs';
 import { toRouteMatcher, createRouter } from 'file:///Users/admin/Documents/loadTrainPlan%C2%A0%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F/nuxt/node_modules/radix3/dist/index.mjs';
-import { readFile } from 'node:fs/promises';
 import consola, { consola as consola$1 } from 'file:///Users/admin/Documents/loadTrainPlan%C2%A0%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F/nuxt/node_modules/consola/dist/index.mjs';
 import { ErrorParser } from 'file:///Users/admin/Documents/loadTrainPlan%C2%A0%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F/nuxt/node_modules/youch-core/build/index.js';
 import { Youch } from 'file:///Users/admin/Documents/loadTrainPlan%C2%A0%E2%80%94%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F/nuxt/node_modules/nitropack/node_modules/youch/build/index.js';
@@ -1114,22 +1114,7 @@ const plugins = [
 _5dMbW_cMEknrRqFgXyd_iofZqDNW9jtdmHekcsbUE
 ];
 
-const assets = {
-  "/index.mjs": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"131ac-c+SQeRaOnZhrq4D11YOtyyvXFjY\"",
-    "mtime": "2026-02-21T14:29:31.695Z",
-    "size": 78252,
-    "path": "index.mjs"
-  },
-  "/index.mjs.map": {
-    "type": "application/json",
-    "etag": "\"463a3-WAO9sFGhJsIpdruYp5Lx4jkK97c\"",
-    "mtime": "2026-02-21T14:29:31.695Z",
-    "size": 287651,
-    "path": "index.mjs.map"
-  }
-};
+const assets = {};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(import.meta.url));
@@ -1542,6 +1527,8 @@ async function getIslandContext(event) {
 const _lazy_BMoSTs = () => Promise.resolve().then(function () { return content_get; });
 const _lazy_OfVDax = () => Promise.resolve().then(function () { return _slug__get; });
 const _lazy_KdhO0d = () => Promise.resolve().then(function () { return cvAnalyze_post$1; });
+const _lazy_FfRhQ5 = () => Promise.resolve().then(function () { return mvpDemoData_get$1; });
+const _lazy_9_9tpi = () => Promise.resolve().then(function () { return mvpDemoFile_get$1; });
 const _lazy_iky23M = () => Promise.resolve().then(function () { return pdf_post$1; });
 const _lazy_PStFY7 = () => Promise.resolve().then(function () { return renderer$1; });
 
@@ -1550,6 +1537,8 @@ const handlers = [
   { route: '/api/content', handler: _lazy_BMoSTs, lazy: true, middleware: false, method: "get" },
   { route: '/api/content/:slug', handler: _lazy_OfVDax, lazy: true, middleware: false, method: "get" },
   { route: '/api/cv-analyze', handler: _lazy_KdhO0d, lazy: true, middleware: false, method: "post" },
+  { route: '/api/mvp-demo-data', handler: _lazy_FfRhQ5, lazy: true, middleware: false, method: "get" },
+  { route: '/api/mvp-demo-file', handler: _lazy_9_9tpi, lazy: true, middleware: false, method: "get" },
   { route: '/api/pdf', handler: _lazy_iky23M, lazy: true, middleware: false, method: "post" },
   { route: '/__nuxt_error', handler: _lazy_PStFY7, lazy: true, middleware: false, method: undefined },
   { route: '/__nuxt_island/**', handler: _SxA8c9, lazy: false, middleware: false, method: undefined },
@@ -1896,109 +1885,95 @@ const _slug__get = /*#__PURE__*/Object.freeze({
   __proto__: null
 });
 
-const asRecord = (value) => value && typeof value === "object" && !Array.isArray(value) ? value : null;
-const asString = (value) => typeof value === "string" && value.trim() ? value : null;
-const asNumber = (value) => typeof value === "number" && Number.isFinite(value) ? value : null;
-const asArray = (value) => Array.isArray(value) ? value : [];
-const mapIncomingFieldName = (fieldName) => {
-  if (fieldName.startsWith("rest2_")) return "rest2";
-  if (fieldName.startsWith("load5_")) return "load5";
-  if (fieldName.startsWith("workout_photo_")) return "workout";
-  if (fieldName.startsWith("workout_text_")) return "text";
-  return fieldName;
+const asRecord = (v) => v && typeof v === "object" && !Array.isArray(v) ? v : null;
+const asString = (v) => typeof v === "string" && v.trim() ? v.trim() : null;
+const asNumber = (v) => typeof v === "number" && Number.isFinite(v) ? v : null;
+const asArray = (v) => Array.isArray(v) ? v : [];
+const mapFieldName = (name) => {
+  if (name.startsWith("rest2_")) return "rest2";
+  if (name.startsWith("rest5_")) return "rest5";
+  if (name.startsWith("load5_")) return "load5";
+  if (name.startsWith("load2_")) return "load2";
+  if (name.startsWith("workout_photo_")) return "workout";
+  if (name.startsWith("workout_text_")) return "text";
+  return name;
 };
-const statusByDelta = (delta) => delta === null || delta <= 20 ? "\u043D\u043E\u0440\u043C\u0430" : "\u0432\u043D\u0438\u043C\u0430\u043D\u0438\u0435";
-const itemToMedicalTest = (rawItem, sourceLabel) => {
-  const item = asRecord(rawItem) || {};
-  const scaleType = asString(item.scale_type) || "unknown";
-  const zones = asArray(item.zones);
-  const parameters = {};
-  zones.forEach((zoneRaw, index) => {
-    const zone = asRecord(zoneRaw) || {};
-    const nearest = asRecord(zone.nearest) || {};
-    const label = asString(nearest.label) || "\u2014";
-    const delta = asNumber(nearest.delta_e);
-    parameters[`zone_${index + 1}`] = {
-      value: label,
-      unit: "level",
-      status: statusByDelta(delta)
-    };
-  });
-  if (!zones.length) {
-    parameters.result = {
-      value: "\u043D\u0435\u0442 \u0434\u0430\u043D\u043D\u044B\u0445",
-      unit: "",
-      status: "\u0432\u043D\u0438\u043C\u0430\u043D\u0438\u0435"
-    };
-  }
+const mapZone = (raw, idx) => {
+  const zone = asRecord(raw) || {};
+  const nearest = asRecord(zone.nearest) || {};
   return {
-    type: `${sourceLabel} (${scaleType})`,
-    parameters
+    index: idx,
+    level: asString(nearest.label) || "\u2014",
+    delta_e: asNumber(nearest.delta_e)
   };
 };
-const buildWorkoutFromOcr = (ocrItemsRaw) => {
-  const notes = [];
-  ocrItemsRaw.forEach((itemRaw, index) => {
-    const item = asRecord(itemRaw) || {};
-    const filename = asString(item.filename) || `image_${index + 1}`;
-    const text = asString(item.text);
-    const warning = asString(item.warning);
-    if (text) notes.push(`[${filename}] ${text}`);
-    if (warning) notes.push(`[${filename}] warning: ${warning}`);
-  });
-  if (!notes.length) return void 0;
+const mapStrip = (raw, groupName) => {
+  var _a;
+  const item = asRecord(raw);
+  if (!item) return null;
+  const stripIndex = (_a = asNumber(item.strip_index)) != null ? _a : 1;
+  if (stripIndex !== 1) return null;
+  const zones = asArray(item.zones).map((z, i) => mapZone(z, i + 1));
   return {
-    name: "OCR \u0440\u0430\u0441\u043F\u043E\u0437\u043D\u0430\u0432\u0430\u043D\u0438\u0435",
-    type: "text",
-    exercises: [],
-    notes
+    photo_filename: asString(item.filename) || "unknown",
+    strip_index: 1,
+    zone_count: zones.length,
+    scale_id: asString(item.matched_scale_id),
+    zones
   };
 };
-const normalizeForPlanner = (rawResponse) => {
+const mapOcrItem = (raw) => {
+  const item = asRecord(raw) || {};
+  return {
+    filename: asString(item.filename) || "unknown",
+    text: asString(item.text) || "",
+    warning: asString(item.warning)
+  };
+};
+const normalizeCvResponse = (rawResponse) => {
   var _a, _b, _c;
   const root = asRecord(rawResponse) || {};
   const payload = asRecord(root.result) || root;
-  const rootError = asString(root.error);
-  const payloadError = asString(payload.error);
-  const rootMessage = asString(root.message);
-  const payloadMessage = asString(payload.message);
-  const isError = root.ok === false || payload.ok === false || Boolean(rootError || payloadError);
+  const isError = root.ok === false || payload.ok === false || Boolean(asString(root.error) || asString(payload.error));
   if (isError) {
-    const message = payloadError || rootError || payloadMessage || rootMessage || "CV analyze failed";
+    const message = asString(payload.error) || asString(root.error) || asString(payload.message) || asString(root.message) || "CV analyze failed";
     return {
       status: "error",
+      session_id: null,
+      strips: { rest: [], load: [] },
+      ocr: { items: [] },
+      meta: { scale_profiles: [], note: null },
       error: message,
       message
     };
   }
-  const existingMedical = asArray(payload.medical_tests);
-  const existingWorkout = asRecord(payload.workout);
-  if (existingMedical.length || existingWorkout) {
+  const meta = asRecord(payload.meta) || {};
+  const session_id = asString(meta.session_id) || asString(root.sessionId);
+  const scale_profiles = asArray(meta.scale_profiles).map((p) => {
+    var _a2, _b2;
+    const pr = asRecord(p) || {};
     return {
-      status: asString(payload.status) || "ok",
-      notes: asArray(payload.notes),
-      medical_tests: existingMedical,
-      workout: existingWorkout || void 0
+      id: asString(pr.id) || "unknown",
+      zone_count: (_a2 = asNumber(pr.count)) != null ? _a2 : 0,
+      palette_size: (_b2 = asNumber(pr.palette_size)) != null ? _b2 : 0,
+      filename: asString(pr.filename) || ""
     };
-  }
-  const restItems = asArray((_a = asRecord(payload.rest)) == null ? void 0 : _a.items);
-  const loadItems = asArray((_b = asRecord(payload.load)) == null ? void 0 : _b.items);
-  const ocrItems = asArray((_c = asRecord(payload.ocr)) == null ? void 0 : _c.items);
-  const medical_tests = [
-    ...restItems.map((item) => itemToMedicalTest(item, "\u041F\u043E\u043A\u043E\u0439")),
-    ...loadItems.map((item) => itemToMedicalTest(item, "\u041F\u043E\u0441\u043B\u0435 \u043D\u0430\u0433\u0440\u0443\u0437\u043A\u0438"))
-  ];
-  const notes = [];
-  const meta = asRecord(payload.meta);
-  const metaNote = asString(meta == null ? void 0 : meta.note);
-  if (metaNote) notes.push(metaNote);
-  const sessionId = asString(meta == null ? void 0 : meta.session_id) || asString(root.sessionId);
-  if (sessionId) notes.push(`session: ${sessionId}`);
+  });
+  const restStrips = asArray((_a = asRecord(payload.rest)) == null ? void 0 : _a.items).map((item) => mapStrip(item)).filter((s) => s !== null);
+  const loadStrips = asArray((_b = asRecord(payload.load)) == null ? void 0 : _b.items).map((item) => mapStrip(item)).filter((s) => s !== null);
+  const ocrItems = asArray((_c = asRecord(payload.ocr)) == null ? void 0 : _c.items).map(mapOcrItem);
   return {
     status: "ok",
-    notes,
-    medical_tests,
-    workout: buildWorkoutFromOcr(ocrItems)
+    session_id,
+    strips: {
+      rest: restStrips,
+      load: loadStrips
+    },
+    ocr: { items: ocrItems },
+    meta: {
+      scale_profiles,
+      note: asString(meta.note)
+    }
   };
 };
 const cvAnalyze_post = defineEventHandler(async (event) => {
@@ -2011,7 +1986,7 @@ const cvAnalyze_post = defineEventHandler(async (event) => {
   const form = new FormData();
   for (const part of parts) {
     if (!part.name) continue;
-    const mappedName = mapIncomingFieldName(part.name);
+    const mappedName = mapFieldName(part.name);
     const blob = new Blob([part.data], { type: part.type || "application/octet-stream" });
     form.append(mappedName, blob, part.filename || mappedName);
   }
@@ -2020,7 +1995,7 @@ const cvAnalyze_post = defineEventHandler(async (event) => {
       method: "POST",
       body: form
     });
-    return normalizeForPlanner(res._data);
+    return normalizeCvResponse(res._data);
   } catch (error) {
     const message = error instanceof Error ? error.message : "CV backend request failed";
     throw createError({
@@ -2034,6 +2009,162 @@ const cvAnalyze_post = defineEventHandler(async (event) => {
 const cvAnalyze_post$1 = /*#__PURE__*/Object.freeze({
   __proto__: null,
   default: cvAnalyze_post
+});
+
+const DESKTOP_ROOT = "/Users/admin/Desktop";
+const TRAINING_DIR = "/Users/admin/Desktop/training";
+const PARTICIPANT_DIR = "/Users/admin/Desktop/\u0410\u0440\u0442\u0435\u043C \u041F\u0443\u0442\u0438\u043D\u0446\u0435\u0432 \u0423\u0447\u0430\u0441\u0442\u043D\u0438\u043A1";
+const REST_DIR = "/Users/admin/Desktop/\u0410\u0440\u0442\u0435\u043C \u041F\u0443\u0442\u0438\u043D\u0446\u0435\u0432 \u0423\u0447\u0430\u0441\u0442\u043D\u0438\u043A1/\u0411\u0435\u0437 \u043D\u0430\u0433\u0440\u0443\u0437\u043A\u0438";
+const REST_PINNED_FILES = [
+  "/Users/admin/Desktop/\u0410\u0440\u0442\u0435\u043C \u041F\u0443\u0442\u0438\u043D\u0446\u0435\u0432 \u0423\u0447\u0430\u0441\u0442\u043D\u0438\u043A1/\u0411\u0435\u0437 \u043D\u0430\u0433\u0440\u0443\u0437\u043A\u0438/photo_2026-02-02_21-08-05.jpg"
+];
+const IMAGE_EXTS = /* @__PURE__ */ new Set([".jpg", ".jpeg", ".png", ".heic", ".webp"]);
+const TEXT_EXTS = /* @__PURE__ */ new Set([".txt", ".md", ".png", ".jpg", ".jpeg"]);
+const ext = (filePath) => path.extname(filePath).toLowerCase();
+const isImage = (filePath) => IMAGE_EXTS.has(ext(filePath));
+const isWorkoutInfo = (filePath) => TEXT_EXTS.has(ext(filePath));
+const sortByName = (files) => files.sort((a, b) => a.localeCompare(b, "ru"));
+async function exists(target) {
+  try {
+    await fs.access(target);
+    return true;
+  } catch {
+    return false;
+  }
+}
+async function listFiles(dir, recursive = false) {
+  if (!await exists(dir)) return [];
+  const out = [];
+  const entries = await fs.readdir(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    if (entry.name.startsWith(".")) continue;
+    const abs = path.join(dir, entry.name);
+    if (entry.isFile()) {
+      out.push(abs);
+      continue;
+    }
+    if (recursive && entry.isDirectory()) {
+      out.push(...await listFiles(abs, true));
+    }
+  }
+  return out;
+}
+async function pickScaleFiles() {
+  const topFiles = await listFiles(DESKTOP_ROOT, false);
+  const jpegOnly = topFiles.filter((file) => [".jpeg", ".jpg"].includes(ext(file)));
+  const dated = await Promise.all(
+    jpegOnly.map(async (file) => ({
+      file,
+      mtime: (await fs.stat(file)).mtimeMs
+    }))
+  );
+  return dated.sort((a, b) => b.mtime - a.mtime).slice(0, 2).map((item) => item.file);
+}
+function toItems(files) {
+  return files.map((file) => ({
+    name: path.basename(file),
+    path: file
+  }));
+}
+const mvpDemoData_get = defineEventHandler(async () => {
+  const notes = [];
+  const scales = await pickScaleFiles();
+  if (scales.length < 2) {
+    notes.push("\u041D\u0430\u0439\u0434\u0435\u043D\u043E \u043C\u0435\u043D\u044C\u0448\u0435 \u0434\u0432\u0443\u0445 JPEG-\u0444\u0430\u0439\u043B\u043E\u0432 \u0434\u043B\u044F \u0448\u043A\u0430\u043B \u043D\u0430 Desktop.");
+  }
+  const trainingFiles = sortByName((await listFiles(TRAINING_DIR, true)).filter(isWorkoutInfo));
+  if (!trainingFiles.length) {
+    notes.push('\u041F\u0430\u043F\u043A\u0430 training \u043D\u0435 \u0441\u043E\u0434\u0435\u0440\u0436\u0438\u0442 \u0444\u0430\u0439\u043B\u043E\u0432 \u0434\u043B\u044F \u0431\u043B\u043E\u043A\u0430 "\u041D\u0430\u0433\u0440\u0443\u0437\u043A\u0430".');
+  }
+  const restFilesExplicit = sortByName((await listFiles(REST_DIR, true)).filter(isImage));
+  const participantAllImages = sortByName((await listFiles(PARTICIPANT_DIR, true)).filter(isImage));
+  const pinnedRestFiles = (await Promise.all(
+    REST_PINNED_FILES.map(async (file) => await exists(file) ? file : null)
+  )).filter((file) => Boolean(file));
+  const restFiles = Array.from(/* @__PURE__ */ new Set([
+    ...pinnedRestFiles,
+    ...restFilesExplicit
+  ])).slice(0, 2);
+  if (pinnedRestFiles.length) {
+    notes.push(`\u0424\u043E\u0442\u043E \u0434\u043B\u044F "\u041F\u043E\u043A\u043E\u0439" \u0437\u0430\u043A\u0440\u0435\u043F\u043B\u0435\u043D\u044B \u0432\u0440\u0443\u0447\u043D\u0443\u044E: ${pinnedRestFiles.map((f) => path.basename(f)).join(", ")}`);
+  }
+  if (!restFiles.length) {
+    notes.push('\u041F\u0430\u043F\u043A\u0430 "\u0411\u0435\u0437 \u043D\u0430\u0433\u0440\u0443\u0437\u043A\u0438" \u043F\u0443\u0441\u0442\u0430. \u0411\u043B\u043E\u043A "\u041F\u043E\u043A\u043E\u0439" \u043D\u0435 \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438.');
+  }
+  const restSet = new Set(restFiles);
+  const loadFiles = participantAllImages.filter((file) => !restSet.has(file)).slice(0, 100);
+  if (!loadFiles.length) {
+    notes.push("\u041D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u044B \u0444\u043E\u0442\u043E \u043F\u043E\u043B\u043E\u0441\u043E\u043A \u043F\u043E\u0441\u043B\u0435 \u043D\u0430\u0433\u0440\u0443\u0437\u043E\u043A.");
+  } else {
+    notes.push('\u0424\u043E\u0442\u043E "\u043F\u043E\u0441\u043B\u0435 \u043D\u0430\u0433\u0440\u0443\u0437\u043A\u0438" \u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043D\u044B \u0438\u0437 \u043F\u0430\u043F\u043A\u0438 \u0443\u0447\u0430\u0441\u0442\u043D\u0438\u043A\u0430 (\u0432\u0441\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u043D\u044B\u0435 \u0438\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u044F).');
+  }
+  return {
+    status: "ok",
+    scales: toItems(scales),
+    rest: toItems(restFiles),
+    load: toItems(loadFiles),
+    workout: toItems(trainingFiles),
+    notes,
+    roots: {
+      training: TRAINING_DIR,
+      participant: PARTICIPANT_DIR,
+      rest: REST_DIR
+    }
+  };
+});
+
+const mvpDemoData_get$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: mvpDemoData_get
+});
+
+const ALLOWED_ROOTS = [
+  "/Users/admin/Desktop/training",
+  "/Users/admin/Desktop/\u0410\u0440\u0442\u0435\u043C \u041F\u0443\u0442\u0438\u043D\u0446\u0435\u0432 \u0423\u0447\u0430\u0441\u0442\u043D\u0438\u043A1",
+  "/Users/admin/Desktop"
+].map((root) => path.resolve(root));
+const MIME_BY_EXT = {
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".png": "image/png",
+  ".heic": "image/heic",
+  ".webp": "image/webp",
+  ".txt": "text/plain; charset=utf-8",
+  ".md": "text/markdown; charset=utf-8"
+};
+const startsWithRoot = (targetPath, root) => targetPath === root || targetPath.startsWith(`${root}${path.sep}`);
+const mvpDemoFile_get = defineEventHandler(async (event) => {
+  const query = getQuery$1(event);
+  const rawPath = typeof query.path === "string" ? query.path : "";
+  if (!rawPath) {
+    throw createError({ statusCode: 400, statusMessage: "path query is required" });
+  }
+  const decoded = decodeURIComponent(rawPath);
+  const resolved = path.resolve(decoded);
+  const isAllowed = ALLOWED_ROOTS.some((root) => startsWithRoot(resolved, root));
+  if (!isAllowed) {
+    throw createError({ statusCode: 403, statusMessage: "Forbidden file path" });
+  }
+  let stat;
+  try {
+    stat = await fs.stat(resolved);
+  } catch {
+    throw createError({ statusCode: 404, statusMessage: "File not found" });
+  }
+  if (!stat.isFile()) {
+    throw createError({ statusCode: 400, statusMessage: "Path is not a file" });
+  }
+  const ext = path.extname(resolved).toLowerCase();
+  const mime = MIME_BY_EXT[ext] || "application/octet-stream";
+  const fileData = await fs.readFile(resolved);
+  setResponseHeader(event, "content-type", mime);
+  setResponseHeader(event, "cache-control", "no-store");
+  return fileData;
+});
+
+const mvpDemoFile_get$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: mvpDemoFile_get
 });
 
 const pdf_post = defineEventHandler(async (event) => {

@@ -1,0 +1,329 @@
+{
+  "ok": true,
+  "meta": {
+    "session_id": "UNFt-CtyIR",
+    "scale2": "1771697385975_photo_2026-02-21_19.59.57.jpeg",
+    "scale5": "1771697385977_photo_2026-02-21_20.00.02.jpeg",
+    "scale_profiles": [
+      {
+        "id": "scale2",
+        "count": 1,
+        "filename": "1771697385975_photo_2026-02-21_19.59.57.jpeg",
+        "palette_size": 8
+      },
+      {
+        "id": "scale5",
+        "count": 1,
+        "filename": "1771697385977_photo_2026-02-21_20.00.02.jpeg",
+        "palette_size": 8
+      }
+    ],
+    "note": "MVP 0.2: авто-определение количества зон на шкале и на полоске с сопоставлением к ближайшей шкале."
+  },
+  "rest": {
+    "items": [
+      {
+        "id": "1771697385978_1.jpg#1",
+        "filename": "1771697385978_1.jpg",
+        "strip_index": 1,
+        "source_group": "rest",
+        "detected_zone_count": 1,
+        "matched_scale_count": 1,
+        "matched_scale_id": "scale2",
+        "scale_type": "1-zones",
+        "zones": [
+          {
+            "index": 1,
+            "mean_lab": [
+              199,
+              128,
+              130
+            ],
+            "nearest": {
+              "label": "L7",
+              "delta_e": 26.32
+            }
+          }
+        ]
+      },
+      {
+        "id": "1771697385978_1.jpg#2",
+        "filename": "1771697385978_1.jpg",
+        "strip_index": 2,
+        "source_group": "rest",
+        "detected_zone_count": 1,
+        "matched_scale_count": 1,
+        "matched_scale_id": "scale2",
+        "scale_type": "1-zones",
+        "zones": [
+          {
+            "index": 1,
+            "mean_lab": [
+              179,
+              127,
+              133
+            ],
+            "nearest": {
+              "label": "L5",
+              "delta_e": 19.31
+            }
+          }
+        ]
+      },
+      {
+        "id": "1771697385978_1.jpg#3",
+        "filename": "1771697385978_1.jpg",
+        "strip_index": 3,
+        "source_group": "rest",
+        "detected_zone_count": 2,
+        "matched_scale_count": 1,
+        "matched_scale_id": "scale2",
+        "scale_type": "1-zones",
+        "zones": [
+          {
+            "index": 1,
+            "mean_lab": [
+              188,
+              128,
+              139
+            ],
+            "nearest": {
+              "label": "L5",
+              "delta_e": 19.72
+            }
+          }
+        ]
+      },
+      {
+        "id": "1771697385978_1.jpg#4",
+        "filename": "1771697385978_1.jpg",
+        "strip_index": 4,
+        "source_group": "rest",
+        "detected_zone_count": 1,
+        "matched_scale_count": 1,
+        "matched_scale_id": "scale2",
+        "scale_type": "1-zones",
+        "zones": [
+          {
+            "index": 1,
+            "mean_lab": [
+              197,
+              128,
+              128
+            ],
+            "nearest": {
+              "label": "L8",
+              "delta_e": 28.79
+            }
+          }
+        ]
+      },
+      {
+        "id": "1771697385978_1.jpg#5",
+        "filename": "1771697385978_1.jpg",
+        "strip_index": 5,
+        "source_group": "rest",
+        "detected_zone_count": 0,
+        "matched_scale_count": 1,
+        "matched_scale_id": "scale2",
+        "scale_type": "1-zones",
+        "zones": [
+          {
+            "index": 1,
+            "mean_lab": [
+              184,
+              128,
+              133
+            ],
+            "nearest": {
+              "label": "L5",
+              "delta_e": 21
+            }
+          }
+        ]
+      },
+      {
+        "id": "1771697385978_1.jpg#6",
+        "filename": "1771697385978_1.jpg",
+        "strip_index": 6,
+        "source_group": "rest",
+        "detected_zone_count": 0,
+        "matched_scale_count": 1,
+        "matched_scale_id": "scale2",
+        "scale_type": "1-zones",
+        "zones": [
+          {
+            "index": 1,
+            "mean_lab": [
+              198,
+              129,
+              133
+            ],
+            "nearest": {
+              "label": "L7",
+              "delta_e": 23.96
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "load": {
+    "items": [
+      {
+        "id": "1771697385980_photo_2026-02-21_17-07-18.jpg#1",
+        "filename": "1771697385980_photo_2026-02-21_17-07-18.jpg",
+        "strip_index": 1,
+        "source_group": "load",
+        "detected_zone_count": 1,
+        "matched_scale_count": 1,
+        "matched_scale_id": "scale2",
+        "scale_type": "1-zones",
+        "zones": [
+          {
+            "index": 1,
+            "mean_lab": [
+              64,
+              129,
+              136
+            ],
+            "nearest": {
+              "label": "L1",
+              "delta_e": 46.04
+            }
+          }
+        ]
+      },
+      {
+        "id": "1771697385980_photo_2026-02-21_17-07-18.jpg#2",
+        "filename": "1771697385980_photo_2026-02-21_17-07-18.jpg",
+        "strip_index": 2,
+        "source_group": "load",
+        "detected_zone_count": 1,
+        "matched_scale_count": 1,
+        "matched_scale_id": "scale2",
+        "scale_type": "1-zones",
+        "zones": [
+          {
+            "index": 1,
+            "mean_lab": [
+              83,
+              128,
+              136
+            ],
+            "nearest": {
+              "label": "L2",
+              "delta_e": 29.6
+            }
+          }
+        ]
+      },
+      {
+        "id": "1771697385980_photo_2026-02-21_17-07-18.jpg#3",
+        "filename": "1771697385980_photo_2026-02-21_17-07-18.jpg",
+        "strip_index": 3,
+        "source_group": "load",
+        "detected_zone_count": 0,
+        "matched_scale_count": 1,
+        "matched_scale_id": "scale2",
+        "scale_type": "1-zones",
+        "zones": [
+          {
+            "index": 1,
+            "mean_lab": [
+              201,
+              127,
+              129
+            ],
+            "nearest": {
+              "label": "L7",
+              "delta_e": 26.7
+            }
+          }
+        ]
+      },
+      {
+        "id": "1771697385980_photo_2026-02-21_17-07-18.jpg#4",
+        "filename": "1771697385980_photo_2026-02-21_17-07-18.jpg",
+        "strip_index": 4,
+        "source_group": "load",
+        "detected_zone_count": 1,
+        "matched_scale_count": 1,
+        "matched_scale_id": "scale2",
+        "scale_type": "1-zones",
+        "zones": [
+          {
+            "index": 1,
+            "mean_lab": [
+              177,
+              126,
+              131
+            ],
+            "nearest": {
+              "label": "L4",
+              "delta_e": 16.55
+            }
+          }
+        ]
+      },
+      {
+        "id": "1771697385980_photo_2026-02-21_17-07-18.jpg#5",
+        "filename": "1771697385980_photo_2026-02-21_17-07-18.jpg",
+        "strip_index": 5,
+        "source_group": "load",
+        "detected_zone_count": 2,
+        "matched_scale_count": 1,
+        "matched_scale_id": "scale2",
+        "scale_type": "1-zones",
+        "zones": [
+          {
+            "index": 1,
+            "mean_lab": [
+              181,
+              126,
+              141
+            ],
+            "nearest": {
+              "label": "L5",
+              "delta_e": 15.1
+            }
+          }
+        ]
+      },
+      {
+        "id": "1771697385980_photo_2026-02-21_17-07-18.jpg#6",
+        "filename": "1771697385980_photo_2026-02-21_17-07-18.jpg",
+        "strip_index": 6,
+        "source_group": "load",
+        "detected_zone_count": 0,
+        "matched_scale_count": 1,
+        "matched_scale_id": "scale2",
+        "scale_type": "1-zones",
+        "zones": [
+          {
+            "index": 1,
+            "mean_lab": [
+              200,
+              128,
+              130
+            ],
+            "nearest": {
+              "label": "L7",
+              "delta_e": 26.04
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "ocr": {
+    "items": [
+      {
+        "id": "1771697385982___________________________2026-02-21____19.42.29.png",
+        "filename": "1771697385982___________________________2026-02-21____19.42.29.png",
+        "text": "",
+        "warning": "OCR ошибка: tesseract is not installed or it's not in your PATH. See README file for more information."
+      }
+    ]
+  }
+}

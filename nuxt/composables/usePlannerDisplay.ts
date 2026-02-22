@@ -141,7 +141,7 @@ export function usePlannerDisplay(deps: PlannerDisplayDeps) {
     {
       key: 'mvp-after',
       title: 'После нагрузки',
-      subtitle: 'Пара полосок на измерение',
+      subtitle: 'Фото полосок после тренировки',
       component: PlannerMvpAfterLoadCard,
       componentProps: {
         load5Sets: deps.mvp.load5Sets.value,

@@ -64,8 +64,24 @@
               <div class="flex flex-col items-center gap-4">
                 <button
                   type="button"
+                  class="inline-flex items-center justify-center rounded-2xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-800 shadow-sm hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+                  :disabled="mvpLoading || mvpDemoLoading"
+                  @click="loadMvpDemoData"
+                >
+                  <span
+                    v-if="mvpDemoLoading"
+                    class="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-slate-800"
+                  />
+                  <span>{{
+                    mvpDemoLoading
+                      ? "Загружаем MVP демоданные..."
+                      : "Загрузить MVP демоданные"
+                  }}</span>
+                </button>
+                <button
+                  type="button"
                   class="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
-                  :disabled="!hasMvpFiles || mvpLoading"
+                  :disabled="!hasMvpFiles || mvpLoading || mvpDemoLoading"
                   @click="analyzeMvp"
                 >
                   <span
@@ -88,85 +104,77 @@
                 {{ mvpError }}
               </div>
 
+              <!-- ── Результаты анализа (новый контракт) ──────────────── -->
               <div v-if="mvpResult" class="space-y-6">
+
+                <!-- Шкалы -->
                 <div
-                  v-if="
-                    Array.isArray(mvpResult.medical_tests) &&
-                    mvpResult.medical_tests.length
-                  "
+                  v-if="mvpResult.meta?.scale_profiles?.length"
+                  class="rounded-2xl border border-slate-200 bg-white p-5"
+                >
+                  <div class="mb-3 text-base font-semibold text-slate-900">
+                    Шкалы (калибровка)
+                  </div>
+                  <div class="flex flex-wrap gap-3">
+                    <div
+                      v-for="sp in mvpResult.meta.scale_profiles"
+                      :key="sp.id"
+                      class="rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm"
+                    >
+                      <span class="font-medium text-slate-800">{{ sp.id }}</span>
+                      <span class="ml-2 text-slate-500">
+                        {{ sp.zone_count }} зон · {{ sp.palette_size }} цветов
+                      </span>
+                      <div class="mt-0.5 truncate text-xs text-slate-400">
+                        {{ sp.filename }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Полоски отдыха -->
+                <div
+                  v-if="mvpResult.strips?.rest?.length"
                   class="space-y-4"
                 >
                   <div class="text-base font-semibold text-slate-900">
-                    Результаты тест-полосок
+                    Полоски отдыха
                   </div>
                   <div
-                    v-for="(test, index) in mvpResult.medical_tests"
-                    :key="`medical-${index}`"
+                    v-for="(strip, idx) in mvpResult.strips.rest"
+                    :key="`rest-${idx}`"
                     class="rounded-2xl border border-slate-200 bg-white p-5"
                   >
-                    <div class="flex items-center justify-between gap-3">
-                      <div class="font-medium text-slate-900">
-                        Полоска {{ index + 1 }}
+                    <div class="mb-3 flex items-center justify-between gap-3">
+                      <div class="text-sm font-medium text-slate-900">
+                        {{ strip.photo_filename }}
                       </div>
-                      <div
-                        v-if="test?.type"
-                        class="text-xs uppercase tracking-wide text-slate-500"
-                      >
-                        {{ test.type }}
+                      <div class="flex items-center gap-2 text-xs text-slate-500">
+                        <span v-if="strip.scale_id" class="rounded-full bg-slate-100 px-2 py-0.5">
+                          Шкала: {{ strip.scale_id }}
+                        </span>
+                        <span>{{ strip.zone_count }} зон</span>
                       </div>
                     </div>
-                    <div class="mt-4 overflow-x-auto">
+                    <div class="overflow-x-auto">
                       <table class="min-w-full text-sm">
                         <thead>
-                          <tr
-                            class="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500"
-                          >
-                            <th class="px-3 py-2 font-medium">Параметр</th>
-                            <th class="px-3 py-2.font-medium">Значение</th>
-                            <th class="px-3 py-2 font-medium">Единицы</th>
-                            <th class="px-3 py-2 font-medium">Статус</th>
+                          <tr class="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
+                            <th class="px-3 py-2 font-medium">Зона</th>
+                            <th class="px-3 py-2 font-medium">Уровень</th>
+                            <th class="px-3 py-2 font-medium">ΔE</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr
-                            v-for="(value, paramKey) in test?.parameters"
-                            :key="paramKey"
+                            v-for="zone in strip.zones"
+                            :key="`rzone-${zone.index}`"
                             class="border-t"
                           >
-                            <td
-                              class="px-3 py-2 font-medium capitalize text-slate-700"
-                            >
-                              {{ paramKey }}
-                            </td>
-                            <td class="px-3 py-2 text-slate-900">
-                              {{ value?.value ?? "—" }}
-                            </td>
-                            <td class="px-3 py-2 text-slate-600">
-                              {{ value?.unit ?? "—" }}
-                            </td>
-                            <td class="px-3 py-2">
-                              <span
-                                v-if="value?.status"
-                                :class="[
-                                  'inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium',
-                                  value.status === 'норма'
-                                    ? 'bg-emerald-50 text-emerald-700'
-                                    : 'bg-amber-50 text-amber-700',
-                                ]"
-                              >
-                                <span
-                                  class="h-2 w-2 rounded-full"
-                                  :class="
-                                    value.status === 'норма'
-                                      ? 'bg-emerald-400'
-                                      : 'bg-amber-400'
-                                  "
-                                />
-                                {{ value.status }}
-                              </span>
-                              <span v-else class="text-xs text-slate-500"
-                                >—</span
-                              >
+                            <td class="px-3 py-1.5 text-slate-500">{{ zone.index + 1 }}</td>
+                            <td class="px-3 py-1.5 font-medium text-slate-900">{{ zone.level }}</td>
+                            <td class="px-3 py-1.5 text-slate-600">
+                              {{ zone.delta_e != null ? zone.delta_e.toFixed(1) : '—' }}
                             </td>
                           </tr>
                         </tbody>
@@ -175,110 +183,96 @@
                   </div>
                 </div>
 
+                <!-- Полоски нагрузки -->
                 <div
-                  v-if="mvpResult.workout"
-                  class="space-y-4 rounded-2xl border border-slate-200 bg-white p-5"
+                  v-if="mvpResult.strips?.load?.length"
+                  class="space-y-4"
                 >
-                  <div>
-                    <div class="text-base font-semibold text-slate-900">
-                      Распознанная тренировка
-                    </div>
-                    <p
-                      v-if="mvpResult.workout.name"
-                      class="mt-1 text-sm text-slate-600"
-                    >
-                      {{ mvpResult.workout.name }}
-                    </p>
-                    <p
-                      v-if="mvpResult.workout.type"
-                      class="text-xs uppercase tracking-wide text-slate-500"
-                    >
-                      {{ mvpResult.workout.type }}
-                    </p>
+                  <div class="text-base font-semibold text-slate-900">
+                    Полоски нагрузки
                   </div>
                   <div
-                    v-if="
-                      Array.isArray(mvpResult.workout.exercises) &&
-                      mvpResult.workout.exercises.length
-                    "
-                    class="space-y-2"
+                    v-for="(strip, idx) in mvpResult.strips.load"
+                    :key="`load-${idx}`"
+                    class="rounded-2xl border border-slate-200 bg-white p-5"
                   >
-                    <div
-                      v-for="(exercise, idx) in mvpResult.workout.exercises"
-                      :key="`exercise-${idx}`"
-                      class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3"
-                    >
-                      <div class="flex items-start justify-between gap-3">
-                        <div>
-                          <div class="text-sm font-semibold text-slate-900">
-                            {{ exercise?.name }}
-                          </div>
-                          <div
-                            v-if="exercise?.minute"
-                            class="text-xs text-slate-500"
-                          >
-                            Минута {{ exercise.minute }}
-                          </div>
-                        </div>
-                        <div class="text-sm text-slate-700">
-                          <span v-if="exercise?.reps">{{ exercise.reps }}</span>
-                          <span
-                            v-if="exercise?.unit"
-                            class="ml-1 text-xs uppercase text-slate-500"
-                          >
-                            {{ exercise.unit }}
-                          </span>
-                        </div>
+                    <div class="mb-3 flex items-center justify-between gap-3">
+                      <div class="text-sm font-medium text-slate-900">
+                        {{ strip.photo_filename }}
+                      </div>
+                      <div class="flex items-center gap-2 text-xs text-slate-500">
+                        <span v-if="strip.scale_id" class="rounded-full bg-slate-100 px-2 py-0.5">
+                          Шкала: {{ strip.scale_id }}
+                        </span>
+                        <span>{{ strip.zone_count }} зон</span>
                       </div>
                     </div>
-                  </div>
-                  <div
-                    v-if="
-                      Array.isArray(mvpResult.workout.notes) &&
-                      mvpResult.workout.notes.length
-                    "
-                    class="rounded-xl border border-dashed border-slate-300 bg-white px-4 py-3"
-                  >
-                    <div
-                      class="text-xs font-semibold uppercase tracking-wide text-slate-500"
-                    >
-                      Примечания
+                    <div class="overflow-x-auto">
+                      <table class="min-w-full text-sm">
+                        <thead>
+                          <tr class="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
+                            <th class="px-3 py-2 font-medium">Зона</th>
+                            <th class="px-3 py-2 font-medium">Уровень</th>
+                            <th class="px-3 py-2 font-medium">ΔE</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr
+                            v-for="zone in strip.zones"
+                            :key="`lzone-${zone.index}`"
+                            class="border-t"
+                          >
+                            <td class="px-3 py-1.5 text-slate-500">{{ zone.index + 1 }}</td>
+                            <td class="px-3 py-1.5 font-medium text-slate-900">{{ zone.level }}</td>
+                            <td class="px-3 py-1.5 text-slate-600">
+                              {{ zone.delta_e != null ? zone.delta_e.toFixed(1) : '—' }}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
-                    <ul
-                      class="mt-2 list-disc space-y-1 pl-4 text-sm text-slate-600"
-                    >
-                      <li
-                        v-for="(note, idx) in mvpResult.workout.notes"
-                        :key="`note-${idx}`"
-                      >
-                        {{ note }}
-                      </li>
-                    </ul>
                   </div>
                 </div>
 
+                <!-- OCR — распознанный текст -->
                 <div
-                  v-if="
-                    Array.isArray(mvpResult.notes) && mvpResult.notes.length
-                  "
+                  v-if="mvpResult.ocr?.items?.length"
+                  class="rounded-2xl border border-slate-200 bg-white p-5"
+                >
+                  <div class="mb-3 text-base font-semibold text-slate-900">
+                    Распознанный текст (OCR)
+                  </div>
+                  <div class="space-y-3">
+                    <div
+                      v-for="(item, idx) in mvpResult.ocr.items"
+                      :key="`ocr-${idx}`"
+                      class="rounded-xl border border-slate-100 bg-slate-50 px-4 py-3"
+                    >
+                      <div class="mb-1 text-xs text-slate-400">{{ item.filename }}</div>
+                      <div class="whitespace-pre-wrap text-sm text-slate-800">
+                        {{ item.text || '—' }}
+                      </div>
+                      <div
+                        v-if="item.warning"
+                        class="mt-1 text-xs text-amber-600"
+                      >
+                        ⚠ {{ item.warning }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Примечание от сервиса -->
+                <div
+                  v-if="mvpResult.meta?.note"
                   class="rounded-2xl border border-dashed border-slate-300 bg-white p-5"
                 >
-                  <div
-                    class="text-sm font-semibold.uppercase tracking-wide text-slate-500"
-                  >
-                    Дополнительно
+                  <div class="text-sm font-semibold uppercase tracking-wide text-slate-500">
+                    Примечание
                   </div>
-                  <ul
-                    class="mt-3 list-disc space-y-1 pl-4 text-sm text-slate-600"
-                  >
-                    <li
-                      v-for="(note, idx) in mvpResult.notes"
-                      :key="`extra-note-${idx}`"
-                    >
-                      {{ note }}
-                    </li>
-                  </ul>
+                  <p class="mt-2 text-sm text-slate-600">{{ mvpResult.meta.note }}</p>
                 </div>
+
               </div>
             </div>
           </div>
@@ -715,6 +709,7 @@ const {
 const {
   mvpCollapsed,
   mvpLoading,
+  mvpDemoLoading,
   mvpError,
   mvpResult,
   weeksInputCollapsed,
@@ -726,6 +721,7 @@ const {
   handleMvpFileChange,
   removeMvpFile,
   analyzeMvp,
+  loadMvpDemoData,
   addLoad5Set,
   removeLoad5Set,
   handleLoad5SetFileChange,

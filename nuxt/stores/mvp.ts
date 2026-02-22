@@ -17,39 +17,54 @@ export type MvpLoad5Set = {
   workoutText: MvpPreview | null
 }
 
-export type MvpTestParameter = {
-  value?: number | string
-  unit?: string
-  status?: string
+// ─── Contract types (mirrors nuxt/server/api/cv-analyze.post.ts) ─────────
+
+export type ZoneResult = {
+  index: number
+  level: string         // 'L1'..'LN' — closest palette match
+  delta_e: number | null  // colour distance (lower = better)
 }
 
-export type MvpMedicalTest = {
-  type?: string
-  parameters?: Record<string, MvpTestParameter>
+export type StripResult = {
+  photo_filename: string
+  strip_index: number
+  zone_count: number
+  scale_id: string | null
+  zones: ZoneResult[]
 }
 
-export type MvpWorkoutExercise = {
-  minute?: number | string
-  name?: string
-  reps?: number | string
-  unit?: string
+export type OcrItem = {
+  filename: string
+  text: string
+  warning: string | null
 }
 
-export type MvpWorkoutResult = {
-  name?: string
-  type?: string
-  exercises?: MvpWorkoutExercise[]
-  notes?: string[]
+export type ScaleProfile = {
+  id: string
+  zone_count: number
+  palette_size: number
+  filename: string
 }
 
 export type MvpAnalysisResult = {
-  status?: string
-  message?: string
+  status: 'ok' | 'error'
+  session_id: string | null
+  strips: {
+    rest: StripResult[]
+    load: StripResult[]
+  }
+  ocr: {
+    items: OcrItem[]
+  }
+  meta: {
+    scale_profiles: ScaleProfile[]
+    note: string | null
+  }
   error?: string
-  notes?: string[]
-  medical_tests?: MvpMedicalTest[]
-  workout?: MvpWorkoutResult
+  message?: string
 }
+
+// ─── Store ───────────────────────────────────────────────────────────────
 
 const createId = () => {
   try {
