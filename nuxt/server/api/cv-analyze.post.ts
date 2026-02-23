@@ -39,7 +39,7 @@ export type ZoneResult = {
 
 export type StripResult = {
   photo_filename: string  // original uploaded photo name
-  strip_index: number     // always 1 — one strip per photo (deduplication applied)
+  strip_index: number     // physical strip index inside one photo
   zone_count: number
   scale_id: string | null // which scale profile was matched
   zones: ZoneResult[]
@@ -51,11 +51,22 @@ export type OcrItem = {
   warning: string | null
 }
 
+export type ScaleZone = {
+  zone_index: number
+  label: string                              // 'L1'..'LN'
+  rgb: [number, number, number]              // [R, G, B] 0-255
+  lab: [number, number, number]              // OpenCV LAB
+  text: string | null                        // OCR-распознанный текст
+  text_confidence: number | null             // 0-1 (от Tesseract)
+  text_bbox: [number, number, number, number] | null  // [x, y, w, h]
+}
+
 export type ScaleProfile = {
   id: string
   zone_count: number
   palette_size: number
   filename: string
+  zones: ScaleZone[]   // детальные данные каждой зоны шкалы
 }
 
 export type CvAnalysisResult = {
@@ -79,6 +90,26 @@ export type CvAnalysisResult = {
 
 // ─── Normalizer ──────────────────────────────────────────────────────────
 
+const mapScaleZone = (raw: unknown): ScaleZone => {
+  const z = asRecord(raw) || {}
+  const rgb = Array.isArray(z.rgb) ? z.rgb as number[] : [0, 0, 0]
+  const lab = Array.isArray(z.lab) ? z.lab as number[] : [0, 0, 0]
+  const bbox = Array.isArray(z.text_bbox) ? z.text_bbox as number[] : null
+  return {
+    zone_index: asNumber(z.zone_index) ?? 0,
+    label: asString(z.label) || 'L?',
+    rgb: [rgb[0] ?? 0, rgb[1] ?? 0, rgb[2] ?? 0] as [number, number, number],
+    lab: [
+      typeof lab[0] === 'number' ? lab[0] : 0,
+      typeof lab[1] === 'number' ? lab[1] : 0,
+      typeof lab[2] === 'number' ? lab[2] : 0,
+    ] as [number, number, number],
+    text: asString(z.text),
+    text_confidence: asNumber(z.text_confidence),
+    text_bbox: bbox ? [bbox[0] ?? 0, bbox[1] ?? 0, bbox[2] ?? 0, bbox[3] ?? 0] as [number, number, number, number] : null,
+  }
+}
+
 const mapZone = (raw: unknown, idx: number): ZoneResult => {
   const zone = asRecord(raw) || {}
   const nearest = asRecord(zone.nearest) || {}
@@ -93,15 +124,10 @@ const mapStrip = (raw: unknown, groupName: 'rest' | 'load'): StripResult | null 
   const item = asRecord(raw)
   if (!item) return null
 
-  // One physical strip per photo — take strip_index === 1.
-  // CV backend may return multiple ROIs per image; we only use the first.
-  const stripIndex = asNumber(item.strip_index) ?? 1
-  if (stripIndex !== 1) return null
-
   const zones = asArray(item.zones).map((z, i) => mapZone(z, i + 1))
   return {
     photo_filename: asString(item.filename) || 'unknown',
-    strip_index: 1,
+    strip_index: asNumber(item.strip_index) ?? 1,
     zone_count: zones.length,
     scale_id: asString(item.matched_scale_id),
     zones,
@@ -154,10 +180,11 @@ const normalizeCvResponse = (rawResponse: unknown): CvAnalysisResult => {
         zone_count: asNumber(pr.count) ?? 0,
         palette_size: asNumber(pr.palette_size) ?? 0,
         filename: asString(pr.filename) || '',
+        zones: asArray(pr.zones).map(mapScaleZone),
       }
     })
 
-  // ── Strips: deduplicate by photo — keep only strip_index === 1 ──
+  // ── Strips (keep all detected strips per photo) ──
   const restStrips = asArray(asRecord(payload.rest)?.items)
     .map((item) => mapStrip(item, 'rest'))
     .filter((s): s is StripResult => s !== null)

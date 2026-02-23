@@ -39,11 +39,22 @@ export type OcrItem = {
   warning: string | null
 }
 
+export type ScaleZone = {
+  zone_index: number
+  label: string
+  rgb: [number, number, number]
+  lab: [number, number, number]
+  text: string | null
+  text_confidence: number | null
+  text_bbox: [number, number, number, number] | null
+}
+
 export type ScaleProfile = {
   id: string
   zone_count: number
   palette_size: number
   filename: string
+  zones: ScaleZone[]
 }
 
 export type MvpAnalysisResult = {

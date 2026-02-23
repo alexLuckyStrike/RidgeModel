@@ -220,7 +220,7 @@ declare global {
   export type { Row, RestBaseline, Athlete } from '../../stores/athletes'
   import('../../stores/athletes')
   // @ts-ignore
-  export type { MvpPreview, MvpLoad5Set, ZoneResult, StripResult, OcrItem, ScaleProfile, MvpAnalysisResult } from '../../stores/mvp'
+  export type { MvpPreview, MvpLoad5Set, ZoneResult, StripResult, OcrItem, ScaleZone, ScaleProfile, MvpAnalysisResult } from '../../stores/mvp'
   import('../../stores/mvp')
 }
 // for vue template auto import

@@ -15,7 +15,7 @@ const TRAINING_DIR = "/Users/admin/Desktop/training";
 const PARTICIPANT_DIR = "/Users/admin/Desktop/\u0410\u0440\u0442\u0435\u043C \u041F\u0443\u0442\u0438\u043D\u0446\u0435\u0432 \u0423\u0447\u0430\u0441\u0442\u043D\u0438\u043A1";
 const REST_DIR = "/Users/admin/Desktop/\u0410\u0440\u0442\u0435\u043C \u041F\u0443\u0442\u0438\u043D\u0446\u0435\u0432 \u0423\u0447\u0430\u0441\u0442\u043D\u0438\u043A1/\u0411\u0435\u0437 \u043D\u0430\u0433\u0440\u0443\u0437\u043A\u0438";
 const REST_PINNED_FILES = [
-  "/Users/admin/Desktop/\u0410\u0440\u0442\u0435\u043C \u041F\u0443\u0442\u0438\u043D\u0446\u0435\u0432 \u0423\u0447\u0430\u0441\u0442\u043D\u0438\u043A1/19.02.2026/1.jpg"
+  "/Users/admin/Desktop/\u0410\u0440\u0442\u0435\u043C \u041F\u0443\u0442\u0438\u043D\u0446\u0435\u0432 \u0423\u0447\u0430\u0441\u0442\u043D\u0438\u043A1/\u0411\u0435\u0437 \u043D\u0430\u0433\u0440\u0443\u0437\u043A\u0438/photo_2026-02-02_21-08-05.jpg"
 ];
 const IMAGE_EXTS = /* @__PURE__ */ new Set([".jpg", ".jpeg", ".png", ".heic", ".webp"]);
 const TEXT_EXTS = /* @__PURE__ */ new Set([".txt", ".md", ".png", ".jpg", ".jpeg"]);

@@ -110,24 +110,87 @@
                 <!-- Шкалы -->
                 <div
                   v-if="mvpResult.meta?.scale_profiles?.length"
-                  class="rounded-2xl border border-slate-200 bg-white p-5"
+                  class="space-y-4"
                 >
-                  <div class="mb-3 text-base font-semibold text-slate-900">
+                  <div class="text-base font-semibold text-slate-900">
                     Шкалы (калибровка)
                   </div>
-                  <div class="flex flex-wrap gap-3">
-                    <div
-                      v-for="sp in mvpResult.meta.scale_profiles"
-                      :key="sp.id"
-                      class="rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm"
-                    >
-                      <span class="font-medium text-slate-800">{{ sp.id }}</span>
-                      <span class="ml-2 text-slate-500">
-                        {{ sp.zone_count }} зон · {{ sp.palette_size }} цветов
-                      </span>
-                      <div class="mt-0.5 truncate text-xs text-slate-400">
-                        {{ sp.filename }}
+                  <div
+                    v-for="sp in mvpResult.meta.scale_profiles"
+                    :key="sp.id"
+                    class="rounded-2xl border border-slate-200 bg-white p-5"
+                  >
+                    <!-- Заголовок шкалы -->
+                    <div class="mb-4 flex items-center justify-between gap-3">
+                      <div>
+                        <span class="font-semibold text-slate-900">{{ sp.id }}</span>
+                        <span class="ml-2 text-sm text-slate-500">
+                          {{ sp.zone_count }} зон · {{ sp.palette_size }} цветов в палитре
+                        </span>
                       </div>
+                      <div class="truncate text-xs text-slate-400">{{ sp.filename }}</div>
+                    </div>
+
+                    <!-- Таблица зон шкалы -->
+                    <div v-if="sp.zones?.length" class="overflow-x-auto">
+                      <table class="min-w-full text-sm">
+                        <thead>
+                          <tr class="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
+                            <th class="px-3 py-2 font-medium">Зона</th>
+                            <th class="px-3 py-2 font-medium">Цвет</th>
+                            <th class="px-3 py-2 font-medium">RGB</th>
+                            <th class="px-3 py-2 font-medium">LAB</th>
+                            <th class="px-3 py-2 font-medium">Текст (OCR)</th>
+                            <th class="px-3 py-2 font-medium">Точность</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr
+                            v-for="zone in sp.zones"
+                            :key="zone.zone_index"
+                            class="border-t"
+                          >
+                            <td class="px-3 py-2 font-medium text-slate-700">
+                              {{ zone.label }}
+                            </td>
+                            <td class="px-3 py-2">
+                              <div
+                                class="h-6 w-10 rounded border border-slate-200"
+                                :style="{ backgroundColor: `rgb(${zone.rgb[0]},${zone.rgb[1]},${zone.rgb[2]})` }"
+                              />
+                            </td>
+                            <td class="px-3 py-2 font-mono text-xs text-slate-600">
+                              {{ zone.rgb.join(', ') }}
+                            </td>
+                            <td class="px-3 py-2 font-mono text-xs text-slate-500">
+                              {{ zone.lab.map((v) => v.toFixed(1)).join(', ') }}
+                            </td>
+                            <td class="px-3 py-2 text-slate-800">
+                              <span v-if="zone.text" class="whitespace-pre-wrap">{{ zone.text }}</span>
+                              <span v-else class="text-slate-400">—</span>
+                            </td>
+                            <td class="px-3 py-2">
+                              <span
+                                v-if="zone.text_confidence != null"
+                                :class="[
+                                  'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
+                                  zone.text_confidence >= 0.7
+                                    ? 'bg-emerald-50 text-emerald-700'
+                                    : zone.text_confidence >= 0.4
+                                    ? 'bg-amber-50 text-amber-700'
+                                    : 'bg-rose-50 text-rose-700',
+                                ]"
+                              >
+                                {{ (zone.text_confidence * 100).toFixed(0) }}%
+                              </span>
+                              <span v-else class="text-xs text-slate-400">—</span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div v-else class="text-sm text-slate-400">
+                      Зоны не извлечены
                     </div>
                   </div>
                 </div>

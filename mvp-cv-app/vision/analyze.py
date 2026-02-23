@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import sys, json, os
+import sys, json, os, re
 from dataclasses import dataclass
 from typing import List, Dict, Any, Tuple, Optional
 
@@ -11,9 +11,10 @@ except Exception as e:
     print(json.dumps({"ok": False, "error": f"OpenCV not installed: {e}"}))
     sys.exit(1)
 
-# OCR is optional
+# OCR is optional — requires both pytesseract module AND tesseract binary
 try:
     import pytesseract
+    pytesseract.get_tesseract_version()  # raises if tesseract binary not in PATH
     _HAVE_TESS = True
 except Exception:
     pytesseract = None
@@ -27,6 +28,21 @@ def read_stdin_json() -> Dict[str, Any]:
 
 def safe_basename(p: str) -> str:
     return os.path.basename(p) if p else ""
+
+
+def file_ext(p: str) -> str:
+    return os.path.splitext(p)[1].lower() if p else ""
+
+
+def read_text_file_loose(path: str) -> str:
+    for enc in ("utf-8", "utf-8-sig", "cp1251", "windows-1251"):
+        try:
+            with open(path, "r", encoding=enc) as f:
+                return f.read()
+        except Exception:
+            continue
+    with open(path, "rb") as f:
+        return f.read().decode("utf-8", errors="replace")
 
 
 def ensure_bgr(img: np.ndarray) -> np.ndarray:
@@ -110,12 +126,193 @@ def _box_iou(a: Tuple[int, int, int, int], b: Tuple[int, int, int, int]) -> floa
     return float(inter / max(1.0, union))
 
 
+def tighten_strip_roi(roi_bgr: np.ndarray) -> np.ndarray:
+    """Crop a candidate elongated ROI closer to the actual strip body."""
+    roi_bgr = ensure_bgr(roi_bgr)
+    if roi_bgr is None or roi_bgr.size == 0:
+        return roi_bgr
+    h, w = roi_bgr.shape[:2]
+    if h < 20 or w < 8:
+        return roi_bgr
+
+    hsv = cv2.cvtColor(roi_bgr, cv2.COLOR_BGR2HSV)
+    lab = cv2.cvtColor(roi_bgr, cv2.COLOR_BGR2LAB)
+    sat = hsv[:, :, 1].astype(np.float32)
+    val = hsv[:, :, 2].astype(np.float32)
+    a = lab[:, :, 1].astype(np.float32) - 128.0
+    b = lab[:, :, 2].astype(np.float32) - 128.0
+    chroma = np.sqrt(a * a + b * b)
+
+    colorish = ((sat > 18) | (chroma > 7)).astype(np.float32)
+    not_bg = ((val < 248) | colorish.astype(bool)).astype(np.float32)
+    col_signal = np.mean((0.7 * colorish + 0.3 * not_bg), axis=0)
+    if col_signal.size == 0:
+        return roi_bgr
+
+    # Smooth x-profile and pick dominant band.
+    kx = max(5, int(w * 0.08) | 1)
+    col_smooth = cv2.GaussianBlur(col_signal.reshape(1, -1), (kx, 1), 0).reshape(-1)
+    peak_idx = int(np.argmax(col_smooth))
+    thr_x = max(0.03, float(np.max(col_smooth) * 0.45))
+    active_x = col_smooth > thr_x
+    x0 = peak_idx
+    x1 = peak_idx
+    while x0 > 0 and active_x[x0 - 1]:
+        x0 -= 1
+    while x1 + 1 < w and active_x[x1 + 1]:
+        x1 += 1
+    pad_x = max(2, int((x1 - x0 + 1) * 0.6))
+    x0 = max(0, x0 - pad_x)
+    x1 = min(w, x1 + pad_x + 1)
+    # Prevent very wide crops that re-introduce napkin/background noise.
+    band_w = x1 - x0
+    max_band_w = max(18, int(w * 0.35))
+    if band_w > max_band_w:
+        cx = peak_idx
+        x0 = max(0, int(cx - max_band_w / 2))
+        x1 = min(w, int(cx + max_band_w / 2))
+        if x1 <= x0:
+            x0, x1 = 0, w
+
+    cropped = roi_bgr[:, x0:x1].copy()
+    if cropped.size == 0:
+        return roi_bgr
+
+    # Trim top/bottom using row activity inside narrowed x-band.
+    hsv2 = cv2.cvtColor(cropped, cv2.COLOR_BGR2HSV)
+    sat2 = hsv2[:, :, 1].astype(np.float32)
+    val2 = hsv2[:, :, 2].astype(np.float32)
+    row_signal = np.mean(((sat2 > 18) | (val2 < 248)).astype(np.float32), axis=1)
+    ky = max(5, int(cropped.shape[0] * 0.03) | 1)
+    row_smooth = cv2.GaussianBlur(row_signal.reshape(-1, 1), (1, ky), 0).reshape(-1)
+    thr_y = max(0.02, float(np.max(row_smooth) * 0.35))
+    active_y = row_smooth > thr_y
+    ys = np.where(active_y)[0]
+    if ys.size > 0:
+        y0 = max(0, int(ys[0]) - max(4, int(0.02 * h)))
+        y1 = min(h, int(ys[-1]) + max(4, int(0.02 * h)) + 1)
+        cropped = cropped[y0:y1, :].copy()
+
+    return cropped if cropped.size > 0 else roi_bgr
+
+
 def find_strip_rois(img_bgr: np.ndarray) -> List[np.ndarray]:
     """Find multiple strip-like ROIs in one image.
     Returns vertical ROIs sorted left->right. Falls back to one ROI.
     """
     img_bgr = ensure_bgr(img_bgr)
     h, w = img_bgr.shape[:2]
+
+    # First pass: find aligned colored pads and expand them into strip ROIs.
+    # Works much better on real photos with napkin textures than edge-only contours.
+    hsv = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2HSV)
+    sat = hsv[:, :, 1]
+    val = hsv[:, :, 2]
+    color_mask = ((sat > 28) & (val > 35) & (val < 250)).astype(np.uint8) * 255
+    color_mask = cv2.morphologyEx(color_mask, cv2.MORPH_OPEN, np.ones((3, 3), np.uint8))
+    color_mask = cv2.morphologyEx(color_mask, cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8))
+
+    contours_color, _ = cv2.findContours(color_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    pad_boxes: List[Tuple[int, int, int, int]] = []
+    img_area = max(1, h * w)
+    for c in contours_color:
+        x, y, cw, ch = cv2.boundingRect(c)
+        area = cw * ch
+        if area < 0.00008 * img_area:
+            continue
+        if area > 0.02 * img_area:
+            continue
+        if min(cw, ch) < 6:
+            continue
+        # pads are usually compact-ish rectangles, not long edges
+        ar = max(cw, ch) / (min(cw, ch) + 1e-6)
+        if ar > 6.0:
+            continue
+        pad_boxes.append((x, y, cw, ch))
+
+    if pad_boxes:
+        pad_boxes.sort(key=lambda b: b[0] + b[2] * 0.5)
+        groups: List[List[Tuple[int, int, int, int]]] = []
+        for box in pad_boxes:
+            x, y, cw, ch = box
+            cx = x + cw / 2.0
+            assigned = False
+            for g in groups:
+                g_centers = [gx + gw / 2.0 for gx, gy, gw, gh in g]
+                g_widths = [gw for gx, gy, gw, gh in g]
+                g_cx = float(np.median(g_centers))
+                tol = max(18.0, float(np.median(g_widths)) * 1.8)
+                if abs(cx - g_cx) <= tol:
+                    g.append(box)
+                    assigned = True
+                    break
+            if not assigned:
+                groups.append([box])
+
+        candidate_boxes: List[Tuple[int, int, int, int, int]] = []
+        for g in groups:
+            if len(g) < 2:
+                continue
+            xs = [b[0] for b in g]
+            ys = [b[1] for b in g]
+            x2s = [b[0] + b[2] for b in g]
+            y2s = [b[1] + b[3] for b in g]
+            widths = [b[2] for b in g]
+            heights = [b[3] for b in g]
+            span_y = max(y2s) - min(ys)
+            med_h = float(np.median(heights)) if heights else 1.0
+            if med_h <= 0:
+                continue
+            # Reject accidental groups with huge gaps (common on textured napkins).
+            if (span_y / med_h) > max(18.0, 10.0 * len(g)):
+                continue
+
+            x0 = max(0, int(min(xs) - max(widths) * 1.6))
+            x1 = min(w, int(max(x2s) + max(widths) * 1.6))
+            y0 = max(0, int(min(ys) - np.median(heights) * 2.0))
+            y1 = min(h, int(max(y2s) + np.median(heights) * 2.0))
+            bw = x1 - x0
+            bh = y1 - y0
+            if bw <= 0 or bh <= 0:
+                continue
+            if max(bw, bh) / (min(bw, bh) + 1e-6) < 3.0:
+                continue
+            # Filter obvious scale-package palette grids and broad blobs.
+            if min(bw, bh) > 0.14 * min(w, h):
+                continue
+            if max(bw, bh) < 0.12 * max(w, h):
+                continue
+            candidate_boxes.append((x0, y0, bw, bh, len(g)))
+
+        # Prefer groups with more pads and reasonable elongated boxes, then deduplicate.
+        candidate_boxes.sort(
+            key=lambda b: (b[4], (b[2] * b[3])), reverse=True
+        )
+        picked_boxes: List[Tuple[int, int, int, int, int]] = []
+        for box in candidate_boxes:
+            cur = (box[0], box[1], box[2], box[3])
+            if any(_box_iou(cur, (p[0], p[1], p[2], p[3])) > 0.35 for p in picked_boxes):
+                continue
+            picked_boxes.append(box)
+
+        picked_boxes.sort(key=lambda b: b[0])
+        rois_from_pads: List[np.ndarray] = []
+        for x, y, cw, ch, _ in picked_boxes:
+            roi = img_bgr[y:y + ch, x:x + cw].copy()
+            if roi.size == 0:
+                continue
+            if roi.shape[1] > roi.shape[0]:
+                roi = cv2.rotate(roi, cv2.ROTATE_90_CLOCKWISE)
+            roi = tighten_strip_roi(roi)
+            # Final sanity: must contain at least 2 likely zones for multi-strip mode.
+            zc = estimate_zone_count(roi)
+            if zc >= 2:
+                rois_from_pads.append(roi)
+
+        if len(rois_from_pads) >= 2:
+            return rois_from_pads
+
+    # Fallback: edge-based contour search
     gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
     gray = cv2.GaussianBlur(gray, (5, 5), 0)
     edges = cv2.Canny(gray, 40, 130)
@@ -123,11 +320,16 @@ def find_strip_rois(img_bgr: np.ndarray) -> List[np.ndarray]:
     contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     raw_boxes: List[Tuple[int, int, int, int, int]] = []
-    img_area = max(1, h * w)
     for c in contours:
         x, y, cw, ch = cv2.boundingRect(c)
         area = cw * ch
         if area < 0.0025 * img_area:
+            continue
+        long_side = max(cw, ch)
+        short_side = min(cw, ch)
+        if long_side < 0.30 * max(w, h):
+            continue
+        if short_side > 0.20 * min(w, h):
             continue
         ar = max(cw, ch) / (min(cw, ch) + 1e-6)
         if ar < 3.0:
@@ -152,6 +354,10 @@ def find_strip_rois(img_bgr: np.ndarray) -> List[np.ndarray]:
             continue
         if roi.shape[1] > roi.shape[0]:
             roi = cv2.rotate(roi, cv2.ROTATE_90_CLOCKWISE)
+        roi = tighten_strip_roi(roi)
+        # Suppress obvious napkin/edge artifacts.
+        if estimate_zone_count(roi) < 1:
+            continue
         rois.append(roi)
 
     if rois:
@@ -192,20 +398,33 @@ def estimate_zone_count(strip_bgr: np.ndarray) -> int:
     hsv = cv2.cvtColor(core, cv2.COLOR_BGR2HSV)
     sat = hsv[:, :, 1]
     val = hsv[:, :, 2]
-    color_mask = ((sat > 25) & (val > 30) & ((val < 245) | (sat > 45))).astype(np.uint8)
+    lab = cv2.cvtColor(core, cv2.COLOR_BGR2LAB)
+    a = lab[:, :, 1].astype(np.int16) - 128
+    b = lab[:, :, 2].astype(np.int16) - 128
+    chroma = np.sqrt(a * a + b * b)
+    color_mask = (
+        ((sat > 22) & (val > 28) & (val < 248))
+        | (chroma > 8)
+    ).astype(np.uint8)
     color_mask = cv2.morphologyEx(color_mask, cv2.MORPH_OPEN, np.ones((3, 3), np.uint8))
+    color_mask = cv2.morphologyEx(color_mask, cv2.MORPH_CLOSE, np.ones((5, 3), np.uint8))
 
     row_signal = np.mean(color_mask, axis=1)
     if row_signal.size == 0:
         return 0
 
-    kernel = np.ones(9, dtype=np.float32) / 9.0
+    kernel = np.ones(11, dtype=np.float32) / 11.0
     smooth = np.convolve(row_signal, kernel, mode="same")
-    thr = max(0.07, float(np.max(smooth) * 0.35))
+    thr = max(0.055, float(np.max(smooth) * 0.28))
     active = smooth > thr
 
-    min_len = max(3, int(core.shape[0] * 0.03))
+    min_len = max(3, int(core.shape[0] * 0.02))
     count = _count_segments(active, min_len=min_len)
+    # Merge over-splitting caused by tiny white gaps inside wet pads.
+    if count > 0:
+        active_u8 = active.astype(np.uint8)
+        active_u8 = cv2.morphologyEx(active_u8.reshape(-1, 1), cv2.MORPH_CLOSE, np.ones((5, 1), np.uint8)).reshape(-1)
+        count = min(count, _count_segments(active_u8 > 0, min_len=min_len))
 
     # practical bounds for this domain
     return int(max(0, min(12, count)))
@@ -287,6 +506,120 @@ def extract_scale_palette(scale_path: Optional[str], k: int) -> List[Dict[str, A
     return palette
 
 
+def lab_to_rgb(lab: List[float]) -> List[int]:
+    """Convert OpenCV LAB values to RGB [0-255]."""
+    lab_px = np.array([[[lab[0], lab[1], lab[2]]]], dtype=np.uint8)
+    bgr = cv2.cvtColor(lab_px, cv2.COLOR_LAB2BGR)
+    r, g, b = int(bgr[0, 0, 2]), int(bgr[0, 0, 1]), int(bgr[0, 0, 0])
+    return [r, g, b]
+
+
+def ocr_zone(zone_bgr: np.ndarray) -> Dict[str, Any]:
+    """Run OCR on a single zone patch. Returns text, confidence, bbox."""
+    if not _HAVE_TESS:
+        return {"text": None, "text_confidence": None, "text_bbox": None}
+    try:
+        # Upscale small zones for better OCR
+        h, w = zone_bgr.shape[:2]
+        scale_up = max(1.0, 80.0 / max(h, w))
+        if scale_up > 1.0:
+            zone_bgr = cv2.resize(zone_bgr, (0, 0), fx=scale_up, fy=scale_up,
+                                  interpolation=cv2.INTER_CUBIC)
+
+        gray = cv2.cvtColor(zone_bgr, cv2.COLOR_BGR2GRAY)
+        gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+
+        data = pytesseract.image_to_data(
+            gray, lang="rus+eng",
+            output_type=pytesseract.Output.DICT
+        )
+
+        words = []
+        confidences = []
+        bboxes = []
+        for i, word in enumerate(data["text"]):
+            conf = int(data["conf"][i])
+            if conf > 30 and word.strip():
+                words.append(word.strip())
+                confidences.append(conf / 100.0)
+                bboxes.append([
+                    int(data["left"][i]), int(data["top"][i]),
+                    int(data["width"][i]), int(data["height"][i])
+                ])
+
+        if not words:
+            return {"text": None, "text_confidence": None, "text_bbox": None}
+
+        text = " ".join(words)
+        avg_conf = float(sum(confidences) / len(confidences))
+        # union bbox
+        xs = [b[0] for b in bboxes]
+        ys = [b[1] for b in bboxes]
+        x2s = [b[0] + b[2] for b in bboxes]
+        y2s = [b[1] + b[3] for b in bboxes]
+        bbox = [min(xs), min(ys), max(x2s) - min(xs), max(y2s) - min(ys)]
+
+        return {
+            "text": text,
+            "text_confidence": round(avg_conf, 2),
+            "text_bbox": bbox
+        }
+    except Exception as e:
+        return {"text": None, "text_confidence": None, "text_bbox": None}
+
+
+def extract_scale_zones(scale_path: Optional[str], n_zones: int) -> List[Dict[str, Any]]:
+    """Segment scale image into zones, extract colors and OCR text per zone.
+
+    Args:
+        scale_path: path to scale image (scale2 or scale5)
+        n_zones: number of zones to split into (2 or 5)
+
+    Returns:
+        list of zone dicts with: zone_index, label, rgb, lab, text, text_confidence, text_bbox
+    """
+    if not scale_path or not os.path.exists(scale_path):
+        return []
+
+    img = cv2.imread(scale_path)
+    if img is None:
+        return []
+
+    img = ensure_bgr(img)
+
+    # Find the scale ROI (long rectangle)
+    roi = find_long_rect_roi(img)
+
+    # Split into zones
+    patches = split_into_zones(roi, n_zones)
+
+    zones = []
+    for i, patch in enumerate(patches, start=1):
+        if patch.size == 0:
+            continue
+
+        # Extract color in LAB space
+        lab = median_lab(patch)
+
+        # Convert LAB → RGB for display
+        rgb = lab_to_rgb(lab)
+
+        # OCR on this zone patch
+        ocr = ocr_zone(patch)
+
+        zones.append({
+            "zone_index": i,
+            "label": f"L{i}",
+            "rgb": rgb,
+            "lab": [round(lab[0], 2), round(lab[1], 2), round(lab[2], 2)],
+            "text": ocr.get("text"),
+            "text_confidence": ocr.get("text_confidence"),
+            "text_bbox": ocr.get("text_bbox"),
+        })
+
+    return zones
+
+
 def match_to_palette(zone_lab: List[float], palette: List[Dict[str, Any]]) -> Dict[str, Any]:
     if not palette:
         return {"label": None, "delta_e": None}
@@ -339,6 +672,11 @@ def detect_scale_profile(scale_path: Optional[str], fallback_count: int, profile
     inferred = max(counts, key=counts.count) if counts else fallback_count
     if inferred <= 0:
         inferred = fallback_count
+    # Scale package photos are noisy; keep known expected count when detection is implausible.
+    if fallback_count in (2, 5) and inferred != fallback_count:
+        inferred = fallback_count
+    elif inferred < 2 or abs(inferred - fallback_count) > 2:
+        inferred = fallback_count
 
     palette_k = 8 if inferred <= 2 else 10 if inferred <= 5 else 12
     palette = extract_scale_palette(scale_path, k=palette_k)
@@ -360,6 +698,67 @@ def pick_scale_profile(zone_count: int, profiles: List[Dict[str, Any]]) -> Optio
     return min(profiles, key=lambda p: abs(int(p.get("count", 0)) - zone_count))
 
 
+def _roi_transition_score(roi: np.ndarray, n_zones: int) -> float:
+    if roi is None or roi.size == 0 or n_zones <= 1:
+        return 0.0
+    patches = split_into_zones(roi, n_zones)
+    if len(patches) < 2:
+        return 0.0
+    labs = [np.array(median_lab(p), dtype=np.float32) for p in patches if p is not None and p.size > 0]
+    if len(labs) < 2:
+        return 0.0
+    diffs = [float(np.linalg.norm(labs[i] - labs[i + 1])) for i in range(len(labs) - 1)]
+    if not diffs:
+        return 0.0
+    # Mean adjacent color contrast; higher usually means more real pads captured.
+    return float(sum(diffs) / len(diffs))
+
+
+def _roi_palette_avg_delta(roi: np.ndarray, profile: Optional[Dict[str, Any]]) -> Optional[float]:
+    if profile is None:
+        return None
+    n = int(profile.get("count", 0) or 0)
+    if n <= 0:
+        return None
+    palette = profile.get("palette", []) or []
+    patches = split_into_zones(roi, n)
+    deltas: List[float] = []
+    for p in patches:
+        if p is None or p.size == 0:
+            continue
+        m = match_to_palette(median_lab(p), palette)
+        d = m.get("delta_e")
+        if d is not None:
+            deltas.append(float(d))
+    if not deltas:
+        return None
+    return float(sum(deltas) / len(deltas))
+
+
+def choose_profile_for_roi(roi: np.ndarray, detected_count: int, profiles: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    if not profiles:
+        return None
+
+    scored: List[Tuple[float, float, float, int, Dict[str, Any]]] = []
+    for p in profiles:
+        n = int(p.get("count", 0) or 0)
+        if n <= 0:
+            continue
+        transition = _roi_transition_score(roi, n)
+        avg_de = _roi_palette_avg_delta(roi, p)
+        palette_bonus = 0.0 if avg_de is None else (-0.02 * avg_de)
+        count_penalty = 0.0 if detected_count <= 0 else (0.15 * abs(n - detected_count))
+        total = transition + palette_bonus - count_penalty
+        # Tuple ordering: total desc, transition desc, avg_de asc, smaller count diff
+        scored.append((total, transition, (avg_de if avg_de is not None else 9999.0), abs(n - detected_count), p))
+
+    if not scored:
+        return pick_scale_profile(detected_count, profiles)
+
+    scored.sort(key=lambda x: (-x[0], -x[1], x[2], x[3]))
+    return scored[0][4]
+
+
 def analyze_photo_with_auto_mapping(path: str, source_group: str, profiles: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     img = cv2.imread(path)
     if img is None:
@@ -375,7 +774,7 @@ def analyze_photo_with_auto_mapping(path: str, source_group: str, profiles: List
 
     for idx, roi in enumerate(rois, start=1):
         detected_count = estimate_zone_count(roi)
-        profile = pick_scale_profile(detected_count, profiles)
+        profile = choose_profile_for_roi(roi, detected_count, profiles)
 
         matched_count = int(profile.get("count", 0)) if profile else 0
         n_zones = matched_count if matched_count > 0 else (detected_count if detected_count > 0 else 2)
@@ -409,6 +808,24 @@ def analyze_photo_with_auto_mapping(path: str, source_group: str, profiles: List
 
 
 def ocr_image(path: str) -> Dict[str, Any]:
+    ext = file_ext(path)
+    if ext in {".txt", ".md", ".csv"}:
+        try:
+            text = read_text_file_loose(path)
+            return {
+                "id": os.path.basename(path),
+                "filename": safe_basename(path),
+                "text": text.strip(),
+                "warning": None
+            }
+        except Exception as e:
+            return {
+                "id": os.path.basename(path),
+                "filename": safe_basename(path),
+                "text": "",
+                "warning": f"Text read error: {e}"
+            }
+
     img = cv2.imread(path)
     if img is None:
         return {"id": os.path.basename(path), "filename": safe_basename(path), "text": "", "error": "Failed to read image"}
@@ -418,9 +835,56 @@ def ocr_image(path: str) -> Dict[str, Any]:
         warning = "pytesseract не установлен. Установите requirements и системный tesseract."
     else:
         try:
+            candidates: List[np.ndarray] = []
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-            text = pytesseract.image_to_string(gray, lang="rus+eng")
+            candidates.append(gray)
+
+            # Center crop variant helps with screen photos where UI occupies middle region.
+            h, w = gray.shape[:2]
+            cx0, cx1 = int(w * 0.12), int(w * 0.88)
+            cy0, cy1 = int(h * 0.06), int(h * 0.96)
+            if cx1 > cx0 and cy1 > cy0:
+                candidates.append(gray[cy0:cy1, cx0:cx1])
+
+            best_text = ""
+            best_score = -1.0
+            seen_shapes = set()
+
+            for base in candidates:
+                if base.size == 0:
+                    continue
+                for upscale in (1.0, 1.8):
+                    proc = base
+                    if upscale > 1.0:
+                        proc = cv2.resize(proc, (0, 0), fx=upscale, fy=upscale, interpolation=cv2.INTER_CUBIC)
+                    proc = cv2.fastNlMeansDenoising(proc, None, 10, 7, 21)
+                    proc = cv2.equalizeHist(proc)
+                    variants = [
+                        proc,
+                        cv2.threshold(proc, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1],
+                        cv2.adaptiveThreshold(proc, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                              cv2.THRESH_BINARY, 31, 11),
+                    ]
+                    for v in variants:
+                        key = (v.shape[0], v.shape[1], int(np.mean(v)))
+                        if key in seen_shapes:
+                            continue
+                        seen_shapes.add(key)
+                        for psm in (6, 11):
+                            try:
+                                cfg = f"--oem 3 --psm {psm}"
+                                t = pytesseract.image_to_string(v, lang="rus+eng", config=cfg).strip()
+                            except Exception:
+                                continue
+                            if not t:
+                                continue
+                            # Score: prefer longer text with more letters/numbers.
+                            alnum = len(re.findall(r"[A-Za-zА-Яа-я0-9]", t))
+                            score = alnum + len(t) * 0.2
+                            if score > best_score:
+                                best_score = score
+                                best_text = t
+            text = best_text
         except Exception as e:
             warning = f"OCR ошибка: {e}"
     return {
@@ -466,6 +930,8 @@ def main():
     ocr_items = []
     for p in payload.get("text", []) or []:
         ocr_items.append(ocr_image(p))
+    for p in payload.get("workout", []) or []:
+        ocr_items.append(ocr_image(p))
 
     # workout photos are stored but not analyzed in MVP (can be used later)
     out = {
@@ -480,10 +946,14 @@ def main():
                     "count": p.get("count"),
                     "filename": p.get("filename"),
                     "palette_size": len(p.get("palette", [])),
+                    "zones": extract_scale_zones(
+                        scale2_path if p.get("id") == "scale2" else scale5_path,
+                        p.get("count", 2)
+                    ),
                 }
                 for p in scale_profiles
             ],
-            "note": "MVP 0.2: авто-определение количества зон на шкале и на полоске с сопоставлением к ближайшей шкале."
+            "note": "MVP 0.3: улучшено распознавание полосок на реальных фото, чтение .txt и OCR фото тренировки."
         },
         "rest": {"items": rest_items},
         "load": {"items": load_items},
