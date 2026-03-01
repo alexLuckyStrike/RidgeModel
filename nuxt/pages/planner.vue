@@ -104,238 +104,127 @@
                 {{ mvpError }}
               </div>
 
-              <!-- ── Результаты анализа (новый контракт) ──────────────── -->
-              <div v-if="mvpResult" class="space-y-6">
-
-                <!-- Шкалы -->
-                <div
-                  v-if="mvpResult.meta?.scale_profiles?.length"
-                  class="space-y-4"
-                >
+              <!-- ── Результаты анализа (числовые) ──────────────── -->
+              <div v-if="mvpResult" class="space-y-4">
+                <div class="space-y-3">
                   <div class="text-base font-semibold text-slate-900">
-                    Шкалы (калибровка)
+                    Медицинские шкалы
                   </div>
-                  <div
-                    v-for="sp in mvpResult.meta.scale_profiles"
-                    :key="sp.id"
-                    class="rounded-2xl border border-slate-200 bg-white p-5"
-                  >
-                    <!-- Заголовок шкалы -->
-                    <div class="mb-4 flex items-center justify-between gap-3">
-                      <div>
-                        <span class="font-semibold text-slate-900">{{ sp.id }}</span>
-                        <span class="ml-2 text-sm text-slate-500">
-                          {{ sp.zone_count }} зон · {{ sp.palette_size }} цветов в палитре
-                        </span>
-                      </div>
-                      <div class="truncate text-xs text-slate-400">{{ sp.filename }}</div>
+                  <div class="grid gap-3 sm:grid-cols-2">
+                    <div
+                      v-if="mvpFiles.scale2"
+                      class="rounded-2xl border border-slate-200 bg-white p-4"
+                    >
+                      <div class="mb-2 text-xs text-slate-500">Шкала 2-полосная (URI-2)</div>
+                      <img
+                        :src="mvpFiles.scale2.url"
+                        :alt="mvpFiles.scale2.name"
+                        class="h-44 w-full rounded-lg border border-slate-100 object-cover"
+                      />
                     </div>
-
-                    <!-- Таблица зон шкалы -->
-                    <div v-if="sp.zones?.length" class="overflow-x-auto">
-                      <table class="min-w-full text-sm">
-                        <thead>
-                          <tr class="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
-                            <th class="px-3 py-2 font-medium">Зона</th>
-                            <th class="px-3 py-2 font-medium">Цвет</th>
-                            <th class="px-3 py-2 font-medium">RGB</th>
-                            <th class="px-3 py-2 font-medium">LAB</th>
-                            <th class="px-3 py-2 font-medium">Текст (OCR)</th>
-                            <th class="px-3 py-2 font-medium">Точность</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr
-                            v-for="zone in sp.zones"
-                            :key="zone.zone_index"
-                            class="border-t"
-                          >
-                            <td class="px-3 py-2 font-medium text-slate-700">
-                              {{ zone.label }}
-                            </td>
-                            <td class="px-3 py-2">
-                              <div
-                                class="h-6 w-10 rounded border border-slate-200"
-                                :style="{ backgroundColor: `rgb(${zone.rgb[0]},${zone.rgb[1]},${zone.rgb[2]})` }"
-                              />
-                            </td>
-                            <td class="px-3 py-2 font-mono text-xs text-slate-600">
-                              {{ zone.rgb.join(', ') }}
-                            </td>
-                            <td class="px-3 py-2 font-mono text-xs text-slate-500">
-                              {{ zone.lab.map((v) => v.toFixed(1)).join(', ') }}
-                            </td>
-                            <td class="px-3 py-2 text-slate-800">
-                              <span v-if="zone.text" class="whitespace-pre-wrap">{{ zone.text }}</span>
-                              <span v-else class="text-slate-400">—</span>
-                            </td>
-                            <td class="px-3 py-2">
-                              <span
-                                v-if="zone.text_confidence != null"
-                                :class="[
-                                  'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
-                                  zone.text_confidence >= 0.7
-                                    ? 'bg-emerald-50 text-emerald-700'
-                                    : zone.text_confidence >= 0.4
-                                    ? 'bg-amber-50 text-amber-700'
-                                    : 'bg-rose-50 text-rose-700',
-                                ]"
-                              >
-                                {{ (zone.text_confidence * 100).toFixed(0) }}%
-                              </span>
-                              <span v-else class="text-xs text-slate-400">—</span>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div v-else class="text-sm text-slate-400">
-                      Зоны не извлечены
+                    <div
+                      v-if="mvpFiles.scale5"
+                      class="rounded-2xl border border-slate-200 bg-white p-4"
+                    >
+                      <div class="mb-2 text-xs text-slate-500">Шкала 5-полосная (URI-5A)</div>
+                      <img
+                        :src="mvpFiles.scale5.url"
+                        :alt="mvpFiles.scale5.name"
+                        class="h-44 w-full rounded-lg border border-slate-100 object-cover"
+                      />
                     </div>
                   </div>
                 </div>
 
-                <!-- Полоски отдыха -->
+                <div class="space-y-3">
+                  <div class="text-base font-semibold text-slate-900">
+                    Полоски (бейслайн / покой)
+                  </div>
+                  <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    <div
+                      v-for="item in restStripPreviews"
+                      :key="`rest-preview-${item.id}`"
+                      class="rounded-2xl border border-slate-200 bg-white p-3"
+                    >
+                      <img
+                        :src="item.url"
+                        :alt="item.name"
+                        class="h-40 w-full rounded-lg border border-slate-100 object-cover"
+                      />
+                      <div class="mt-2 truncate text-xs text-slate-500">{{ item.name }}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="space-y-3">
+                  <div class="text-base font-semibold text-slate-900">
+                    Полоски (после нагрузки)
+                  </div>
+                  <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    <div
+                      v-for="item in afterLoadStripPreviews"
+                      :key="`load-preview-${item.id}`"
+                      class="rounded-2xl border border-slate-200 bg-white p-3"
+                    >
+                      <img
+                        :src="item.url"
+                        :alt="item.name"
+                        class="h-40 w-full rounded-lg border border-slate-100 object-cover"
+                      />
+                      <div class="mt-2 truncate text-xs text-slate-500">{{ item.name }}</div>
+                    </div>
+                  </div>
+                </div>
+
                 <div
-                  v-if="mvpResult.strips?.rest?.length"
-                  class="space-y-4"
+                  v-if="mvpResult.medical_tests?.length"
+                  class="space-y-3"
                 >
                   <div class="text-base font-semibold text-slate-900">
-                    Полоски отдыха
+                    Результаты тест-полосок
                   </div>
                   <div
-                    v-for="(strip, idx) in mvpResult.strips.rest"
-                    :key="`rest-${idx}`"
+                    v-for="(test, idx) in mvpResult.medical_tests"
+                    :key="`test-${idx}`"
                     class="rounded-2xl border border-slate-200 bg-white p-5"
                   >
                     <div class="mb-3 flex items-center justify-between gap-3">
                       <div class="text-sm font-medium text-slate-900">
-                        {{ strip.photo_filename }}
+                        {{ test.photo_filename }}
                       </div>
-                      <div class="flex items-center gap-2 text-xs text-slate-500">
-                        <span v-if="strip.scale_id" class="rounded-full bg-slate-100 px-2 py-0.5">
-                          Шкала: {{ strip.scale_id }}
-                        </span>
-                        <span>{{ strip.zone_count }} зон</span>
-                      </div>
+                      <span class="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
+                        {{ test.source === 'rest' ? 'Покой' : 'После нагрузки' }}
+                      </span>
                     </div>
-                    <div class="overflow-x-auto">
-                      <table class="min-w-full text-sm">
-                        <thead>
-                          <tr class="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
-                            <th class="px-3 py-2 font-medium">Зона</th>
-                            <th class="px-3 py-2 font-medium">Уровень</th>
-                            <th class="px-3 py-2 font-medium">ΔE</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr
-                            v-for="zone in strip.zones"
-                            :key="`rzone-${zone.index}`"
-                            class="border-t"
-                          >
-                            <td class="px-3 py-1.5 text-slate-500">{{ zone.index + 1 }}</td>
-                            <td class="px-3 py-1.5 font-medium text-slate-900">{{ zone.level }}</td>
-                            <td class="px-3 py-1.5 text-slate-600">
-                              {{ zone.delta_e != null ? zone.delta_e.toFixed(1) : '—' }}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+
+                    <div class="grid gap-2 text-sm text-slate-800">
+                      <div
+                        v-for="reading in getMedicalRows(test.results, test.units)"
+                        :key="`${test.photo_filename}-${reading.key}`"
+                      >
+                        {{ reading.label }}:
+                        <span class="font-semibold">{{ reading.value }}</span>
+                        {{ reading.unit }}
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <!-- Полоски нагрузки -->
                 <div
-                  v-if="mvpResult.strips?.load?.length"
-                  class="space-y-4"
-                >
-                  <div class="text-base font-semibold text-slate-900">
-                    Полоски нагрузки
-                  </div>
-                  <div
-                    v-for="(strip, idx) in mvpResult.strips.load"
-                    :key="`load-${idx}`"
-                    class="rounded-2xl border border-slate-200 bg-white p-5"
-                  >
-                    <div class="mb-3 flex items-center justify-between gap-3">
-                      <div class="text-sm font-medium text-slate-900">
-                        {{ strip.photo_filename }}
-                      </div>
-                      <div class="flex items-center gap-2 text-xs text-slate-500">
-                        <span v-if="strip.scale_id" class="rounded-full bg-slate-100 px-2 py-0.5">
-                          Шкала: {{ strip.scale_id }}
-                        </span>
-                        <span>{{ strip.zone_count }} зон</span>
-                      </div>
-                    </div>
-                    <div class="overflow-x-auto">
-                      <table class="min-w-full text-sm">
-                        <thead>
-                          <tr class="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
-                            <th class="px-3 py-2 font-medium">Зона</th>
-                            <th class="px-3 py-2 font-medium">Уровень</th>
-                            <th class="px-3 py-2 font-medium">ΔE</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr
-                            v-for="zone in strip.zones"
-                            :key="`lzone-${zone.index}`"
-                            class="border-t"
-                          >
-                            <td class="px-3 py-1.5 text-slate-500">{{ zone.index + 1 }}</td>
-                            <td class="px-3 py-1.5 font-medium text-slate-900">{{ zone.level }}</td>
-                            <td class="px-3 py-1.5 text-slate-600">
-                              {{ zone.delta_e != null ? zone.delta_e.toFixed(1) : '—' }}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- OCR — распознанный текст -->
-                <div
-                  v-if="mvpResult.ocr?.items?.length"
+                  v-if="mvpResult.workout?.notes?.length"
                   class="rounded-2xl border border-slate-200 bg-white p-5"
                 >
-                  <div class="mb-3 text-base font-semibold text-slate-900">
-                    Распознанный текст (OCR)
+                  <div class="mb-2 text-base font-semibold text-slate-900">
+                    Нагрузка
                   </div>
-                  <div class="space-y-3">
-                    <div
-                      v-for="(item, idx) in mvpResult.ocr.items"
-                      :key="`ocr-${idx}`"
-                      class="rounded-xl border border-slate-100 bg-slate-50 px-4 py-3"
-                    >
-                      <div class="mb-1 text-xs text-slate-400">{{ item.filename }}</div>
-                      <div class="whitespace-pre-wrap text-sm text-slate-800">
-                        {{ item.text || '—' }}
-                      </div>
-                      <div
-                        v-if="item.warning"
-                        class="mt-1 text-xs text-amber-600"
-                      >
-                        ⚠ {{ item.warning }}
-                      </div>
-                    </div>
+                  <div
+                    v-for="(note, idx) in mvpResult.workout.notes"
+                    :key="`note-${idx}`"
+                    class="whitespace-pre-wrap text-sm text-slate-700"
+                  >
+                    {{ note }}
                   </div>
                 </div>
-
-                <!-- Примечание от сервиса -->
-                <div
-                  v-if="mvpResult.meta?.note"
-                  class="rounded-2xl border border-dashed border-slate-300 bg-white p-5"
-                >
-                  <div class="text-sm font-semibold uppercase tracking-wide text-slate-500">
-                    Примечание
-                  </div>
-                  <p class="mt-2 text-sm text-slate-600">{{ mvpResult.meta.note }}</p>
-                </div>
-
               </div>
             </div>
           </div>
@@ -791,6 +680,75 @@ const {
   removeLoad5SetFile,
   MVP_LOAD5_MAX_SETS,
 } = mvp
+
+const analyteOrder = [
+  "creatinine",
+  "albumin",
+  "hb_myoglobin",
+  "protein",
+  "ketones",
+  "glucose",
+  "ph",
+] as const
+
+const analyteLabels: Record<string, string> = {
+  creatinine: "Креатинин",
+  albumin: "Альбумин",
+  hb_myoglobin: "Hb/Миоглобин",
+  protein: "Белок",
+  ketones: "Кетоны",
+  glucose: "Глюкоза",
+  ph: "pH",
+}
+
+const analyteDecimals: Record<string, number> = {
+  creatinine: 2,
+  albumin: 3,
+  hb_myoglobin: 0,
+  protein: 2,
+  ketones: 2,
+  glucose: 2,
+  ph: 1,
+}
+
+const restStripPreviews = computed(() => {
+  return mvpFiles.rest2.map((item) => ({
+    id: item.id,
+    name: item.name,
+    url: item.url,
+  }))
+})
+
+const afterLoadStripPreviews = computed(() => {
+  return load5Sets.value
+    .filter((set) => !!set.second)
+    .map((set) => ({
+      id: set.id,
+      name: set.second?.name || "После нагрузки",
+      url: set.second?.url || "",
+    }))
+    .filter((item) => !!item.url)
+})
+
+const getMedicalRows = (
+  results: Record<string, number> | undefined,
+  units: Record<string, string> | undefined
+) => {
+  if (!results) return []
+  const rows: Array<{ key: string; label: string; value: string; unit: string }> = []
+  analyteOrder.forEach((key) => {
+    const raw = results[key]
+    if (typeof raw !== "number" || !Number.isFinite(raw)) return
+    const digits = analyteDecimals[key] ?? 2
+    rows.push({
+      key,
+      label: analyteLabels[key] || key,
+      value: raw.toFixed(digits),
+      unit: units?.[key] || "",
+    })
+  })
+  return rows
+}
 </script>
 
 

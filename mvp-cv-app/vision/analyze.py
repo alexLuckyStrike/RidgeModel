@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import sys, json, os, re
+import sys, json, os, re, math
 from dataclasses import dataclass
 from typing import List, Dict, Any, Tuple, Optional
 
@@ -503,6 +503,8 @@ def extract_scale_palette(scale_path: Optional[str], k: int) -> List[Dict[str, A
     # relabel after sorting
     for i, p in enumerate(palette):
         p["label"] = f"L{i+1}"
+        # Numeric axis for interpolation (ordinal when real concentrations are unknown).
+        p["value"] = float(i + 1)
     return palette
 
 
@@ -620,19 +622,224 @@ def extract_scale_zones(scale_path: Optional[str], n_zones: int) -> List[Dict[st
     return zones
 
 
+LEVEL_VALUES: Dict[str, Dict[str, float]] = {
+    # URI-2 MAK (креатинин, ммоль/л)
+    "creatinine": {
+        "L1": 0.9,
+        "L2": 1.8,
+        "L3": 4.4,
+        "L4": 8.8,
+        "L5": 17.7,
+        "L6": 26.5,
+        "L7": 26.5,
+    },
+    # URI-2 MAK (альбумин, г/л)
+    "albumin": {
+        "L1": 0.01,
+        "L2": 0.03,
+        "L3": 0.08,
+        "L4": 0.15,
+        "L5": 0.3,
+        "L6": 1.0,
+        "L7": 5.0,
+    },
+    # URI-5A (кровь/гемоглобин/миоглобин, эр/мкл)
+    "hb_myoglobin": {
+        "L1": 0.0,
+        "L2": 10.0,
+        "L3": 25.0,
+        "L4": 50.0,
+        "L5": 250.0,
+        "L6": 250.0,
+    },
+    # URI-5A (кетоны, ммоль/л)
+    "ketones": {
+        "L1": 0.0,
+        "L2": 0.5,
+        "L3": 1.5,
+        "L4": 4.0,
+        "L5": 8.0,
+        "L6": 16.0,
+    },
+    # URI-5A (белок, г/л)
+    "protein": {
+        "L1": 0.0,
+        "L2": 0.1,
+        "L3": 0.3,
+        "L4": 1.0,
+        "L5": 3.0,
+        "L6": 10.0,
+    },
+    # URI-5A (глюкоза, ммоль/л)
+    "glucose": {
+        "L1": 0.0,
+        "L2": 2.8,
+        "L3": 5.6,
+        "L4": 14.0,
+        "L5": 28.0,
+        "L6": 56.0,
+    },
+    # URI-5A (pH)
+    "ph": {
+        "L1": 5.0,
+        "L2": 6.0,
+        "L3": 6.5,
+        "L4": 7.0,
+        "L5": 8.0,
+        "L6": 9.0,
+    },
+}
+
+ANALYTE_UNITS: Dict[str, str] = {
+    "creatinine": "ммоль/л",
+    "albumin": "г/л",
+    "hb_myoglobin": "эр/мкл",
+    "ketones": "ммоль/л",
+    "protein": "г/л",
+    "glucose": "ммоль/л",
+    "ph": "pH",
+}
+
+ANALYTE_ROUNDING: Dict[str, int] = {
+    "creatinine": 2,
+    "albumin": 3,
+    "hb_myoglobin": 0,
+    "ketones": 2,
+    "protein": 2,
+    "glucose": 2,
+    "ph": 1,
+}
+
+
+def log_interp(v1: float, v2: float, t: float) -> float:
+    if v1 <= 0.0 or v2 <= 0.0:
+        return v1 + (v2 - v1) * t
+    return 10 ** (math.log10(v1) + (math.log10(v2) - math.log10(v1)) * t)
+
+
+def get_analyte_zone_map(scale_id: Optional[str], n_zones: int) -> Dict[int, str]:
+    # Mapping by known strip type in this MVP.
+    if scale_id == "scale2" or n_zones == 2:
+        return {
+            1: "creatinine",
+            2: "albumin",
+        }
+    if scale_id == "scale5" or n_zones == 5:
+        # URI-5A: 5 зон. Индексы соответствуют текущему порядку split_into_zones.
+        return {
+            1: "hb_myoglobin",
+            2: "ketones",
+            3: "protein",
+            4: "glucose",
+            5: "ph",
+        }
+    return {}
+
+
+def interpolate_numeric_from_nearest(nearest: Dict[str, Any], analyte: str) -> Optional[float]:
+    levels = LEVEL_VALUES.get(analyte)
+    if not levels:
+        return None
+
+    neighbors = nearest.get("neighbors") or []
+    if not isinstance(neighbors, list) or len(neighbors) < 1:
+        label = nearest.get("label")
+        return float(levels.get(label)) if label in levels else None
+
+    n1 = neighbors[0] if len(neighbors) > 0 else {}
+    n2 = neighbors[1] if len(neighbors) > 1 else None
+    l1 = n1.get("label")
+    d1 = float(n1.get("delta_e", 1e9))
+    v1 = levels.get(l1)
+    if v1 is None:
+        return None
+
+    if not n2:
+        return float(v1)
+    l2 = n2.get("label")
+    d2 = float(n2.get("delta_e", 1e9))
+    v2 = levels.get(l2)
+    if v2 is None:
+        return float(v1)
+
+    eps = 1e-6
+    w1 = 1.0 / (d1 + eps)
+    w2 = 1.0 / (d2 + eps)
+    t = w2 / max(eps, (w1 + w2))
+    t = float(max(0.0, min(1.0, t)))
+
+    v_low, v_high = (float(v1), float(v2)) if v1 <= v2 else (float(v2), float(v1))
+    if v1 > v2:
+        t = 1.0 - t
+
+    return float(log_interp(v_low, v_high, t))
+
+
 def match_to_palette(zone_lab: List[float], palette: List[Dict[str, Any]]) -> Dict[str, Any]:
     if not palette:
-        return {"label": None, "delta_e": None}
+        return {
+            "label": None,
+            "delta_e": None,
+            "interpolated_value": None,
+            "interpolation": None,
+        }
     z = np.array(zone_lab, dtype=np.float32)
-    best = None
-    best_d = 1e9
+    dists: List[Tuple[float, Dict[str, Any]]] = []
     for p in palette:
         pl = np.array(p["lab"], dtype=np.float32)
         d = float(np.linalg.norm(z - pl))
-        if d < best_d:
-            best_d = d
-            best = p
-    return {"label": best["label"], "delta_e": round(best_d, 2)}
+        dists.append((d, p))
+
+    dists.sort(key=lambda x: x[0])
+    d1, p1 = dists[0]
+    if len(dists) < 2:
+        return {
+            "label": p1.get("label"),
+            "delta_e": round(float(d1), 2),
+            "interpolated_value": p1.get("value"),
+            "interpolation": "none",
+        }
+
+    d2, p2 = dists[1]
+
+    # Soft nearest-neighbor weight towards the second neighbor.
+    eps = 1e-6
+    w1 = 1.0 / (d1 + eps)
+    w2 = 1.0 / (d2 + eps)
+    t = w2 / max(eps, (w1 + w2))
+    t = float(max(0.0, min(1.0, t)))
+
+    v1 = float(p1.get("value", 0.0))
+    v2 = float(p2.get("value", 0.0))
+    v_low, v_high = (v1, v2) if v1 <= v2 else (v2, v1)
+    t_adj = t if v1 <= v2 else (1.0 - t)
+    t_adj = float(max(0.0, min(1.0, t_adj)))
+
+    if v_low > 0.0 and v_high > 0.0:
+        interpolated = 10 ** (math.log10(v_low) + (math.log10(v_high) - math.log10(v_low)) * t_adj)
+        interpolation = "log10"
+    else:
+        interpolated = v_low + (v_high - v_low) * t_adj
+        interpolation = "linear_fallback"
+
+    return {
+        "label": p1.get("label"),
+        "delta_e": round(float(d1), 2),
+        "interpolated_value": round(float(interpolated), 4),
+        "interpolation": interpolation,
+        "neighbors": [
+            {
+                "label": p1.get("label"),
+                "value": v1,
+                "delta_e": round(float(d1), 2),
+            },
+            {
+                "label": p2.get("label"),
+                "value": v2,
+                "delta_e": round(float(d2), 2),
+            },
+        ],
+    }
 
 
 def analyze_strip(path: str, scale_type: str, palette: List[Dict[str, Any]], n_zones: int) -> Dict[str, Any]:
@@ -678,7 +885,12 @@ def detect_scale_profile(scale_path: Optional[str], fallback_count: int, profile
     elif inferred < 2 or abs(inferred - fallback_count) > 2:
         inferred = fallback_count
 
-    palette_k = 8 if inferred <= 2 else 10 if inferred <= 5 else 12
+    if profile_id == "scale2":
+        palette_k = 7
+    elif profile_id == "scale5":
+        palette_k = 6
+    else:
+        palette_k = 8 if inferred <= 2 else 10 if inferred <= 5 else 12
     palette = extract_scale_palette(scale_path, k=palette_k)
     return {
         "id": profile_id,
@@ -792,16 +1004,25 @@ def analyze_photo_with_auto_mapping(path: str, source_group: str, profiles: List
                 "nearest": nearest
             })
 
+        zone_map = get_analyte_zone_map(scale_id, n_zones)
+        final_results: Dict[str, float] = {}
+        for z in out_zones:
+            analyte = zone_map.get(int(z.get("index", 0)))
+            if not analyte:
+                continue
+            numeric = interpolate_numeric_from_nearest(z.get("nearest", {}), analyte)
+            if numeric is None:
+                continue
+            precision = ANALYTE_ROUNDING.get(analyte, 2)
+            final_results[analyte] = round(float(numeric), precision)
+
         out_items.append({
             "id": f"{os.path.basename(path)}#{idx}",
             "filename": safe_basename(path),
             "strip_index": idx,
             "source_group": source_group,
-            "detected_zone_count": int(detected_count),
-            "matched_scale_count": int(n_zones),
-            "matched_scale_id": scale_id,
-            "scale_type": f"{n_zones}-zones",
-            "zones": out_zones,
+            "results": final_results,
+            "units": {k: ANALYTE_UNITS.get(k) for k in final_results.keys()},
         })
 
     return out_items

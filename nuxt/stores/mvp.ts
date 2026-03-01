@@ -19,18 +19,12 @@ export type MvpLoad5Set = {
 
 // ─── Contract types (mirrors nuxt/server/api/cv-analyze.post.ts) ─────────
 
-export type ZoneResult = {
-  index: number
-  level: string         // 'L1'..'LN' — closest palette match
-  delta_e: number | null  // colour distance (lower = better)
-}
-
-export type StripResult = {
+export type MedicalTestResult = {
+  source: 'rest' | 'load'
   photo_filename: string
   strip_index: number
-  zone_count: number
-  scale_id: string | null
-  zones: ZoneResult[]
+  results: Record<string, number>
+  units: Record<string, string>
 }
 
 export type OcrItem = {
@@ -39,37 +33,12 @@ export type OcrItem = {
   warning: string | null
 }
 
-export type ScaleZone = {
-  zone_index: number
-  label: string
-  rgb: [number, number, number]
-  lab: [number, number, number]
-  text: string | null
-  text_confidence: number | null
-  text_bbox: [number, number, number, number] | null
-}
-
-export type ScaleProfile = {
-  id: string
-  zone_count: number
-  palette_size: number
-  filename: string
-  zones: ScaleZone[]
-}
-
 export type MvpAnalysisResult = {
   status: 'ok' | 'error'
   session_id: string | null
-  strips: {
-    rest: StripResult[]
-    load: StripResult[]
-  }
-  ocr: {
-    items: OcrItem[]
-  }
-  meta: {
-    scale_profiles: ScaleProfile[]
-    note: string | null
+  medical_tests: MedicalTestResult[]
+  workout: {
+    notes: string[]
   }
   error?: string
   message?: string

@@ -38,7 +38,7 @@ export { isFilled, keyOf, uid } from '../utils/plannerHelpers';
 export { PlannedSession, PlannedWeek, Plan, MarkerKey, Coeffs, VariantSettings, PlanVariantId, PlanVariant } from '../utils/plannerTypes';
 export { postulateIds, planVariants } from '../utils/plannerVariants';
 export { useAthletesStore, Row, RestBaseline, Athlete } from '../stores/athletes';
-export { useMvpStore, MvpPreview, MvpLoad5Set, ZoneResult, StripResult, OcrItem, ScaleZone, ScaleProfile, MvpAnalysisResult } from '../stores/mvp';
+export { useMvpStore, MvpPreview, MvpLoad5Set, MedicalTestResult, OcrItem, MvpAnalysisResult } from '../stores/mvp';
 export { defineStore, acceptHMRUpdate, usePinia, storeToRefs } from '../node_modules/@pinia/nuxt/dist/runtime/composables';
 export { useNuxtDevTools } from '../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools';
 export { definePageMeta } from '../node_modules/nuxt/dist/pages/runtime/composables';

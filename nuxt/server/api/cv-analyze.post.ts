@@ -15,6 +15,24 @@ const asNumber = (v: unknown): number | null =>
 
 const asArray = (v: unknown): unknown[] => (Array.isArray(v) ? v : [])
 
+const asNumberRecord = (v: unknown): Record<string, number> => {
+  const rec = asRecord(v) || {}
+  const out: Record<string, number> = {}
+  for (const [k, value] of Object.entries(rec)) {
+    if (typeof value === 'number' && Number.isFinite(value)) out[k] = value
+  }
+  return out
+}
+
+const asStringRecord = (v: unknown): Record<string, string> => {
+  const rec = asRecord(v) || {}
+  const out: Record<string, string> = {}
+  for (const [k, value] of Object.entries(rec)) {
+    if (typeof value === 'string' && value.trim()) out[k] = value.trim()
+  }
+  return out
+}
+
 // ─── Field name mapping: frontend → CV backend ────────────────────────────
 // Frontend sends: rest2_0, rest2_1, load5_0_a, load5_0_b, workout_photo_0, workout_text_0
 // CV backend expects: rest2 (array), load5 (array), workout (array), text (array)
@@ -32,17 +50,11 @@ const mapFieldName = (name: string): string => {
 // ─── Contract types (shared with frontend and future mobile) ─────────────
 
 export type ZoneResult = {
-  index: number
-  level: string        // 'L1'..'LN' — closest match on scale palette
-  delta_e: number | null  // colour distance (lower = better match)
-}
-
-export type StripResult = {
-  photo_filename: string  // original uploaded photo name
-  strip_index: number     // physical strip index inside one photo
-  zone_count: number
-  scale_id: string | null // which scale profile was matched
-  zones: ZoneResult[]
+  source: 'rest' | 'load'
+  photo_filename: string
+  strip_index: number
+  results: Record<string, number>
+  units: Record<string, string>
 }
 
 export type OcrItem = {
@@ -51,37 +63,12 @@ export type OcrItem = {
   warning: string | null
 }
 
-export type ScaleZone = {
-  zone_index: number
-  label: string                              // 'L1'..'LN'
-  rgb: [number, number, number]              // [R, G, B] 0-255
-  lab: [number, number, number]              // OpenCV LAB
-  text: string | null                        // OCR-распознанный текст
-  text_confidence: number | null             // 0-1 (от Tesseract)
-  text_bbox: [number, number, number, number] | null  // [x, y, w, h]
-}
-
-export type ScaleProfile = {
-  id: string
-  zone_count: number
-  palette_size: number
-  filename: string
-  zones: ScaleZone[]   // детальные данные каждой зоны шкалы
-}
-
 export type CvAnalysisResult = {
   status: 'ok' | 'error'
   session_id: string | null
-  strips: {
-    rest: StripResult[]
-    load: StripResult[]
-  }
-  ocr: {
-    items: OcrItem[]
-  }
-  meta: {
-    scale_profiles: ScaleProfile[]
-    note: string | null
+  medical_tests: ZoneResult[]
+  workout: {
+    notes: string[]
   }
   // error fields (only when status === 'error')
   error?: string
@@ -90,47 +77,15 @@ export type CvAnalysisResult = {
 
 // ─── Normalizer ──────────────────────────────────────────────────────────
 
-const mapScaleZone = (raw: unknown): ScaleZone => {
-  const z = asRecord(raw) || {}
-  const rgb = Array.isArray(z.rgb) ? z.rgb as number[] : [0, 0, 0]
-  const lab = Array.isArray(z.lab) ? z.lab as number[] : [0, 0, 0]
-  const bbox = Array.isArray(z.text_bbox) ? z.text_bbox as number[] : null
-  return {
-    zone_index: asNumber(z.zone_index) ?? 0,
-    label: asString(z.label) || 'L?',
-    rgb: [rgb[0] ?? 0, rgb[1] ?? 0, rgb[2] ?? 0] as [number, number, number],
-    lab: [
-      typeof lab[0] === 'number' ? lab[0] : 0,
-      typeof lab[1] === 'number' ? lab[1] : 0,
-      typeof lab[2] === 'number' ? lab[2] : 0,
-    ] as [number, number, number],
-    text: asString(z.text),
-    text_confidence: asNumber(z.text_confidence),
-    text_bbox: bbox ? [bbox[0] ?? 0, bbox[1] ?? 0, bbox[2] ?? 0, bbox[3] ?? 0] as [number, number, number, number] : null,
-  }
-}
-
-const mapZone = (raw: unknown, idx: number): ZoneResult => {
-  const zone = asRecord(raw) || {}
-  const nearest = asRecord(zone.nearest) || {}
-  return {
-    index: idx,
-    level: asString(nearest.label) || '—',
-    delta_e: asNumber(nearest.delta_e),
-  }
-}
-
-const mapStrip = (raw: unknown, groupName: 'rest' | 'load'): StripResult | null => {
+const mapMedical = (raw: unknown, source: 'rest' | 'load'): ZoneResult | null => {
   const item = asRecord(raw)
   if (!item) return null
-
-  const zones = asArray(item.zones).map((z, i) => mapZone(z, i + 1))
   return {
+    source,
     photo_filename: asString(item.filename) || 'unknown',
     strip_index: asNumber(item.strip_index) ?? 1,
-    zone_count: zones.length,
-    scale_id: asString(item.matched_scale_id),
-    zones,
+    results: asNumberRecord(item.results),
+    units: asStringRecord(item.units),
   }
 }
 
@@ -159,9 +114,8 @@ const normalizeCvResponse = (rawResponse: unknown): CvAnalysisResult => {
     return {
       status: 'error',
       session_id: null,
-      strips: { rest: [], load: [] },
-      ocr: { items: [] },
-      meta: { scale_profiles: [], note: null },
+      medical_tests: [],
+      workout: { notes: [] },
       error: message,
       message,
     }
@@ -171,43 +125,25 @@ const normalizeCvResponse = (rawResponse: unknown): CvAnalysisResult => {
   const meta = asRecord(payload.meta) || {}
   const session_id = asString(meta.session_id) || asString(root.sessionId)
 
-  // ── Scale profiles ──
-  const scale_profiles: ScaleProfile[] = asArray(meta.scale_profiles)
-    .map((p) => {
-      const pr = asRecord(p) || {}
-      return {
-        id: asString(pr.id) || 'unknown',
-        zone_count: asNumber(pr.count) ?? 0,
-        palette_size: asNumber(pr.palette_size) ?? 0,
-        filename: asString(pr.filename) || '',
-        zones: asArray(pr.zones).map(mapScaleZone),
-      }
-    })
+  // ── Numeric medical results ──
+  const restItems = asArray(asRecord(payload.rest)?.items)
+    .map((item) => mapMedical(item, 'rest'))
+    .filter((s): s is ZoneResult => s !== null)
+  const loadItems = asArray(asRecord(payload.load)?.items)
+    .map((item) => mapMedical(item, 'load'))
+    .filter((s): s is ZoneResult => s !== null)
 
-  // ── Strips (keep all detected strips per photo) ──
-  const restStrips = asArray(asRecord(payload.rest)?.items)
-    .map((item) => mapStrip(item, 'rest'))
-    .filter((s): s is StripResult => s !== null)
-
-  const loadStrips = asArray(asRecord(payload.load)?.items)
-    .map((item) => mapStrip(item, 'load'))
-    .filter((s): s is StripResult => s !== null)
-
-  // ── OCR ──
-  const ocrItems = asArray(asRecord(payload.ocr)?.items).map(mapOcrItem)
+  // ── Workout notes from OCR text ──
+  const notes = asArray(asRecord(payload.ocr)?.items)
+    .map(mapOcrItem)
+    .map((x) => x.text)
+    .filter((x) => !!x)
 
   return {
     status: 'ok',
     session_id,
-    strips: {
-      rest: restStrips,
-      load: loadStrips,
-    },
-    ocr: { items: ocrItems },
-    meta: {
-      scale_profiles,
-      note: asString(meta.note),
-    },
+    medical_tests: [...restItems, ...loadItems],
+    workout: { notes },
   }
 }
 
