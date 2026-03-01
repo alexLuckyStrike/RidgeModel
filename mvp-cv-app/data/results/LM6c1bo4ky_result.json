@@ -1,0 +1,1479 @@
+{
+  "ok": true,
+  "meta": {
+    "session_id": "LM6c1bo4ky",
+    "scale2": "1772366528218_photo_2026-02-21_19.59.57.jpeg",
+    "scale5": "1772366528218_photo_2026-02-21_20.00.02.jpeg",
+    "scale_profiles": [
+      {
+        "id": "scale2",
+        "count": 2,
+        "filename": "1772366528218_photo_2026-02-21_19.59.57.jpeg",
+        "has_refs": true,
+        "refs_keys": [
+          "albumin",
+          "creatinine"
+        ]
+      },
+      {
+        "id": "scale5",
+        "count": 5,
+        "filename": "1772366528218_photo_2026-02-21_20.00.02.jpeg",
+        "has_refs": true,
+        "refs_keys": [
+          "glucose",
+          "hb_myoglobin",
+          "ketones",
+          "ph",
+          "protein"
+        ]
+      }
+    ],
+    "note": "MVP: calibration uses reference charts (not kmeans); output includes numeric results with log interpolation."
+  },
+  "rest": {
+    "items": [
+      {
+        "id": "1772366528219_photo_2026-02-02_21-08-05.jpg#1",
+        "filename": "1772366528219_photo_2026-02-02_21-08-05.jpg",
+        "strip_index": 1,
+        "source_group": "rest",
+        "results": {
+          "creatinine": 21.7,
+          "albumin": 2.24
+        },
+        "units": {
+          "creatinine": "ммоль/л",
+          "albumin": "г/л"
+        },
+        "debug": {
+          "detected_zone_count": 1,
+          "matched_scale_id": "scale2",
+          "matched_scale_count": 2,
+          "zones": [
+            {
+              "index": 1,
+              "mean_lab": [
+                135,
+                128,
+                135
+              ],
+              "analyte": "creatinine",
+              "nearest": {
+                "label": "L6",
+                "delta_e": 89.46,
+                "neighbors": [
+                  {
+                    "label": "L6",
+                    "delta_e": 89.46
+                  },
+                  {
+                    "label": "L5",
+                    "delta_e": 91.14
+                  }
+                ]
+              }
+            },
+            {
+              "index": 2,
+              "mean_lab": [
+                137,
+                128,
+                135
+              ],
+              "analyte": "albumin",
+              "nearest": {
+                "label": "L7",
+                "delta_e": 90.8,
+                "neighbors": [
+                  {
+                    "label": "L7",
+                    "delta_e": 90.8
+                  },
+                  {
+                    "label": "L6",
+                    "delta_e": 91.66
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "1772366528219_photo_2026-02-02_21-08-05.jpg#2",
+        "filename": "1772366528219_photo_2026-02-02_21-08-05.jpg",
+        "strip_index": 2,
+        "source_group": "rest",
+        "results": {
+          "creatinine": 21.7,
+          "albumin": 2.25
+        },
+        "units": {
+          "creatinine": "ммоль/л",
+          "albumin": "г/л"
+        },
+        "debug": {
+          "detected_zone_count": 1,
+          "matched_scale_id": "scale2",
+          "matched_scale_count": 2,
+          "zones": [
+            {
+              "index": 1,
+              "mean_lab": [
+                148,
+                127,
+                134
+              ],
+              "analyte": "creatinine",
+              "nearest": {
+                "label": "L6",
+                "delta_e": 76.45,
+                "neighbors": [
+                  {
+                    "label": "L6",
+                    "delta_e": 76.45
+                  },
+                  {
+                    "label": "L5",
+                    "delta_e": 78.11
+                  }
+                ]
+              }
+            },
+            {
+              "index": 2,
+              "mean_lab": [
+                150,
+                127,
+                134
+              ],
+              "analyte": "albumin",
+              "nearest": {
+                "label": "L7",
+                "delta_e": 77.78,
+                "neighbors": [
+                  {
+                    "label": "L7",
+                    "delta_e": 77.78
+                  },
+                  {
+                    "label": "L6",
+                    "delta_e": 78.64
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "1772366528219_photo_2026-02-02_21-08-05.jpg#3",
+        "filename": "1772366528219_photo_2026-02-02_21-08-05.jpg",
+        "strip_index": 3,
+        "source_group": "rest",
+        "results": {
+          "creatinine": 21.7,
+          "albumin": 2.25
+        },
+        "units": {
+          "creatinine": "ммоль/л",
+          "albumin": "г/л"
+        },
+        "debug": {
+          "detected_zone_count": 1,
+          "matched_scale_id": "scale2",
+          "matched_scale_count": 2,
+          "zones": [
+            {
+              "index": 1,
+              "mean_lab": [
+                145,
+                127,
+                134
+              ],
+              "analyte": "creatinine",
+              "nearest": {
+                "label": "L6",
+                "delta_e": 79.43,
+                "neighbors": [
+                  {
+                    "label": "L6",
+                    "delta_e": 79.43
+                  },
+                  {
+                    "label": "L5",
+                    "delta_e": 81.1
+                  }
+                ]
+              }
+            },
+            {
+              "index": 2,
+              "mean_lab": [
+                153,
+                127,
+                134
+              ],
+              "analyte": "albumin",
+              "nearest": {
+                "label": "L7",
+                "delta_e": 74.81,
+                "neighbors": [
+                  {
+                    "label": "L7",
+                    "delta_e": 74.81
+                  },
+                  {
+                    "label": "L6",
+                    "delta_e": 75.67
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "1772366528219_photo_2026-02-02_21-08-05.jpg#4",
+        "filename": "1772366528219_photo_2026-02-02_21-08-05.jpg",
+        "strip_index": 4,
+        "source_group": "rest",
+        "results": {
+          "creatinine": 21.7,
+          "albumin": 2.25
+        },
+        "units": {
+          "creatinine": "ммоль/л",
+          "albumin": "г/л"
+        },
+        "debug": {
+          "detected_zone_count": 1,
+          "matched_scale_id": "scale2",
+          "matched_scale_count": 2,
+          "zones": [
+            {
+              "index": 1,
+              "mean_lab": [
+                198,
+                127,
+                137
+              ],
+              "analyte": "creatinine",
+              "nearest": {
+                "label": "L6",
+                "delta_e": 28.3,
+                "neighbors": [
+                  {
+                    "label": "L6",
+                    "delta_e": 28.3
+                  },
+                  {
+                    "label": "L5",
+                    "delta_e": 28.88
+                  }
+                ]
+              }
+            },
+            {
+              "index": 2,
+              "mean_lab": [
+                200,
+                127,
+                137
+              ],
+              "analyte": "albumin",
+              "nearest": {
+                "label": "L7",
+                "delta_e": 30.41,
+                "neighbors": [
+                  {
+                    "label": "L7",
+                    "delta_e": 30.41
+                  },
+                  {
+                    "label": "L6",
+                    "delta_e": 30.89
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "load": {
+    "items": [
+      {
+        "id": "1772366528220_photo_2026-02-03_20-59-05.jpg#1",
+        "filename": "1772366528220_photo_2026-02-03_20-59-05.jpg",
+        "strip_index": 1,
+        "source_group": "load",
+        "results": {
+          "hb_myoglobin": 13,
+          "ketones": 0.8,
+          "protein": 0.2,
+          "glucose": 1,
+          "ph": 5.4
+        },
+        "units": {
+          "hb_myoglobin": "эр/мкл",
+          "ketones": "ммоль/л",
+          "protein": "г/л",
+          "glucose": "ммоль/л",
+          "ph": "pH"
+        },
+        "debug": {
+          "detected_zone_count": 4,
+          "matched_scale_id": "scale5",
+          "matched_scale_count": 5,
+          "zones": [
+            {
+              "index": 1,
+              "mean_lab": [
+                183,
+                126,
+                132
+              ],
+              "analyte": "hb_myoglobin",
+              "nearest": {
+                "label": "L3",
+                "delta_e": 34.06,
+                "neighbors": [
+                  {
+                    "label": "L3",
+                    "delta_e": 34.06
+                  },
+                  {
+                    "label": "L1",
+                    "delta_e": 34.07
+                  }
+                ]
+              }
+            },
+            {
+              "index": 2,
+              "mean_lab": [
+                153,
+                127,
+                133
+              ],
+              "analyte": "ketones",
+              "nearest": {
+                "label": "L3",
+                "delta_e": 55.89,
+                "neighbors": [
+                  {
+                    "label": "L3",
+                    "delta_e": 55.89
+                  },
+                  {
+                    "label": "L1",
+                    "delta_e": 63.48
+                  }
+                ]
+              }
+            },
+            {
+              "index": 3,
+              "mean_lab": [
+                148,
+                127,
+                133
+              ],
+              "analyte": "protein",
+              "nearest": {
+                "label": "L3",
+                "delta_e": 36.41,
+                "neighbors": [
+                  {
+                    "label": "L3",
+                    "delta_e": 36.41
+                  },
+                  {
+                    "label": "L2",
+                    "delta_e": 63.77
+                  }
+                ]
+              }
+            },
+            {
+              "index": 4,
+              "mean_lab": [
+                208,
+                128,
+                129
+              ],
+              "analyte": "glucose",
+              "nearest": {
+                "label": "L1",
+                "delta_e": 30.25,
+                "neighbors": [
+                  {
+                    "label": "L1",
+                    "delta_e": 30.25
+                  },
+                  {
+                    "label": "L2",
+                    "delta_e": 56.72
+                  }
+                ]
+              }
+            },
+            {
+              "index": 5,
+              "mean_lab": [
+                212,
+                128,
+                129
+              ],
+              "analyte": "ph",
+              "nearest": {
+                "label": "L1",
+                "delta_e": 62.85,
+                "neighbors": [
+                  {
+                    "label": "L1",
+                    "delta_e": 62.85
+                  },
+                  {
+                    "label": "L2",
+                    "delta_e": 106.04
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "1772366528222_photo_2026-02-04_19-31-14.jpg#1",
+        "filename": "1772366528222_photo_2026-02-04_19-31-14.jpg",
+        "strip_index": 1,
+        "source_group": "load",
+        "results": {
+          "creatinine": 21.7,
+          "albumin": 2.25
+        },
+        "units": {
+          "creatinine": "ммоль/л",
+          "albumin": "г/л"
+        },
+        "debug": {
+          "detected_zone_count": 2,
+          "matched_scale_id": "scale2",
+          "matched_scale_count": 2,
+          "zones": [
+            {
+              "index": 1,
+              "mean_lab": [
+                168,
+                129,
+                132
+              ],
+              "analyte": "creatinine",
+              "nearest": {
+                "label": "L6",
+                "delta_e": 56.32,
+                "neighbors": [
+                  {
+                    "label": "L6",
+                    "delta_e": 56.32
+                  },
+                  {
+                    "label": "L5",
+                    "delta_e": 58.04
+                  }
+                ]
+              }
+            },
+            {
+              "index": 2,
+              "mean_lab": [
+                182,
+                128,
+                133
+              ],
+              "analyte": "albumin",
+              "nearest": {
+                "label": "L7",
+                "delta_e": 46.11,
+                "neighbors": [
+                  {
+                    "label": "L7",
+                    "delta_e": 46.11
+                  },
+                  {
+                    "label": "L6",
+                    "delta_e": 46.87
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "1772366528223_photo_2026-02-10_22-34-28.jpg#1",
+        "filename": "1772366528223_photo_2026-02-10_22-34-28.jpg",
+        "strip_index": 1,
+        "source_group": "load",
+        "results": {
+          "creatinine": 21.7,
+          "albumin": 2.24
+        },
+        "units": {
+          "creatinine": "ммоль/л",
+          "albumin": "г/л"
+        },
+        "debug": {
+          "detected_zone_count": 1,
+          "matched_scale_id": "scale2",
+          "matched_scale_count": 2,
+          "zones": [
+            {
+              "index": 1,
+              "mean_lab": [
+                16,
+                136,
+                135
+              ],
+              "analyte": "creatinine",
+              "nearest": {
+                "label": "L6",
+                "delta_e": 208.31,
+                "neighbors": [
+                  {
+                    "label": "L6",
+                    "delta_e": 208.31
+                  },
+                  {
+                    "label": "L5",
+                    "delta_e": 210.21
+                  }
+                ]
+              }
+            },
+            {
+              "index": 2,
+              "mean_lab": [
+                15,
+                134,
+                134
+              ],
+              "analyte": "albumin",
+              "nearest": {
+                "label": "L7",
+                "delta_e": 212.4,
+                "neighbors": [
+                  {
+                    "label": "L7",
+                    "delta_e": 212.4
+                  },
+                  {
+                    "label": "L6",
+                    "delta_e": 213.32
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "1772366528224_photo_2026-02-14_11-42-57.jpg#1",
+        "filename": "1772366528224_photo_2026-02-14_11-42-57.jpg",
+        "strip_index": 1,
+        "source_group": "load",
+        "results": {
+          "creatinine": 21.7,
+          "albumin": 2.25
+        },
+        "units": {
+          "creatinine": "ммоль/л",
+          "albumin": "г/л"
+        },
+        "debug": {
+          "detected_zone_count": 3,
+          "matched_scale_id": "scale2",
+          "matched_scale_count": 2,
+          "zones": [
+            {
+              "index": 1,
+              "mean_lab": [
+                166,
+                128,
+                134
+              ],
+              "analyte": "creatinine",
+              "nearest": {
+                "label": "L6",
+                "delta_e": 58.56,
+                "neighbors": [
+                  {
+                    "label": "L6",
+                    "delta_e": 58.56
+                  },
+                  {
+                    "label": "L5",
+                    "delta_e": 60.13
+                  }
+                ]
+              }
+            },
+            {
+              "index": 2,
+              "mean_lab": [
+                159,
+                127,
+                134
+              ],
+              "analyte": "albumin",
+              "nearest": {
+                "label": "L7",
+                "delta_e": 68.88,
+                "neighbors": [
+                  {
+                    "label": "L7",
+                    "delta_e": 68.88
+                  },
+                  {
+                    "label": "L6",
+                    "delta_e": 69.73
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "1772366528225_photo_2026-02-18_20-23-47.jpg#1",
+        "filename": "1772366528225_photo_2026-02-18_20-23-47.jpg",
+        "strip_index": 1,
+        "source_group": "load",
+        "results": {
+          "hb_myoglobin": 13,
+          "ketones": 0.8,
+          "protein": 0.19,
+          "glucose": 0.9,
+          "ph": 5.4
+        },
+        "units": {
+          "hb_myoglobin": "эр/мкл",
+          "ketones": "ммоль/л",
+          "protein": "г/л",
+          "glucose": "ммоль/л",
+          "ph": "pH"
+        },
+        "debug": {
+          "detected_zone_count": 4,
+          "matched_scale_id": "scale5",
+          "matched_scale_count": 5,
+          "zones": [
+            {
+              "index": 1,
+              "mean_lab": [
+                166,
+                128,
+                133
+              ],
+              "analyte": "hb_myoglobin",
+              "nearest": {
+                "label": "L3",
+                "delta_e": 49.98,
+                "neighbors": [
+                  {
+                    "label": "L3",
+                    "delta_e": 49.98
+                  },
+                  {
+                    "label": "L1",
+                    "delta_e": 50.41
+                  }
+                ]
+              }
+            },
+            {
+              "index": 2,
+              "mean_lab": [
+                137,
+                127,
+                133
+              ],
+              "analyte": "ketones",
+              "nearest": {
+                "label": "L3",
+                "delta_e": 71.47,
+                "neighbors": [
+                  {
+                    "label": "L3",
+                    "delta_e": 71.47
+                  },
+                  {
+                    "label": "L1",
+                    "delta_e": 79.39
+                  }
+                ]
+              }
+            },
+            {
+              "index": 3,
+              "mean_lab": [
+                153,
+                127,
+                132
+              ],
+              "analyte": "protein",
+              "nearest": {
+                "label": "L3",
+                "delta_e": 41.28,
+                "neighbors": [
+                  {
+                    "label": "L3",
+                    "delta_e": 41.28
+                  },
+                  {
+                    "label": "L2",
+                    "delta_e": 58.99
+                  }
+                ]
+              }
+            },
+            {
+              "index": 4,
+              "mean_lab": [
+                199,
+                127,
+                131
+              ],
+              "analyte": "glucose",
+              "nearest": {
+                "label": "L1",
+                "delta_e": 21.47,
+                "neighbors": [
+                  {
+                    "label": "L1",
+                    "delta_e": 21.47
+                  },
+                  {
+                    "label": "L2",
+                    "delta_e": 47.98
+                  }
+                ]
+              }
+            },
+            {
+              "index": 5,
+              "mean_lab": [
+                208,
+                126,
+                131
+              ],
+              "analyte": "ph",
+              "nearest": {
+                "label": "L1",
+                "delta_e": 58.84,
+                "neighbors": [
+                  {
+                    "label": "L1",
+                    "delta_e": 58.84
+                  },
+                  {
+                    "label": "L2",
+                    "delta_e": 102.05
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "1772366528226_1.jpg#1",
+        "filename": "1772366528226_1.jpg",
+        "strip_index": 1,
+        "source_group": "load",
+        "results": {
+          "hb_myoglobin": 13,
+          "ketones": 0.8,
+          "protein": 0.2,
+          "glucose": 1.7,
+          "ph": 5.3
+        },
+        "units": {
+          "hb_myoglobin": "эр/мкл",
+          "ketones": "ммоль/л",
+          "protein": "г/л",
+          "glucose": "ммоль/л",
+          "ph": "pH"
+        },
+        "debug": {
+          "detected_zone_count": 4,
+          "matched_scale_id": "scale5",
+          "matched_scale_count": 5,
+          "zones": [
+            {
+              "index": 1,
+              "mean_lab": [
+                185,
+                128,
+                133
+              ],
+              "analyte": "hb_myoglobin",
+              "nearest": {
+                "label": "L3",
+                "delta_e": 31.58,
+                "neighbors": [
+                  {
+                    "label": "L3",
+                    "delta_e": 31.58
+                  },
+                  {
+                    "label": "L1",
+                    "delta_e": 31.65
+                  }
+                ]
+              }
+            },
+            {
+              "index": 2,
+              "mean_lab": [
+                177,
+                128,
+                133
+              ],
+              "analyte": "ketones",
+              "nearest": {
+                "label": "L3",
+                "delta_e": 33.06,
+                "neighbors": [
+                  {
+                    "label": "L3",
+                    "delta_e": 33.06
+                  },
+                  {
+                    "label": "L1",
+                    "delta_e": 39.66
+                  }
+                ]
+              }
+            },
+            {
+              "index": 3,
+              "mean_lab": [
+                151,
+                128,
+                133
+              ],
+              "analyte": "protein",
+              "nearest": {
+                "label": "L3",
+                "delta_e": 39.06,
+                "neighbors": [
+                  {
+                    "label": "L3",
+                    "delta_e": 39.06
+                  },
+                  {
+                    "label": "L2",
+                    "delta_e": 60.75
+                  }
+                ]
+              }
+            },
+            {
+              "index": 4,
+              "mean_lab": [
+                140,
+                128,
+                133
+              ],
+              "analyte": "glucose",
+              "nearest": {
+                "label": "L2",
+                "delta_e": 23.77,
+                "neighbors": [
+                  {
+                    "label": "L2",
+                    "delta_e": 23.77
+                  },
+                  {
+                    "label": "L1",
+                    "delta_e": 39.43
+                  }
+                ]
+              }
+            },
+            {
+              "index": 5,
+              "mean_lab": [
+                170,
+                128,
+                131
+              ],
+              "analyte": "ph",
+              "nearest": {
+                "label": "L1",
+                "delta_e": 21.77,
+                "neighbors": [
+                  {
+                    "label": "L1",
+                    "delta_e": 21.77
+                  },
+                  {
+                    "label": "L2",
+                    "delta_e": 64.62
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "1772366528227_photo_2026-02-19_20-48-31.jpg#1",
+        "filename": "1772366528227_photo_2026-02-19_20-48-31.jpg",
+        "strip_index": 1,
+        "source_group": "load",
+        "results": {
+          "creatinine": 21.7,
+          "albumin": 2.25
+        },
+        "units": {
+          "creatinine": "ммоль/л",
+          "albumin": "г/л"
+        },
+        "debug": {
+          "detected_zone_count": 2,
+          "matched_scale_id": "scale2",
+          "matched_scale_count": 2,
+          "zones": [
+            {
+              "index": 1,
+              "mean_lab": [
+                188,
+                128,
+                133
+              ],
+              "analyte": "creatinine",
+              "nearest": {
+                "label": "L6",
+                "delta_e": 36.69,
+                "neighbors": [
+                  {
+                    "label": "L6",
+                    "delta_e": 36.69
+                  },
+                  {
+                    "label": "L5",
+                    "delta_e": 38.12
+                  }
+                ]
+              }
+            },
+            {
+              "index": 2,
+              "mean_lab": [
+                187,
+                127,
+                134
+              ],
+              "analyte": "albumin",
+              "nearest": {
+                "label": "L7",
+                "delta_e": 41.48,
+                "neighbors": [
+                  {
+                    "label": "L7",
+                    "delta_e": 41.48
+                  },
+                  {
+                    "label": "L6",
+                    "delta_e": 42.21
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "1772366528228_photo_2026-02-21_11-08-05.jpg#1",
+        "filename": "1772366528228_photo_2026-02-21_11-08-05.jpg",
+        "strip_index": 1,
+        "source_group": "load",
+        "results": {
+          "creatinine": 21.7,
+          "albumin": 2.24
+        },
+        "units": {
+          "creatinine": "ммоль/л",
+          "albumin": "г/л"
+        },
+        "debug": {
+          "detected_zone_count": 3,
+          "matched_scale_id": "scale2",
+          "matched_scale_count": 2,
+          "zones": [
+            {
+              "index": 1,
+              "mean_lab": [
+                81,
+                129,
+                131
+              ],
+              "analyte": "creatinine",
+              "nearest": {
+                "label": "L6",
+                "delta_e": 143.09,
+                "neighbors": [
+                  {
+                    "label": "L6",
+                    "delta_e": 143.09
+                  },
+                  {
+                    "label": "L5",
+                    "delta_e": 145.01
+                  }
+                ]
+              }
+            },
+            {
+              "index": 2,
+              "mean_lab": [
+                56,
+                132,
+                136
+              ],
+              "analyte": "albumin",
+              "nearest": {
+                "label": "L7",
+                "delta_e": 171.57,
+                "neighbors": [
+                  {
+                    "label": "L7",
+                    "delta_e": 171.57
+                  },
+                  {
+                    "label": "L6",
+                    "delta_e": 172.46
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "1772366528229_photo_2026-02-21_17-07-18.jpg#1",
+        "filename": "1772366528229_photo_2026-02-21_17-07-18.jpg",
+        "strip_index": 1,
+        "source_group": "load",
+        "results": {
+          "hb_myoglobin": 81,
+          "ketones": 11,
+          "protein": 5.24,
+          "glucose": 9.5,
+          "ph": 6.3
+        },
+        "units": {
+          "hb_myoglobin": "эр/мкл",
+          "ketones": "ммоль/л",
+          "protein": "г/л",
+          "glucose": "ммоль/л",
+          "ph": "pH"
+        },
+        "debug": {
+          "detected_zone_count": 4,
+          "matched_scale_id": "scale5",
+          "matched_scale_count": 5,
+          "zones": [
+            {
+              "index": 1,
+              "mean_lab": [
+                64,
+                131,
+                129
+              ],
+              "analyte": "hb_myoglobin",
+              "nearest": {
+                "label": "L4",
+                "delta_e": 11.49,
+                "neighbors": [
+                  {
+                    "label": "L4",
+                    "delta_e": 11.49
+                  },
+                  {
+                    "label": "L5",
+                    "delta_e": 26.85
+                  }
+                ]
+              }
+            },
+            {
+              "index": 2,
+              "mean_lab": [
+                69,
+                130,
+                129
+              ],
+              "analyte": "ketones",
+              "nearest": {
+                "label": "L5",
+                "delta_e": 27.59,
+                "neighbors": [
+                  {
+                    "label": "L5",
+                    "delta_e": 27.59
+                  },
+                  {
+                    "label": "L6",
+                    "delta_e": 32.53
+                  }
+                ]
+              }
+            },
+            {
+              "index": 3,
+              "mean_lab": [
+                72,
+                131,
+                129
+              ],
+              "analyte": "protein",
+              "nearest": {
+                "label": "L5",
+                "delta_e": 29.5,
+                "neighbors": [
+                  {
+                    "label": "L5",
+                    "delta_e": 29.5
+                  },
+                  {
+                    "label": "L6",
+                    "delta_e": 34.26
+                  }
+                ]
+              }
+            },
+            {
+              "index": 4,
+              "mean_lab": [
+                75,
+                129,
+                131
+              ],
+              "analyte": "glucose",
+              "nearest": {
+                "label": "L4",
+                "delta_e": 22.14,
+                "neighbors": [
+                  {
+                    "label": "L4",
+                    "delta_e": 22.14
+                  },
+                  {
+                    "label": "L3",
+                    "delta_e": 29.77
+                  }
+                ]
+              }
+            },
+            {
+              "index": 5,
+              "mean_lab": [
+                76,
+                130,
+                129
+              ],
+              "analyte": "ph",
+              "nearest": {
+                "label": "L3",
+                "delta_e": 22.05,
+                "neighbors": [
+                  {
+                    "label": "L3",
+                    "delta_e": 22.05
+                  },
+                  {
+                    "label": "L2",
+                    "delta_e": 35.79
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "1772366528230_photo_2026-02-02_21-08-32.jpg#1",
+        "filename": "1772366528230_photo_2026-02-02_21-08-32.jpg",
+        "strip_index": 1,
+        "source_group": "load",
+        "results": {
+          "hb_myoglobin": 13,
+          "ketones": 0.8,
+          "protein": 0.05,
+          "glucose": 0.7,
+          "ph": 5.3
+        },
+        "units": {
+          "hb_myoglobin": "эр/мкл",
+          "ketones": "ммоль/л",
+          "protein": "г/л",
+          "glucose": "ммоль/л",
+          "ph": "pH"
+        },
+        "debug": {
+          "detected_zone_count": 6,
+          "matched_scale_id": "scale5",
+          "matched_scale_count": 5,
+          "zones": [
+            {
+              "index": 1,
+              "mean_lab": [
+                187,
+                130,
+                134
+              ],
+              "analyte": "hb_myoglobin",
+              "nearest": {
+                "label": "L3",
+                "delta_e": 29.19,
+                "neighbors": [
+                  {
+                    "label": "L3",
+                    "delta_e": 29.19
+                  },
+                  {
+                    "label": "L1",
+                    "delta_e": 29.34
+                  }
+                ]
+              }
+            },
+            {
+              "index": 2,
+              "mean_lab": [
+                204,
+                129,
+                134
+              ],
+              "analyte": "ketones",
+              "nearest": {
+                "label": "L3",
+                "delta_e": 12.88,
+                "neighbors": [
+                  {
+                    "label": "L3",
+                    "delta_e": 12.88
+                  },
+                  {
+                    "label": "L1",
+                    "delta_e": 13.34
+                  }
+                ]
+              }
+            },
+            {
+              "index": 3,
+              "mean_lab": [
+                199,
+                129,
+                133
+              ],
+              "analyte": "protein",
+              "nearest": {
+                "label": "L2",
+                "delta_e": 15.13,
+                "neighbors": [
+                  {
+                    "label": "L2",
+                    "delta_e": 15.13
+                  },
+                  {
+                    "label": "L1",
+                    "delta_e": 15.75
+                  }
+                ]
+              }
+            },
+            {
+              "index": 4,
+              "mean_lab": [
+                192,
+                129,
+                133
+              ],
+              "analyte": "glucose",
+              "nearest": {
+                "label": "L1",
+                "delta_e": 13.93,
+                "neighbors": [
+                  {
+                    "label": "L1",
+                    "delta_e": 13.93
+                  },
+                  {
+                    "label": "L2",
+                    "delta_e": 40.48
+                  }
+                ]
+              }
+            },
+            {
+              "index": 5,
+              "mean_lab": [
+                178,
+                130,
+                134
+              ],
+              "analyte": "ph",
+              "nearest": {
+                "label": "L1",
+                "delta_e": 28.44,
+                "neighbors": [
+                  {
+                    "label": "L1",
+                    "delta_e": 28.44
+                  },
+                  {
+                    "label": "L2",
+                    "delta_e": 71.65
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "ocr": {
+    "items": [
+      {
+        "id": "1772366528222___________________________2026-02-21____19.42.29.png",
+        "filename": "1772366528222___________________________2026-02-21____19.42.29.png",
+        "text": "Ф Тренировка 1 (Средний объём)\n\nПрисед: 5x5 / 150\n\nЖим лёжа: 6x5 [105\n\nТяга в наклоне: 4х8 / 90\n\nЖим гантелей: 2x10 / 32\n\nГиперэкстензия: 3x12 /25\n\nОтдых:\n\n.\n\nбазовые упражнения: 3—4 мин\n\n- вспомогательные: 1,5-2 мин",
+        "warning": null
+      },
+      {
+        "id": "1772366528223___________________________2026-02-21____19.42.57.png",
+        "filename": "1772366528223___________________________2026-02-21____19.42.57.png",
+        "text": "Ф Тренировка 2 (Тяговая акцент)\n\nТяга классика: 5х4 /175\n\nПрисед пауза: 4х4 / 145\n\nЖим узким: 4x6 / 95\n\nТяга верхнего блока: 4х8 /75\n\nПресс: 3х15\n\nОтдых:\n\n* тяга: 4-5 мин\n\n® остальные: 2-3 мин",
+        "warning": null
+      },
+      {
+        "id": "1772366528224___________________________2026-02-21____19.43.09.png",
+        "filename": "1772366528224___________________________2026-02-21____19.43.09.png",
+        "text": "Ф Тренировка 3 (Интенсивная)\n\nПрисед: 4x3 / 170\n\nЖим лёжа: 4х3 / 115\n\nТяга классика: 3x3 /190\n\nЖим под углом: 3х6 /95\n\nРазгибания спины: 3x10 {35\n\nОтдых:\n\n.\n\nбазовые тяжёлые: 4-5 мин\n\n„ вспомогательные: 2 мин",
+        "warning": null
+      },
+      {
+        "id": "1772366528225___________________________2026-02-21____19.43.25.png",
+        "filename": "1772366528225___________________________2026-02-21____19.43.25.png",
+        "text": "Ф Тренировка 4 (Объёмная)\n\nПрисед: 6x6 / 140\n\nЖим лёжа: 6x5 / 100\n\nТяга в наклоне: 4x10 / 85\n\nЖим гантелей: 3х12 / 30\n\nПресс: 3х20\n\nОтдых\n\n.\n\nбазовые: 3 мин\n\n„ вспомогательные: 15 мин",
+        "warning": null
+      },
+      {
+        "id": "1772366528226___________________________2026-02-21____19.43.42.png",
+        "filename": "1772366528226___________________________2026-02-21____19.43.42.png",
+        "text": "Ф Тренировка 5 (Тяжёлая)\n\nПрисед: 5х2 / 180\n\nЖим лёжа: 5х2 /120\n\nTara классика: 4x2 j 200\n\nЖим узким: 3x5 / 100\n\nГиперэкстензия: 3x12 / 30\n\nОтдых:\n\n= тяжёлые подходы: 5-6 мин\n\n* вспомогательные: 2 мин",
+        "warning": null
+      },
+      {
+        "id": "1772366528227___________________________2026-02-21____19.43.59.png",
+        "filename": "1772366528227___________________________2026-02-21____19.43.59.png",
+        "text": "Ф Тренировка 6 (Средняя силовая)\n\nПрисед: 4х4 /160\n\nЖим лёжа: 4х4 [| 110\n\nТяга классика: 4х3 / 180\n\nЖим под углом: 3х8 / 90\n\nTara блока: 3x10 / 70\n\nОтдых:\n\n.\n\nбазовые: 3—4 мин\n\n» вспомогательные: 2 мин",
+        "warning": null
+      },
+      {
+        "id": "1772366528228___________________________2026-02-21____19.44.10.png",
+        "filename": "1772366528228___________________________2026-02-21____19.44.10.png",
+        "text": "Ф Тренировка 7 (Лёгкая восстановительная)\n\nПрисед: 4x5 / 120\n\nЖим лёжа: 4x5 | 85\n\nTara румынская: 3х8 / 120\n\nЖим гантелей: 3x10 / 28\n\nПресс: 3х20\n\nОтдых:\n\ns\n\nбазовые: 2-3 мин\n\n= вспомогательные: 1-1,5 мин",
+        "warning": null
+      },
+      {
+        "id": "1772366528229___________________________2026-02-21____19.44.20.png",
+        "filename": "1772366528229___________________________2026-02-21____19.44.20.png",
+        "text": "Ф Тренировка 8 (Тяговая интенсивная)\n\nTara классика: 5х3 /190\n\nПрисед пауза: 4x3 / 150\n\nЖим лёжа: 4х4 4110\n\nTara в наклоне: 4х8 / 95\n\nГиперэкстензия: 3x12 / 30\n\nОтдых\n\n» тяга: 4-5 мин\n\n= остальные: 2-3 мин",
+        "warning": null
+      },
+      {
+        "id": "1772366528230___________________________2026-02-21____19.44.31.png",
+        "filename": "1772366528230___________________________2026-02-21____19.44.31.png",
+        "text": "Ф Тренировка 9 (Волновая)\n\nПрисед: 5х3 / 150\n\nЖим лёжа: 4х4 / 105\n\nТяга классика: 4x4 /170\n\nЖим узким: 3x6 {95\n\nТяга блока: 3х10 /70\n\nОтдых:\n\n.\n\nбазовые: 3-4 мин\n\n„_ вспомогательные: 2 мин",
+        "warning": null
+      },
+      {
+        "id": "1772366528231___________________________2026-02-21____19.44.43.png",
+        "filename": "1772366528231___________________________2026-02-21____19.44.43.png",
+        "text": "Ф Тренировка 10 (Пиковая нейромышечная)\n\nПрисед: 4x2 /185\n\nЖим лёжа: 4x2 / 125\n\nTara классика: 3x2 {205\n\nЖим под углом: 8x5 / 95\n\nГиперэкстензия: 3x10 | 35\n\nОтдых:\n\n* тяжёлые: 5-6 мин\n\n» вспомогательные: 2 мин",
+        "warning": null
+      },
+      {
+        "id": "1772366528222___________________________2026-02-21____19.42.29.png",
+        "filename": "1772366528222___________________________2026-02-21____19.42.29.png",
+        "text": "Ф Тренировка 1 (Средний объём)\n\nПрисед: 5x5 / 150\n\nЖим лёжа: 6x5 [105\n\nТяга в наклоне: 4х8 / 90\n\nЖим гантелей: 2x10 / 32\n\nГиперэкстензия: 3x12 /25\n\nОтдых:\n\n.\n\nбазовые упражнения: 3—4 мин\n\n- вспомогательные: 1,5-2 мин",
+        "warning": null
+      },
+      {
+        "id": "1772366528223___________________________2026-02-21____19.42.57.png",
+        "filename": "1772366528223___________________________2026-02-21____19.42.57.png",
+        "text": "Ф Тренировка 2 (Тяговая акцент)\n\nТяга классика: 5х4 /175\n\nПрисед пауза: 4х4 / 145\n\nЖим узким: 4x6 / 95\n\nТяга верхнего блока: 4х8 /75\n\nПресс: 3х15\n\nОтдых:\n\n* тяга: 4-5 мин\n\n® остальные: 2-3 мин",
+        "warning": null
+      },
+      {
+        "id": "1772366528224___________________________2026-02-21____19.43.09.png",
+        "filename": "1772366528224___________________________2026-02-21____19.43.09.png",
+        "text": "Ф Тренировка 3 (Интенсивная)\n\nПрисед: 4x3 / 170\n\nЖим лёжа: 4х3 / 115\n\nТяга классика: 3x3 /190\n\nЖим под углом: 3х6 /95\n\nРазгибания спины: 3x10 {35\n\nОтдых:\n\n.\n\nбазовые тяжёлые: 4-5 мин\n\n„ вспомогательные: 2 мин",
+        "warning": null
+      },
+      {
+        "id": "1772366528225___________________________2026-02-21____19.43.25.png",
+        "filename": "1772366528225___________________________2026-02-21____19.43.25.png",
+        "text": "Ф Тренировка 4 (Объёмная)\n\nПрисед: 6x6 / 140\n\nЖим лёжа: 6x5 / 100\n\nТяга в наклоне: 4x10 / 85\n\nЖим гантелей: 3х12 / 30\n\nПресс: 3х20\n\nОтдых\n\n.\n\nбазовые: 3 мин\n\n„ вспомогательные: 15 мин",
+        "warning": null
+      },
+      {
+        "id": "1772366528226___________________________2026-02-21____19.43.42.png",
+        "filename": "1772366528226___________________________2026-02-21____19.43.42.png",
+        "text": "Ф Тренировка 5 (Тяжёлая)\n\nПрисед: 5х2 / 180\n\nЖим лёжа: 5х2 /120\n\nTara классика: 4x2 j 200\n\nЖим узким: 3x5 / 100\n\nГиперэкстензия: 3x12 / 30\n\nОтдых:\n\n= тяжёлые подходы: 5-6 мин\n\n* вспомогательные: 2 мин",
+        "warning": null
+      },
+      {
+        "id": "1772366528227___________________________2026-02-21____19.43.59.png",
+        "filename": "1772366528227___________________________2026-02-21____19.43.59.png",
+        "text": "Ф Тренировка 6 (Средняя силовая)\n\nПрисед: 4х4 /160\n\nЖим лёжа: 4х4 [| 110\n\nТяга классика: 4х3 / 180\n\nЖим под углом: 3х8 / 90\n\nTara блока: 3x10 / 70\n\nОтдых:\n\n.\n\nбазовые: 3—4 мин\n\n» вспомогательные: 2 мин",
+        "warning": null
+      },
+      {
+        "id": "1772366528228___________________________2026-02-21____19.44.10.png",
+        "filename": "1772366528228___________________________2026-02-21____19.44.10.png",
+        "text": "Ф Тренировка 7 (Лёгкая восстановительная)\n\nПрисед: 4x5 / 120\n\nЖим лёжа: 4x5 | 85\n\nTara румынская: 3х8 / 120\n\nЖим гантелей: 3x10 / 28\n\nПресс: 3х20\n\nОтдых:\n\ns\n\nбазовые: 2-3 мин\n\n= вспомогательные: 1-1,5 мин",
+        "warning": null
+      },
+      {
+        "id": "1772366528229___________________________2026-02-21____19.44.20.png",
+        "filename": "1772366528229___________________________2026-02-21____19.44.20.png",
+        "text": "Ф Тренировка 8 (Тяговая интенсивная)\n\nTara классика: 5х3 /190\n\nПрисед пауза: 4x3 / 150\n\nЖим лёжа: 4х4 4110\n\nTara в наклоне: 4х8 / 95\n\nГиперэкстензия: 3x12 / 30\n\nОтдых\n\n» тяга: 4-5 мин\n\n= остальные: 2-3 мин",
+        "warning": null
+      },
+      {
+        "id": "1772366528230___________________________2026-02-21____19.44.31.png",
+        "filename": "1772366528230___________________________2026-02-21____19.44.31.png",
+        "text": "Ф Тренировка 9 (Волновая)\n\nПрисед: 5х3 / 150\n\nЖим лёжа: 4х4 / 105\n\nТяга классика: 4x4 /170\n\nЖим узким: 3x6 {95\n\nТяга блока: 3х10 /70\n\nОтдых:\n\n.\n\nбазовые: 3-4 мин\n\n„_ вспомогательные: 2 мин",
+        "warning": null
+      },
+      {
+        "id": "1772366528231___________________________2026-02-21____19.44.43.png",
+        "filename": "1772366528231___________________________2026-02-21____19.44.43.png",
+        "text": "Ф Тренировка 10 (Пиковая нейромышечная)\n\nПрисед: 4x2 /185\n\nЖим лёжа: 4x2 / 125\n\nTara классика: 3x2 {205\n\nЖим под углом: 8x5 / 95\n\nГиперэкстензия: 3x10 | 35\n\nОтдых:\n\n* тяжёлые: 5-6 мин\n\n» вспомогательные: 2 мин",
+        "warning": null
+      }
+    ]
+  }
+}

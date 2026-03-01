@@ -176,35 +176,56 @@
                   </div>
                 </div>
 
+                <!-- Результаты тест-полосок, сгруппированные по фотографиям -->
                 <div
-                  v-if="mvpResult.medical_tests?.length"
-                  class="space-y-3"
+                  v-if="groupedMedicalTests.length"
+                  class="space-y-4"
                 >
                   <div class="text-base font-semibold text-slate-900">
                     Результаты тест-полосок
                   </div>
+
                   <div
-                    v-for="(test, idx) in mvpResult.medical_tests"
-                    :key="`test-${idx}`"
-                    class="rounded-2xl border border-slate-200 bg-white p-5"
+                    v-for="group in groupedMedicalTests"
+                    :key="group.key"
+                    class="rounded-2xl border border-slate-200 bg-white p-5 space-y-3"
                   >
-                    <div class="mb-3 flex items-center justify-between gap-3">
-                      <div class="text-sm font-medium text-slate-900">
-                        {{ test.photo_filename }}
+                    <!-- Заголовок блока -->
+                    <div class="flex items-center justify-between gap-3">
+                      <div class="text-sm font-semibold text-slate-900">
+                        {{ group.label }}
                       </div>
-                      <span class="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
-                        {{ test.source === 'rest' ? 'Покой' : 'После нагрузки' }}
+                      <span
+                        :class="group.source === 'rest'
+                          ? 'bg-blue-50 text-blue-700'
+                          : 'bg-orange-50 text-orange-700'"
+                        class="rounded-full px-2 py-0.5 text-xs font-medium"
+                      >
+                        {{ group.source === 'rest' ? 'Покой' : 'После нагрузки' }}
                       </span>
                     </div>
 
-                    <div class="grid gap-2 text-sm text-slate-800">
-                      <div
-                        v-for="reading in getMedicalRows(test.results, test.units)"
-                        :key="`${test.photo_filename}-${reading.key}`"
-                      >
-                        {{ reading.label }}:
-                        <span class="font-semibold">{{ reading.value }}</span>
-                        {{ reading.unit }}
+                    <!-- Полоски внутри блока (макс 2: URI-5A + URI-2) -->
+                    <div
+                      v-for="(strip, sIdx) in group.strips"
+                      :key="`${group.key}-strip-${sIdx}`"
+                      class="rounded-xl border border-slate-100 bg-slate-50 p-3"
+                    >
+                      <div class="mb-2 text-xs font-medium text-slate-500">
+                        Полоска {{ sIdx + 1 }}
+                      </div>
+                      <div class="grid gap-1.5 text-sm text-slate-800">
+                        <div
+                          v-for="reading in getMedicalRows(strip.results, strip.units)"
+                          :key="reading.key"
+                          class="flex justify-between"
+                        >
+                          <span class="text-slate-600">{{ reading.label }}</span>
+                          <span class="font-semibold">
+                            {{ reading.value }}
+                            <span class="font-normal text-slate-500">{{ reading.unit }}</span>
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -749,6 +770,59 @@ const getMedicalRows = (
   })
   return rows
 }
+
+const groupedMedicalTests = computed(() => {
+  const tests = mvpResult.value?.medical_tests
+  if (!tests?.length) return []
+
+  // Группируем по photo_filename, сохраняя порядок появления
+  const byPhoto = new Map<string, {
+    source: 'rest' | 'load'
+    strips: typeof tests
+  }>()
+
+  for (const test of tests) {
+    if (!byPhoto.has(test.photo_filename)) {
+      byPhoto.set(test.photo_filename, { source: test.source, strips: [] })
+    }
+    byPhoto.get(test.photo_filename)!.strips.push(test)
+  }
+
+  // URI-5A содержит: hb_myoglobin, ketones, glucose (любой из них → шкала 5)
+  const isScale5 = (s: { results?: Record<string, number> }) => {
+    const r = s.results || {}
+    return 'hb_myoglobin' in r || 'ketones' in r || 'glucose' in r
+  }
+
+  // Подписи: "Базовый уровень [N]" для rest, "Измерение N" для load
+  const totalBaseline = [...byPhoto.values()].filter(g => g.source === 'rest').length
+  let baselineIdx = 0
+  let loadIdx = 0
+
+  return [...byPhoto.entries()].map(([filename, group]) => {
+    let label: string
+    if (group.source === 'rest') {
+      baselineIdx++
+      label = totalBaseline > 1 ? `Базовый уровень ${baselineIdx}` : 'Базовый уровень'
+    } else {
+      loadIdx++
+      label = `Измерение ${loadIdx}`
+    }
+
+    // Дедупликация: оставляем ровно 1 полоску URI-5A (5 маркеров)
+    // и 1 полоску URI-2 (2 маркера) на каждый блок фотографии
+    const scale5Strip = group.strips.find(s => isScale5(s))
+    const scale2Strip = group.strips.find(s => !isScale5(s))
+    const deduped = [scale5Strip, scale2Strip].filter(Boolean) as typeof tests
+
+    return {
+      key: filename,
+      label,
+      source: group.source,
+      strips: deduped.length ? deduped : group.strips,
+    }
+  })
+})
 </script>
 
 
