@@ -365,7 +365,7 @@
                               </div>
                             </div>
                           </div>
-                          <div class="mt-3 grid grid-cols-3 gap-3">
+                          <div class="mt-3 grid grid-cols-4 gap-3">
                             <Field label="Креатинин"
                               ><input
                                 v-model.number="athlete.rows[keyOf(w, s)].creatinine"
@@ -387,6 +387,13 @@
                                 step="0.1"
                                 class="input"
                             /></Field>
+                            <Field label="Кетоны"
+                              ><input
+                                v-model.number="athlete.rows[keyOf(w, s)].ketones"
+                                type="number"
+                                step="0.1"
+                                class="input"
+                            /></Field>
                           </div>
                         </div>
                       </div>
@@ -403,6 +410,7 @@
                               <th class="py-2 pr-3">Креатинин</th>
                               <th class="py-2 pr-3">Белок</th>
                               <th class="py-2 pr-3">Миоглобин</th>
+                              <th class="py-2 pr-3">Кетоны</th>
                               <th class="py-2">Статус</th>
                             </tr>
                           </thead>
@@ -457,6 +465,14 @@
                                   type="number"
                                   step="0.1"
                                   class="input h-10 w-28"
+                                />
+                              </td>
+                              <td class="py-3 pr-3">
+                                <input
+                                  v-model.number="athlete.rows[keyOf(w, s)].ketones"
+                                  type="number"
+                                  step="0.1"
+                                  class="input h-10 w-24"
                                 />
                               </td>
                               <td class="py-3">

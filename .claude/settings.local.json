@@ -20,7 +20,15 @@
       "Bash(python3:*)",
       "Bash(ls:*)",
       "Bash(brew install:*)",
-      "Bash(tesseract:*)"
+      "Bash(tesseract:*)",
+      "Bash(unzip -p \"/Users/admin/Documents/Документы для работы/Коэффициент корреляция.pages\" index.xml)",
+      "Bash(unzip -l \"Коэффициент корреляция.pages\")",
+      "Bash(unzip -l \"/Users/admin/Documents/Документы для работы/Коэффициент корреляция.pages\")",
+      "Bash(unzip -l ''\"''\"'Коэффициент корреляция.pages'\"''\"'')",
+      "Bash(unzip -l *корреляция*.pages)",
+      "Bash(npm install typescript)",
+      "Bash(npx vue-tsc --noEmit)",
+      "Bash(node_modules/.bin/tsc --noEmit --project tsconfig.json)"
     ]
   }
 }

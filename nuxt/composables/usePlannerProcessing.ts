@@ -1,9 +1,12 @@
 import { computed, nextTick } from 'vue'
 import type { Ref, ComputedRef } from 'vue'
 import { olsFit } from '~/utils/ols'
+import { ridgeFit, loocvLambda } from '~/utils/ridge'
+import { pcaFromSamples, compositeScores } from '~/utils/pca'
 import { isFilled, uid } from '~/utils/plannerHelpers'
 import type {
   Coeffs,
+  CompositeModel,
   MarkerKey,
   Plan,
   PlannedWeek,
@@ -114,6 +117,7 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
       creatinine: avg('creatinine') ?? 5.0,
       protein: avg('protein') ?? 2.0,
       myoglobin: avg('myoglobin') ?? 20.0,
+      ketones: avg('ketones') ?? 0.5,
     }
   })
 
@@ -123,7 +127,7 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
 
   // ─── Pure functions ───
   const markerLabel = (m: MarkerKey) =>
-    m === 'creatinine' ? 'Креатинин' : m === 'protein' ? 'Белок' : 'Миоглобин'
+    m === 'creatinine' ? 'Креатинин' : m === 'protein' ? 'Белок' : m === 'myoglobin' ? 'Миоглобин' : 'Кетоны'
 
   const mkDelta = (x: number, x0: number) => (x - x0) / Math.max(1e-9, x0)
   const applyDelta = (x0: number, d: number) => x0 * (1 + d)
@@ -144,6 +148,7 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
       creatinine: avg('creatinine') ?? 5.0,
       protein: avg('protein') ?? 2.0,
       myoglobin: avg('myoglobin') ?? 20.0,
+      ketones: avg('ketones') ?? 0.5,
     }
   }
 
@@ -168,6 +173,7 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     const b0 = Math.log(Math.max(1e-9, yTrain0) / Math.max(1e-9, yRest0))
     if (m === 'myoglobin') return { b0, b1: 0.85, b2: 0.25, b3: -0.55 }
     if (m === 'protein') return { b0, b1: 0.45, b2: 0.35, b3: -0.4 }
+    if (m === 'ketones') return { b0, b1: 0.7, b2: 0.3, b3: -0.5 }
     return { b0, b1: 0.3, b2: 0.55, b3: -0.35 }
   }
 
@@ -178,6 +184,7 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     const b0 = Math.log(Math.max(1e-9, yTrain0) / Math.max(1e-9, yRest0))
     if (m === 'myoglobin') return { b0, b1: 0.85, b2: 0.25, b3: -0.55 }
     if (m === 'protein') return { b0, b1: 0.45, b2: 0.35, b3: -0.4 }
+    if (m === 'ketones') return { b0, b1: 0.7, b2: 0.3, b3: -0.5 }
     return { b0, b1: 0.3, b2: 0.55, b3: -0.35 }
   }
 
@@ -243,6 +250,68 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     }
   }
 
+  const MARKERS: MarkerKey[] = ['creatinine', 'protein', 'myoglobin', 'ketones']
+
+  const fitCompositeFor = (athlete: Athlete): CompositeModel | null => {
+    const b = baselineFor(athlete)
+    const allRows = Object.values(athlete.rows).filter(isFilled)
+
+    // Need all 3 markers positive in every sample
+    const samples = allRows.filter((r) =>
+      MARKERS.every(
+        (m) =>
+          typeof r[m] === 'number' &&
+          Number.isFinite(r[m] as number) &&
+          (r[m] as number) > 0
+      )
+    )
+    if (samples.length < 6) return null
+
+    try {
+      // ln-ratios: [ln(cr/cr0), ln(prot/prot0), ln(myo/myo0)]
+      const lnRatios = samples.map((r) =>
+        MARKERS.map((m) => {
+          const y0 = getRestY0For(athlete, m)
+          return Math.log((r[m] as number) / y0)
+        })
+      )
+
+      // PCA on ln-ratios -> PC1 composite
+      const pca = pcaFromSamples(lnRatios)
+      const z = compositeScores(lnRatios, pca)
+
+      // Design matrix (no intercept): [dV, dP, dR]
+      const X = samples.map((r) => [
+        mkDelta(r.V as number, b.V),
+        mkDelta(r.P as number, b.P),
+        mkDelta(r.R as number, b.R),
+      ])
+
+      // Ridge regression: z = beta1*dV + beta2*dP + beta3*dR
+      const lambda = loocvLambda(X, z)
+      const ridge = ridgeFit(X, z, lambda)
+
+      // Validate: beta3 (rest coefficient) must be meaningful
+      if (!Number.isFinite(ridge.beta[2]) || Math.abs(ridge.beta[2]) < 0.02)
+        return null
+
+      return {
+        ridge: {
+          beta: ridge.beta as [number, number, number],
+          lambda: ridge.lambda,
+          r2: ridge.r2,
+        },
+        pca: {
+          weights: pca.weights as [number, number, number, number],
+          means: pca.means as [number, number, number, number],
+          explainedRatio: pca.explainedRatio,
+        },
+      }
+    } catch {
+      return null
+    }
+  }
+
   const pickModel = (weekIndexZero: number, totalWeeks: number) => {
     const w = weekIndexZero + 1
     const last = totalWeeks
@@ -276,7 +345,10 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     const total = deps.getPlanWeeksFor(athlete)
     if (total <= 0) return null
     const settings = VARIANT_DEFAULTS[variantId]
-    const coeffs = fitCoeffsFor(athlete, settings.control)
+    const composite = fitCompositeFor(athlete)
+    const coeffs = composite
+      ? null
+      : fitCoeffsFor(athlete, settings.control)
 
     const clampR = (x: number) => {
       const a = Math.min(settings.rMin, settings.rMax)
@@ -343,13 +415,23 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
         const dP = mkDelta(P, base.P)
 
         const phase = (i + 1) * 0.7 + withinWeekPhase * 1.4
-        const lnTarget =
-          coeffs.b0 +
-          settings.targetShiftLn +
-          settings.targetWaveLn * Math.sin(phase)
 
-        const dR =
-          (lnTarget - coeffs.b0 - coeffs.b1 * dV - coeffs.b2 * dP) / coeffs.b3
+        let dR: number
+        if (composite) {
+          // Ridge + PCA composite: z_target = shift + wave*sin(phase)
+          const zTarget =
+            settings.targetShiftLn +
+            settings.targetWaveLn * Math.sin(phase)
+          const { beta } = composite.ridge
+          dR = (zTarget - beta[0] * dV - beta[1] * dP) / beta[2]
+        } else {
+          // OLS fallback
+          const lnTarget =
+            coeffs!.b0 +
+            settings.targetShiftLn +
+            settings.targetWaveLn * Math.sin(phase)
+          dR = (lnTarget - coeffs!.b0 - coeffs!.b1 * dV - coeffs!.b2 * dP) / coeffs!.b3
+        }
         const Rraw = applyDelta(base.R, dR)
         const Rclamped = clampR(Rraw)
         const R = Math.round(Rclamped * 10) / 10
@@ -421,6 +503,7 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     defaultCoeffsFor,
     fitCoeffs,
     fitCoeffsFor,
+    fitCompositeFor,
     buildPlan,
     pickModel,
     buildWorkout,

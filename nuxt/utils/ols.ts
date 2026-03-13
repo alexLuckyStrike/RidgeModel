@@ -66,7 +66,7 @@ function dot(a: number[], b: number[]): number {
  * Solve A x = b using Gaussian elimination with partial pivoting.
  * Throws if matrix is singular/ill-conditioned for our use.
  */
-function solveLinearSystem(Ain: Matrix, bin: number[]): number[] {
+export function solveLinearSystem(Ain: Matrix, bin: number[]): number[] {
   const n = Ain.length
   const A: Matrix = Ain.map((row) => row.slice())
   const b = bin.slice()

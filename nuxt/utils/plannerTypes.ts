@@ -23,7 +23,7 @@ export type Plan = {
   weeks: PlannedWeek[];
 };
 
-export type MarkerKey = "creatinine" | "protein" | "myoglobin";
+export type MarkerKey = "creatinine" | "protein" | "myoglobin" | "ketones";
 export type Coeffs = { b0: number; b1: number; b2: number; b3: number };
 
 export type VariantSettings = {
@@ -56,4 +56,21 @@ export type PlanVariant = {
   title: string;
   subtitle: string;
   explanationHtml: string;
+};
+
+export type RidgeCoeffs = {
+  beta: [number, number, number];
+  lambda: number;
+  r2: number;
+};
+
+export type PcaWeights = {
+  weights: [number, number, number, number];
+  means: [number, number, number, number];
+  explainedRatio: number;
+};
+
+export type CompositeModel = {
+  ridge: RidgeCoeffs;
+  pca: PcaWeights;
 };

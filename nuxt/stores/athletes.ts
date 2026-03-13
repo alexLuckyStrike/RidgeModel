@@ -8,12 +8,14 @@ export type Row = {
   creatinine: number | null;
   protein: number | null;
   myoglobin: number | null;
+  ketones: number | null;
 };
 
 export type RestBaseline = {
   creatinine: number | null;
   protein: number | null;
   myoglobin: number | null;
+  ketones: number | null;
 };
 
 export type Athlete = {
@@ -54,6 +56,7 @@ const createAthlete = (index: number): Athlete => ({
     creatinine: null,
     protein: null,
     myoglobin: null,
+    ketones: null,
   },
 });
 
@@ -96,6 +99,7 @@ export const useAthletesStore = defineStore("athletes", () => {
         creatinine: null,
         protein: null,
         myoglobin: null,
+        ketones: null,
       },
     }));
     setAthleteCount(athletes.value.length);

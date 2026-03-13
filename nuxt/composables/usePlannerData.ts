@@ -76,6 +76,7 @@ export function usePlannerData(deps: PlannerDataDeps) {
         creatinine: null,
         protein: null,
         myoglobin: null,
+        ketones: null,
       }
   )
 
@@ -118,6 +119,7 @@ export function usePlannerData(deps: PlannerDataDeps) {
             creatinine: null,
             protein: null,
             myoglobin: null,
+            ketones: null,
           }
           changed = true
         }
@@ -169,10 +171,10 @@ export function usePlannerData(deps: PlannerDataDeps) {
     if (!athletes.value.length) return
 
     const patterns = [
-      { V: 9500, P: 72, R: 1.2, creatinine: 5.5, protein: 2.4, myoglobin: 25.0 },
-      { V: 8800, P: 64, R: 1.8, creatinine: 6.2, protein: 3.2, myoglobin: 38.0 },
-      { V: 7600, P: 56, R: 2.4, creatinine: 4.8, protein: 2.0, myoglobin: 18.0 },
-      { V: 6800, P: 60, R: 2.9, creatinine: 4.2, protein: 1.6, myoglobin: 12.0 },
+      { V: 9500, P: 72, R: 1.2, creatinine: 5.5, protein: 2.4, myoglobin: 25.0, ketones: 0.9 },
+      { V: 8800, P: 64, R: 1.8, creatinine: 6.2, protein: 3.2, myoglobin: 38.0, ketones: 1.2 },
+      { V: 7600, P: 56, R: 2.4, creatinine: 4.8, protein: 2.0, myoglobin: 18.0, ketones: 0.6 },
+      { V: 6800, P: 60, R: 2.9, creatinine: 4.2, protein: 1.6, myoglobin: 12.0, ketones: 0.4 },
     ]
 
     athletes.value.forEach((athlete, athleteIdx) => {
@@ -191,6 +193,7 @@ export function usePlannerData(deps: PlannerDataDeps) {
         creatinine: 3.5 + 0.2 * athleteIdx,
         protein: 1.0 + 0.1 * athleteIdx,
         myoglobin: 10.0 + 1.5 * athleteIdx,
+        ketones: 0.05 + 0.02 * athleteIdx,
       }
 
       for (let w = 1; w <= athlete.period.observationWeeks; w++) {
@@ -222,6 +225,7 @@ export function usePlannerData(deps: PlannerDataDeps) {
       creatinine: null,
       protein: null,
       myoglobin: null,
+      ketones: null,
     }
     deps.destroyCharts()
   }

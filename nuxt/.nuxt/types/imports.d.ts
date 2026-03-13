@@ -93,6 +93,7 @@ declare global {
   const shallowReadonly: typeof import('vue').shallowReadonly
   const shallowRef: typeof import('vue').shallowRef
   const showError: typeof import('../../node_modules/nuxt/dist/app/composables/error').showError
+  const solveLinearSystem: typeof import('../../utils/ols').solveLinearSystem
   const storeToRefs: typeof import('../../node_modules/@pinia/nuxt/dist/runtime/composables').storeToRefs
   const toRaw: typeof import('vue').toRaw
   const toRef: typeof import('vue').toRef
@@ -125,7 +126,6 @@ declare global {
   const useMvpStore: typeof import('../../stores/mvp').useMvpStore
   const useNuxtApp: typeof import('../../node_modules/nuxt/dist/app/nuxt').useNuxtApp
   const useNuxtData: typeof import('../../node_modules/nuxt/dist/app/composables/asyncData').useNuxtData
-  const useNuxtDevTools: typeof import('../../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools').useNuxtDevTools
   const usePinia: typeof import('../../node_modules/@pinia/nuxt/dist/runtime/composables').usePinia
   const usePlannerData: typeof import('../../composables/usePlannerData').usePlannerData
   const usePlannerDisplay: typeof import('../../composables/usePlannerDisplay').usePlannerDisplay
@@ -214,7 +214,7 @@ declare global {
   export type { OlsResult } from '../../utils/ols'
   import('../../utils/ols')
   // @ts-ignore
-  export type { PlannedSession, PlannedWeek, Plan, MarkerKey, Coeffs, VariantSettings, PlanVariantId, PlanVariant } from '../../utils/plannerTypes'
+  export type { PlannedSession, PlannedWeek, Plan, MarkerKey, Coeffs, VariantSettings, PlanVariantId, PlanVariant, RidgeCoeffs, PcaWeights, CompositeModel } from '../../utils/plannerTypes'
   import('../../utils/plannerTypes')
   // @ts-ignore
   export type { Row, RestBaseline, Athlete } from '../../stores/athletes'
@@ -319,6 +319,7 @@ declare module 'vue' {
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
     readonly showError: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/error')['showError']>
+    readonly solveLinearSystem: UnwrapRef<typeof import('../../utils/ols')['solveLinearSystem']>
     readonly storeToRefs: UnwrapRef<typeof import('../../node_modules/@pinia/nuxt/dist/runtime/composables')['storeToRefs']>
     readonly toRaw: UnwrapRef<typeof import('vue')['toRaw']>
     readonly toRef: UnwrapRef<typeof import('vue')['toRef']>
@@ -351,7 +352,6 @@ declare module 'vue' {
     readonly useMvpStore: UnwrapRef<typeof import('../../stores/mvp')['useMvpStore']>
     readonly useNuxtApp: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/nuxt')['useNuxtApp']>
     readonly useNuxtData: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['useNuxtData']>
-    readonly useNuxtDevTools: UnwrapRef<typeof import('../../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools')['useNuxtDevTools']>
     readonly usePinia: UnwrapRef<typeof import('../../node_modules/@pinia/nuxt/dist/runtime/composables')['usePinia']>
     readonly usePlannerData: UnwrapRef<typeof import('../../composables/usePlannerData')['usePlannerData']>
     readonly usePlannerDisplay: UnwrapRef<typeof import('../../composables/usePlannerDisplay')['usePlannerDisplay']>
