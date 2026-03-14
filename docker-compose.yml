@@ -1,13 +1,37 @@
 version: '3.8'
 services:
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=loadtrain
+      - POSTGRES_USER=loadtrain_user
+      - POSTGRES_PASSWORD=loadtrain_pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U loadtrain_user -d loadtrain"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   backend:
     build: ./backend
     ports:
       - "3001:3001"
     volumes:
       - ./backend/content:/app/content
+    depends_on:
+      - postgres
     environment:
       - NODE_ENV=production
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=loadtrain
+      - DB_USER=loadtrain_user
+      - DB_PASSWORD=loadtrain_pass
 
   nuxt:
     build: ./nuxt
@@ -25,3 +49,6 @@ services:
     depends_on:
       - nuxt
       - backend
+
+volumes:
+  postgres_data:

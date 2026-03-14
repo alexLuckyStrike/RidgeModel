@@ -10,7 +10,10 @@ declare global {
   const clearError: typeof import('../../node_modules/nuxt/dist/app/composables/error').clearError
   const clearNuxtData: typeof import('../../node_modules/nuxt/dist/app/composables/asyncData').clearNuxtData
   const clearNuxtState: typeof import('../../node_modules/nuxt/dist/app/composables/state').clearNuxtState
+  const columnMeans: typeof import('../../utils/pca').columnMeans
+  const compositeScores: typeof import('../../utils/pca').compositeScores
   const computed: typeof import('vue').computed
+  const covMatrix: typeof import('../../utils/pca').covMatrix
   const createError: typeof import('../../node_modules/nuxt/dist/app/composables/error').createError
   const customRef: typeof import('vue').customRef
   const defineAppConfig: typeof import('../../node_modules/nuxt/dist/app/nuxt').defineAppConfig
@@ -47,6 +50,7 @@ declare global {
   const isVue3: typeof import('../../node_modules/nuxt/dist/app/compat/vue-demi').isVue3
   const keyOf: typeof import('../../utils/plannerHelpers').keyOf
   const loadPayload: typeof import('../../node_modules/nuxt/dist/app/composables/payload').loadPayload
+  const loocvLambda: typeof import('../../utils/ridge').loocvLambda
   const markRaw: typeof import('vue').markRaw
   const mergeModels: typeof import('vue').mergeModels
   const navigateTo: typeof import('../../node_modules/nuxt/dist/app/composables/router').navigateTo
@@ -69,6 +73,8 @@ declare global {
   const onServerPrefetch: typeof import('vue').onServerPrefetch
   const onUnmounted: typeof import('vue').onUnmounted
   const onUpdated: typeof import('vue').onUpdated
+  const pc1Extract: typeof import('../../utils/pca').pc1Extract
+  const pcaFromSamples: typeof import('../../utils/pca').pcaFromSamples
   const planVariants: typeof import('../../utils/plannerVariants').planVariants
   const postulateIds: typeof import('../../utils/plannerVariants').postulateIds
   const prefetchComponents: typeof import('../../node_modules/nuxt/dist/app/composables/preload').prefetchComponents
@@ -86,6 +92,7 @@ declare global {
   const reloadNuxtApp: typeof import('../../node_modules/nuxt/dist/app/composables/chunk').reloadNuxtApp
   const requestIdleCallback: typeof import('../../node_modules/nuxt/dist/app/compat/idle-callback').requestIdleCallback
   const resolveComponent: typeof import('vue').resolveComponent
+  const ridgeFit: typeof import('../../utils/ridge').ridgeFit
   const setInterval: typeof import('../../node_modules/nuxt/dist/app/compat/interval').setInterval
   const setPageLayout: typeof import('../../node_modules/nuxt/dist/app/composables/router').setPageLayout
   const setResponseStatus: typeof import('../../node_modules/nuxt/dist/app/composables/ssr').setResponseStatus
@@ -126,6 +133,7 @@ declare global {
   const useMvpStore: typeof import('../../stores/mvp').useMvpStore
   const useNuxtApp: typeof import('../../node_modules/nuxt/dist/app/nuxt').useNuxtApp
   const useNuxtData: typeof import('../../node_modules/nuxt/dist/app/composables/asyncData').useNuxtData
+  const useNuxtDevTools: typeof import('../../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools').useNuxtDevTools
   const usePinia: typeof import('../../node_modules/@pinia/nuxt/dist/runtime/composables').usePinia
   const usePlannerData: typeof import('../../composables/usePlannerData').usePlannerData
   const usePlannerDisplay: typeof import('../../composables/usePlannerDisplay').usePlannerDisplay
@@ -214,8 +222,14 @@ declare global {
   export type { OlsResult } from '../../utils/ols'
   import('../../utils/ols')
   // @ts-ignore
+  export type { PcaResult } from '../../utils/pca'
+  import('../../utils/pca')
+  // @ts-ignore
   export type { PlannedSession, PlannedWeek, Plan, MarkerKey, Coeffs, VariantSettings, PlanVariantId, PlanVariant, RidgeCoeffs, PcaWeights, CompositeModel } from '../../utils/plannerTypes'
   import('../../utils/plannerTypes')
+  // @ts-ignore
+  export type { RidgeResult } from '../../utils/ridge'
+  import('../../utils/ridge')
   // @ts-ignore
   export type { Row, RestBaseline, Athlete } from '../../stores/athletes'
   import('../../stores/athletes')
@@ -236,7 +250,10 @@ declare module 'vue' {
     readonly clearError: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/error')['clearError']>
     readonly clearNuxtData: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['clearNuxtData']>
     readonly clearNuxtState: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/state')['clearNuxtState']>
+    readonly columnMeans: UnwrapRef<typeof import('../../utils/pca')['columnMeans']>
+    readonly compositeScores: UnwrapRef<typeof import('../../utils/pca')['compositeScores']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
+    readonly covMatrix: UnwrapRef<typeof import('../../utils/pca')['covMatrix']>
     readonly createError: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/error')['createError']>
     readonly customRef: UnwrapRef<typeof import('vue')['customRef']>
     readonly defineAppConfig: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/nuxt')['defineAppConfig']>
@@ -273,6 +290,7 @@ declare module 'vue' {
     readonly isVue3: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/compat/vue-demi')['isVue3']>
     readonly keyOf: UnwrapRef<typeof import('../../utils/plannerHelpers')['keyOf']>
     readonly loadPayload: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/payload')['loadPayload']>
+    readonly loocvLambda: UnwrapRef<typeof import('../../utils/ridge')['loocvLambda']>
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
     readonly mergeModels: UnwrapRef<typeof import('vue')['mergeModels']>
     readonly navigateTo: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/router')['navigateTo']>
@@ -295,6 +313,8 @@ declare module 'vue' {
     readonly onServerPrefetch: UnwrapRef<typeof import('vue')['onServerPrefetch']>
     readonly onUnmounted: UnwrapRef<typeof import('vue')['onUnmounted']>
     readonly onUpdated: UnwrapRef<typeof import('vue')['onUpdated']>
+    readonly pc1Extract: UnwrapRef<typeof import('../../utils/pca')['pc1Extract']>
+    readonly pcaFromSamples: UnwrapRef<typeof import('../../utils/pca')['pcaFromSamples']>
     readonly planVariants: UnwrapRef<typeof import('../../utils/plannerVariants')['planVariants']>
     readonly postulateIds: UnwrapRef<typeof import('../../utils/plannerVariants')['postulateIds']>
     readonly prefetchComponents: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/preload')['prefetchComponents']>
@@ -312,6 +332,7 @@ declare module 'vue' {
     readonly reloadNuxtApp: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/chunk')['reloadNuxtApp']>
     readonly requestIdleCallback: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/compat/idle-callback')['requestIdleCallback']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
+    readonly ridgeFit: UnwrapRef<typeof import('../../utils/ridge')['ridgeFit']>
     readonly setInterval: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/compat/interval')['setInterval']>
     readonly setPageLayout: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/router')['setPageLayout']>
     readonly setResponseStatus: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/ssr')['setResponseStatus']>
@@ -352,6 +373,7 @@ declare module 'vue' {
     readonly useMvpStore: UnwrapRef<typeof import('../../stores/mvp')['useMvpStore']>
     readonly useNuxtApp: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/nuxt')['useNuxtApp']>
     readonly useNuxtData: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['useNuxtData']>
+    readonly useNuxtDevTools: UnwrapRef<typeof import('../../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools')['useNuxtDevTools']>
     readonly usePinia: UnwrapRef<typeof import('../../node_modules/@pinia/nuxt/dist/runtime/composables')['usePinia']>
     readonly usePlannerData: UnwrapRef<typeof import('../../composables/usePlannerData')['usePlannerData']>
     readonly usePlannerDisplay: UnwrapRef<typeof import('../../composables/usePlannerDisplay')['usePlannerDisplay']>

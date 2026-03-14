@@ -4,6 +4,7 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const { createPdf } = require('./pdfGenerator');
+const { checkDbHealth } = require('./db/client');
 
 const app = express();
 app.use(cors());
@@ -32,6 +33,14 @@ app.get('/api/notes/:name', (req, res) => {
   }
   const content = fs.readFileSync(file, 'utf-8');
   res.json({ content });
+});
+
+app.get('/api/db/health', async (req, res) => {
+  const health = await checkDbHealth();
+  if (!health.ok) {
+    return res.status(503).json(health);
+  }
+  res.json(health);
 });
 
 app.post('/pdf', async (req, res) => {

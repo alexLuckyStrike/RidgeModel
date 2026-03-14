@@ -34,10 +34,13 @@ export { usePlannerDisplay, PlannerDisplayDeps } from '../composables/usePlanner
 export { MVP_LOAD5_MAX_SETS, usePlannerMvp, MvpKey } from '../composables/usePlannerMvp';
 export { usePlannerProcessing, PlannerProcessingDeps } from '../composables/usePlannerProcessing';
 export { olsFit, solveLinearSystem, OlsResult } from '../utils/ols';
+export { columnMeans, covMatrix, pc1Extract, compositeScores, pcaFromSamples, PcaResult } from '../utils/pca';
 export { isFilled, keyOf, uid } from '../utils/plannerHelpers';
 export { PlannedSession, PlannedWeek, Plan, MarkerKey, Coeffs, VariantSettings, PlanVariantId, PlanVariant, RidgeCoeffs, PcaWeights, CompositeModel } from '../utils/plannerTypes';
 export { postulateIds, planVariants } from '../utils/plannerVariants';
+export { ridgeFit, loocvLambda, RidgeResult } from '../utils/ridge';
 export { useAthletesStore, Row, RestBaseline, Athlete } from '../stores/athletes';
 export { useMvpStore, MvpPreview, MvpLoad5Set, MedicalTestResult, OcrItem, MvpAnalysisResult } from '../stores/mvp';
 export { defineStore, acceptHMRUpdate, usePinia, storeToRefs } from '../node_modules/@pinia/nuxt/dist/runtime/composables';
+export { useNuxtDevTools } from '../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools';
 export { definePageMeta } from '../node_modules/nuxt/dist/pages/runtime/composables';
