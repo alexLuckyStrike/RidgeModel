@@ -4,17 +4,11 @@ import { isFilled } from '~/utils/plannerHelpers'
 import { planVariants } from '~/utils/plannerVariants'
 import type { Plan, PlannedSession, PlanVariantId } from '~/utils/plannerTypes'
 import type { Athlete, Row, RestBaseline } from '~/stores/athletes'
-import type { MvpPreview, MvpLoad5Set } from '~/stores/mvp'
-import type { MvpKey } from '~/composables/usePlannerMvp'
 
 import PlannerPeriodCard from '~/components/planner/cards/PlannerPeriodCard.vue'
 import PlannerDataCard from '~/components/planner/cards/PlannerDataCard.vue'
 import PlannerBaselineCard from '~/components/planner/cards/PlannerBaselineCard.vue'
 import PlannerModelingCard from '~/components/planner/cards/PlannerModelingCard.vue'
-import PlannerMvpScalesCard from '~/components/planner/mvp/PlannerMvpScalesCard.vue'
-import PlannerMvpRestCard from '~/components/planner/mvp/PlannerMvpRestCard.vue'
-import PlannerMvpAfterLoadCard from '~/components/planner/mvp/PlannerMvpAfterLoadCard.vue'
-import PlannerMvpLoadCard from '~/components/planner/mvp/PlannerMvpLoadCard.vue'
 
 export interface PlannerDisplayDeps {
   // From Group 1
@@ -41,17 +35,7 @@ export interface PlannerDisplayDeps {
   startDate: ComputedRef<string>
   drawCharts: () => void
   getPngDataUrls: () => { V: string; P: string; R: string }
-  // MVP deps
-  mvp: {
-    mvpFiles: { scale2: MvpPreview | null; scale5: MvpPreview | null; rest2: MvpPreview[] }
-    handleMvpFileChange: (event: Event, key: MvpKey) => void
-    removeMvpFile: (key: MvpKey, id?: string) => void
-    load5Sets: Ref<MvpLoad5Set[]>
-    addLoad5Set: () => void
-    removeLoad5Set: (setId: string) => void
-    handleLoad5SetFileChange: (event: Event, setId: string, field: string) => void
-    removeLoad5SetFile: (setId: string, field: string) => void
-  }
+
 }
 
 export function usePlannerDisplay(deps: PlannerDisplayDeps) {
@@ -115,55 +99,7 @@ export function usePlannerDisplay(deps: PlannerDisplayDeps) {
     },
   ])
 
-  const mvpCards = computed(() => [
-    {
-      key: 'mvp-scales',
-      title: 'Эталоны (шкалы)',
-      subtitle: 'Фотографии эталонных шкал',
-      component: PlannerMvpScalesCard,
-      componentProps: {
-        files: deps.mvp.mvpFiles,
-        onFileChange: deps.mvp.handleMvpFileChange,
-        remove: deps.mvp.removeMvpFile,
-      },
-    },
-    {
-      key: 'mvp-rest',
-      title: 'Покой',
-      subtitle: 'Полоски в состоянии покоя',
-      component: PlannerMvpRestCard,
-      componentProps: {
-        files: deps.mvp.mvpFiles,
-        onFileChange: deps.mvp.handleMvpFileChange,
-        remove: deps.mvp.removeMvpFile,
-      },
-    },
-    {
-      key: 'mvp-after',
-      title: 'После нагрузки',
-      subtitle: 'Фото полосок после тренировки',
-      component: PlannerMvpAfterLoadCard,
-      componentProps: {
-        load5Sets: deps.mvp.load5Sets.value,
-        addSet: deps.mvp.addLoad5Set,
-        removeSet: deps.mvp.removeLoad5Set,
-        onSetFileChange: deps.mvp.handleLoad5SetFileChange,
-        removeSetFile: deps.mvp.removeLoad5SetFile,
-      },
-    },
-    {
-      key: 'mvp-load',
-      title: 'Нагрузка',
-      subtitle: 'Фото/текст контекста',
-      component: PlannerMvpLoadCard,
-      componentProps: {
-        load5Sets: deps.mvp.load5Sets.value,
-        onSetFileChange: deps.mvp.handleLoad5SetFileChange,
-        removeSetFile: deps.mvp.removeLoad5SetFile,
-      },
-    },
-  ])
-
+  
   // ─── Functions ───
   const chipText = (r: Row): string => (isFilled(r) ? 'База' : '—')
 
@@ -253,7 +189,6 @@ export function usePlannerDisplay(deps: PlannerDisplayDeps) {
     // computed
     activeVariant,
     uiFormCards,
-    mvpCards,
     // functions
     chipText,
     chipClass,

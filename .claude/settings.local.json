@@ -28,7 +28,10 @@
       "Bash(unzip -l *корреляция*.pages)",
       "Bash(npm install typescript)",
       "Bash(npx vue-tsc --noEmit)",
-      "Bash(node_modules/.bin/tsc --noEmit --project tsconfig.json)"
+      "Bash(node_modules/.bin/tsc --noEmit --project tsconfig.json)",
+      "Bash(cd /Users/admin/Documents/loadTrainPlan*копия)",
+      "Bash(wc -l /Users/admin/Documents/loadTrainPlan*копия/nuxt/composables/usePlannerMvp.ts)",
+      "Bash(wc -l /Users/admin/Documents/loadTrainPlan*копия/nuxt/pages/planner.vue)"
     ]
   }
 }

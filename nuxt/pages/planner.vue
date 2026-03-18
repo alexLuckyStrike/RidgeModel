@@ -14,243 +14,18 @@
       </div>
 
       <UiForm :cards="uiFormCards" />
-      <div
-        class="rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden"
+      <NuxtLink
+        to="/cv"
+        class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm hover:bg-slate-50 transition"
       >
-        <button
-          type="button"
-          class="flex w-full items-center justify-between gap-3 px-6 py-5 text-left transition hover:bg-slate-50"
-          @click="toggleMvp"
-        >
-          <div>
-            <div class="text-lg font-semibold text-slate-900">
-              MVP 0.1 — Индикаторные полоски
-            </div>
-            <p class="mt-1 text-sm text-slate-600">
-              Загрузите шкалы, фото полосок и описание нагрузки, чтобы
-              автоматически распознать цвета и текст.
-            </p>
-          </div>
-          <span
-            class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white"
-          >
-            <svg
-              class="h-5 w-5 text-slate-600 transition-transform duration-300"
-              :class="mvpCollapsed ? '' : 'rotate-180'"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.5"
-                d="M6 9л6 6 6-6"
-              />
-            </svg>
-          </span>
-        </button>
-        <transition name="mvp-collapse">
-          <div
-            v-show="!mvpCollapsed"
-            class="border-t border-slate-100 bg-slate-50/60 overflow-hidden"
-          >
-            <div class="space-y-6 px-6 py-6">
-              <UiForm
-                :cards="mvpCards"
-                wrapper-class="grid gap-6 lg:grid-cols-2 xl:grid-cols-4 mobile-cards-vertical"
-              />
-
-              <div class="flex flex-col items-center gap-4">
-                <button
-                  type="button"
-                  class="inline-flex items-center justify-center rounded-2xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-800 shadow-sm hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
-                  :disabled="mvpLoading || mvpDemoLoading"
-                  @click="loadMvpDemoData"
-                >
-                  <span
-                    v-if="mvpDemoLoading"
-                    class="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-slate-800"
-                  />
-                  <span>{{
-                    mvpDemoLoading
-                      ? "Загружаем MVP демоданные..."
-                      : "Загрузить MVP демоданные"
-                  }}</span>
-                </button>
-                <button
-                  type="button"
-                  class="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
-                  :disabled="!hasMvpFiles || mvpLoading || mvpDemoLoading"
-                  @click="analyzeMvp"
-                >
-                  <span
-                    v-if="mvpLoading"
-                    class="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
-                  />
-                  <span>{{
-                    mvpLoading ? "Анализируем..." : "Запустить анализ"
-                  }}</span>
-                </button>
-                <p class="text-center text-xs text-slate-500">
-                  Поддерживаются изображения JPG, PNG, HEIC до 10 МБ.
-                </p>
-              </div>
-
-              <div
-                v-if="mvpError"
-                class="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700"
-              >
-                {{ mvpError }}
-              </div>
-
-              <!-- ── Результаты анализа (числовые) ──────────────── -->
-              <div v-if="mvpResult" class="space-y-4">
-                <div class="space-y-3">
-                  <div class="text-base font-semibold text-slate-900">
-                    Медицинские шкалы
-                  </div>
-                  <div class="grid gap-3 sm:grid-cols-2">
-                    <div
-                      v-if="mvpFiles.scale2"
-                      class="rounded-2xl border border-slate-200 bg-white p-4"
-                    >
-                      <div class="mb-2 text-xs text-slate-500">Шкала 2-полосная (URI-2)</div>
-                      <img
-                        :src="mvpFiles.scale2.url"
-                        :alt="mvpFiles.scale2.name"
-                        class="h-44 w-full rounded-lg border border-slate-100 object-cover"
-                      />
-                    </div>
-                    <div
-                      v-if="mvpFiles.scale5"
-                      class="rounded-2xl border border-slate-200 bg-white p-4"
-                    >
-                      <div class="mb-2 text-xs text-slate-500">Шкала 5-полосная (URI-5A)</div>
-                      <img
-                        :src="mvpFiles.scale5.url"
-                        :alt="mvpFiles.scale5.name"
-                        class="h-44 w-full rounded-lg border border-slate-100 object-cover"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div class="space-y-3">
-                  <div class="text-base font-semibold text-slate-900">
-                    Полоски (бейслайн / покой)
-                  </div>
-                  <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    <div
-                      v-for="item in restStripPreviews"
-                      :key="`rest-preview-${item.id}`"
-                      class="rounded-2xl border border-slate-200 bg-white p-3"
-                    >
-                      <img
-                        :src="item.url"
-                        :alt="item.name"
-                        class="h-40 w-full rounded-lg border border-slate-100 object-cover"
-                      />
-                      <div class="mt-2 truncate text-xs text-slate-500">{{ item.name }}</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="space-y-3">
-                  <div class="text-base font-semibold text-slate-900">
-                    Полоски (после нагрузки)
-                  </div>
-                  <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    <div
-                      v-for="item in afterLoadStripPreviews"
-                      :key="`load-preview-${item.id}`"
-                      class="rounded-2xl border border-slate-200 bg-white p-3"
-                    >
-                      <img
-                        :src="item.url"
-                        :alt="item.name"
-                        class="h-40 w-full rounded-lg border border-slate-100 object-cover"
-                      />
-                      <div class="mt-2 truncate text-xs text-slate-500">{{ item.name }}</div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Результаты тест-полосок, сгруппированные по фотографиям -->
-                <div
-                  v-if="groupedMedicalTests.length"
-                  class="space-y-4"
-                >
-                  <div class="text-base font-semibold text-slate-900">
-                    Результаты тест-полосок
-                  </div>
-
-                  <div
-                    v-for="group in groupedMedicalTests"
-                    :key="group.key"
-                    class="rounded-2xl border border-slate-200 bg-white p-5 space-y-3"
-                  >
-                    <!-- Заголовок блока -->
-                    <div class="flex items-center justify-between gap-3">
-                      <div class="text-sm font-semibold text-slate-900">
-                        {{ group.label }}
-                      </div>
-                      <span
-                        :class="group.source === 'rest'
-                          ? 'bg-blue-50 text-blue-700'
-                          : 'bg-orange-50 text-orange-700'"
-                        class="rounded-full px-2 py-0.5 text-xs font-medium"
-                      >
-                        {{ group.source === 'rest' ? 'Покой' : 'После нагрузки' }}
-                      </span>
-                    </div>
-
-                    <!-- Полоски внутри блока (макс 2: URI-5A + URI-2) -->
-                    <div
-                      v-for="(strip, sIdx) in group.strips"
-                      :key="`${group.key}-strip-${sIdx}`"
-                      class="rounded-xl border border-slate-100 bg-slate-50 p-3"
-                    >
-                      <div class="mb-2 text-xs font-medium text-slate-500">
-                        Полоска {{ sIdx + 1 }}
-                      </div>
-                      <div class="grid gap-1.5 text-sm text-slate-800">
-                        <div
-                          v-for="reading in getMedicalRows(strip.results, strip.units)"
-                          :key="reading.key"
-                          class="flex justify-between"
-                        >
-                          <span class="text-slate-600">{{ reading.label }}</span>
-                          <span class="font-semibold">
-                            {{ reading.value }}
-                            <span class="font-normal text-slate-500">{{ reading.unit }}</span>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div
-                  v-if="mvpResult.workout?.notes?.length"
-                  class="rounded-2xl border border-slate-200 bg-white p-5"
-                >
-                  <div class="mb-2 text-base font-semibold text-slate-900">
-                    Нагрузка
-                  </div>
-                  <div
-                    v-for="(note, idx) in mvpResult.workout.notes"
-                    :key="`note-${idx}`"
-                    class="whitespace-pre-wrap text-sm text-slate-700"
-                  >
-                    {{ note }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </transition>
-      </div>
+        <svg class="h-5 w-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        MVP 0.1 — Индикаторные полоски
+        <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
+        </svg>
+      </NuxtLink>
     </section>
 
     <section class="grid gap-6">
@@ -584,8 +359,7 @@ import PlannerCharts from '~/components/planner/PlannerCharts.vue'
 import { usePlannerData } from '~/composables/usePlannerData'
 import { usePlannerProcessing } from '~/composables/usePlannerProcessing'
 import { usePlannerDisplay } from '~/composables/usePlannerDisplay'
-import { usePlannerMvp } from '~/composables/usePlannerMvp'
-import { uid, keyOf } from '~/utils/plannerHelpers'
+import { keyOf } from '~/utils/plannerHelpers'
 import type { PlanVariantId, Plan } from '~/utils/plannerTypes'
 
 // ─── Shared state (owned by orchestrator) ───
@@ -594,6 +368,12 @@ const athletePlans = ref<
 >({})
 const activePlanId = ref<PlanVariantId>('balanced')
 const chartsRef = ref<InstanceType<typeof PlannerCharts> | null>(null)
+
+const weeksInputCollapsed = ref(false)
+const toggleWeeksInput = () => {
+  weeksInputCollapsed.value = !weeksInputCollapsed.value
+}
+
 
 const drawCharts = () => chartsRef.value?.drawCharts?.()
 const destroyCharts = () => chartsRef.value?.destroyCharts?.()
@@ -625,9 +405,6 @@ const processing = usePlannerProcessing({
   drawCharts,
 })
 
-// ─── MVP (already extracted) ───
-const mvp = usePlannerMvp(uid)
-
 // ─── Group 3: Data Display ───
 const display = usePlannerDisplay({
   athletes: data.athletes,
@@ -651,16 +428,7 @@ const display = usePlannerDisplay({
   startDate: data.startDate,
   drawCharts,
   getPngDataUrls,
-  mvp: {
-    mvpFiles: mvp.mvpFiles,
-    handleMvpFileChange: mvp.handleMvpFileChange,
-    removeMvpFile: mvp.removeMvpFile,
-    load5Sets: mvp.load5Sets,
-    addLoad5Set: mvp.addLoad5Set,
-    removeLoad5Set: mvp.removeLoad5Set,
-    handleLoad5SetFileChange: mvp.handleLoad5SetFileChange,
-    removeLoad5SetFile: mvp.removeLoad5SetFile,
-  },
+
 })
 
 // ─── Re-export for template compatibility ───
@@ -685,7 +453,6 @@ const { canModel, hasFilledData, flatPlan, model, planWeeks, baseline } = proces
 const {
   activeVariant,
   uiFormCards,
-  mvpCards,
   chipText,
   chipClass,
   summaryWeek,
@@ -695,82 +462,8 @@ const {
   exportPdf,
 } = display
 
-const {
-  mvpCollapsed,
-  mvpLoading,
-  mvpDemoLoading,
-  mvpError,
-  mvpResult,
-  weeksInputCollapsed,
-  mvpFiles,
-  load5Sets,
-  hasMvpFiles,
-  toggleMvp,
-  toggleWeeksInput,
-  handleMvpFileChange,
-  removeMvpFile,
-  analyzeMvp,
-  loadMvpDemoData,
-  addLoad5Set,
-  removeLoad5Set,
-  handleLoad5SetFileChange,
-  removeLoad5SetFile,
-  MVP_LOAD5_MAX_SETS,
-} = mvp
 
-const analyteOrder = [
-  "creatinine",
-  "albumin",
-  "hb_myoglobin",
-  "protein",
-  "ketones",
-  "glucose",
-  "ph",
-] as const
 
-const analyteLabels: Record<string, string> = {
-  creatinine: "Креатинин",
-  albumin: "Альбумин",
-  hb_myoglobin: "Hb/Миоглобин",
-  protein: "Белок",
-  ketones: "Кетоны",
-  glucose: "Глюкоза",
-  ph: "pH",
-}
-
-const analyteDecimals: Record<string, number> = {
-  creatinine: 2,
-  albumin: 3,
-  hb_myoglobin: 0,
-  protein: 2,
-  ketones: 2,
-  glucose: 2,
-  ph: 1,
-}
-
-const restStripPreviews = computed(() => {
-  return mvpFiles.rest2.map((item) => ({
-    id: item.id,
-    name: item.name,
-    url: item.url,
-  }))
-})
-
-const afterLoadStripPreviews = computed(() => {
-  return load5Sets.value
-    .filter((set) => !!set.second)
-    .map((set) => ({
-      id: set.id,
-      name: set.second?.name || "После нагрузки",
-      url: set.second?.url || "",
-    }))
-    .filter((item) => !!item.url)
-})
-
-const getMedicalRows = (
-  results: Record<string, number> | undefined,
-  units: Record<string, string> | undefined
-) => {
   if (!results) return []
   const rows: Array<{ key: string; label: string; value: string; unit: string }> = []
   analyteOrder.forEach((key) => {
@@ -787,69 +480,10 @@ const getMedicalRows = (
   return rows
 }
 
-const groupedMedicalTests = computed(() => {
-  const tests = mvpResult.value?.medical_tests
-  if (!tests?.length) return []
-
-  // Группируем по photo_filename, сохраняя порядок появления
-  const byPhoto = new Map<string, {
-    source: 'rest' | 'load'
-    strips: typeof tests
-  }>()
-
-  for (const test of tests) {
-    if (!byPhoto.has(test.photo_filename)) {
-      byPhoto.set(test.photo_filename, { source: test.source, strips: [] })
-    }
-    byPhoto.get(test.photo_filename)!.strips.push(test)
-  }
-
-  // URI-5A содержит: hb_myoglobin, ketones, glucose (любой из них → шкала 5)
-  const isScale5 = (s: { results?: Record<string, number> }) => {
-    const r = s.results || {}
-    return 'hb_myoglobin' in r || 'ketones' in r || 'glucose' in r
-  }
-
-  // Подписи: "Базовый уровень [N]" для rest, "Измерение N" для load
-  const totalBaseline = [...byPhoto.values()].filter(g => g.source === 'rest').length
-  let baselineIdx = 0
-  let loadIdx = 0
-
-  return [...byPhoto.entries()].map(([filename, group]) => {
-    let label: string
-    if (group.source === 'rest') {
-      baselineIdx++
-      label = totalBaseline > 1 ? `Базовый уровень ${baselineIdx}` : 'Базовый уровень'
-    } else {
-      loadIdx++
-      label = `Измерение ${loadIdx}`
-    }
-
-    // Дедупликация: оставляем ровно 1 полоску URI-5A (5 маркеров)
-    // и 1 полоску URI-2 (2 маркера) на каждый блок фотографии
-    const scale5Strip = group.strips.find(s => isScale5(s))
-    const scale2Strip = group.strips.find(s => !isScale5(s))
-    const deduped = [scale5Strip, scale2Strip].filter(Boolean) as typeof tests
-
-    return {
-      key: filename,
-      label,
-      source: group.source,
-      strips: deduped.length ? deduped : group.strips,
-    }
-  })
-})
 </script>
 
 
 <style scoped>
-@media (max-width: 767px) {
-  .mobile-cards-vertical {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 1.25rem !important;
-  }
-}
 :deep(.mvp-collapse-enter-active),
 :deep(.mvp-collapse-leave-active) {
   transition: max-height 0.3s ease, opacity 0.3s ease;
