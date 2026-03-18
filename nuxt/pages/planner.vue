@@ -82,187 +82,19 @@
                 </summary>
 
                 <div class="mt-4 space-y-4">
-                  <details
+                  <ObservationWeek
                     v-for="w in athlete.period.observationWeeks"
                     :key="w"
-                    class="rounded-2xl border bg-white p-4"
+                    :week="w"
+                    :sessions-per-week="athlete.period.sessionsPerWeek"
                     :open="expandedWeeks.includes(w)"
-                  >
-                    <summary
-                      class="cursor-pointer select-none flex items-center justify-between gap-3"
-                    >
-                      <div class="font-semibold">Неделя {{ w }}</div>
-                      <div class="text-xs text-slate-600">
-                        {{ summaryWeek(athlete, w) }}
-                      </div>
-                    </summary>
-
-                    <div class="mt-4 space-y-3">
-                      <!-- Mobile cards -->
-                      <div class="grid gap-3 lg:hidden">
-                        <div
-                          v-for="s in athlete.period.sessionsPerWeek"
-                          :key="`${w}-${s}`"
-                          class="rounded-2xl border p-4"
-                        >
-                          <div class="flex items-center justify-between">
-                            <div class="font-medium">Тренировка {{ s }}</div>
-                            <span
-                              class="text-xs px-2 py-1 rounded-full"
-                              :class="chipClass(getRow(athlete, w, s))"
-                              >{{ chipText(getRow(athlete, w, s)) }}</span
-                            >
-                          </div>
-                          <div class="mt-3 grid grid-cols-2 gap-3">
-                            <Field label="V (кг)"
-                              ><input
-                                v-model.number="athlete.rows[keyOf(w, s)].V"
-                                type="number"
-                                class="input"
-                            /></Field>
-                            <Field label="P (раз)"
-                              ><input
-                                v-model.number="athlete.rows[keyOf(w, s)].P"
-                                type="number"
-                                class="input"
-                            /></Field>
-                            <Field label="R (мин)"
-                              ><input
-                                v-model.number="athlete.rows[keyOf(w, s)].R"
-                                type="number"
-                                step="0.1"
-                                class="input"
-                            /></Field>
-                            <div class="rounded-xl bg-slate-50 border p-3">
-                              <div class="text-xs text-slate-600">Подсказка</div>
-                              <div class="text-sm text-slate-700 mt-1">
-                                P↑ = средний вес↓; P↓ = средний вес↑
-                              </div>
-                            </div>
-                          </div>
-                          <div class="mt-3 grid grid-cols-4 gap-3">
-                            <Field label="Креатинин"
-                              ><input
-                                v-model.number="athlete.rows[keyOf(w, s)].creatinine"
-                                type="number"
-                                step="0.1"
-                                class="input"
-                            /></Field>
-                            <Field label="Белок"
-                              ><input
-                                v-model.number="athlete.rows[keyOf(w, s)].protein"
-                                type="number"
-                                step="0.1"
-                                class="input"
-                            /></Field>
-                            <Field label="Миоглобин"
-                              ><input
-                                v-model.number="athlete.rows[keyOf(w, s)].myoglobin"
-                                type="number"
-                                step="0.1"
-                                class="input"
-                            /></Field>
-                            <Field label="Кетоны"
-                              ><input
-                                v-model.number="athlete.rows[keyOf(w, s)].ketones"
-                                type="number"
-                                step="0.1"
-                                class="input"
-                            /></Field>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Desktop table -->
-                      <div class="hidden lg:block overflow-x-auto">
-                        <table class="w-full text-sm">
-                          <thead>
-                            <tr class="text-left text-slate-600">
-                              <th class="py-2 pr-3">Трен.</th>
-                              <th class="py-2 pr-3">V</th>
-                              <th class="py-2 pr-3">P</th>
-                              <th class="py-2 pr-3">R</th>
-                              <th class="py-2 pr-3">Креатинин</th>
-                              <th class="py-2 pr-3">Белок</th>
-                              <th class="py-2 pr-3">Миоглобин</th>
-                              <th class="py-2 pr-3">Кетоны</th>
-                              <th class="py-2">Статус</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr
-                              v-for="s in athlete.period.sessionsPerWeek"
-                              :key="`${w}-${s}`"
-                              class="border-t"
-                            >
-                              <td class="py-3 pr-3 font-medium">{{ s }}</td>
-                              <td class="py-3 pr-3">
-                                <input
-                                  v-model.number="athlete.rows[keyOf(w, s)].V"
-                                  type="number"
-                                  class="input h-10 w-28"
-                                />
-                              </td>
-                              <td class="py-3 pr-3">
-                                <input
-                                  v-model.number="athlete.rows[keyOf(w, s)].P"
-                                  type="number"
-                                  class="input h-10 w-24"
-                                />
-                              </td>
-                              <td class="py-3 pr-3">
-                                <input
-                                  v-model.number="athlete.rows[keyOf(w, s)].R"
-                                  type="number"
-                                  step="0.1"
-                                  class="input h-10 w-24"
-                                />
-                              </td>
-                              <td class="py-3 pr-3">
-                                <input
-                                  v-model.number="athlete.rows[keyOf(w, s)].creatinine"
-                                  type="number"
-                                  step="0.1"
-                                  class="input h-10 w-28"
-                                />
-                              </td>
-                              <td class="py-3 pr-3">
-                                <input
-                                  v-model.number="athlete.rows[keyOf(w, s)].protein"
-                                  type="number"
-                                  step="0.1"
-                                  class="input h-10 w-24"
-                                />
-                              </td>
-                              <td class="py-3 pr-3">
-                                <input
-                                  v-model.number="athlete.rows[keyOf(w, s)].myoglobin"
-                                  type="number"
-                                  step="0.1"
-                                  class="input h-10 w-28"
-                                />
-                              </td>
-                              <td class="py-3 pr-3">
-                                <input
-                                  v-model.number="athlete.rows[keyOf(w, s)].ketones"
-                                  type="number"
-                                  step="0.1"
-                                  class="input h-10 w-24"
-                                />
-                              </td>
-                              <td class="py-3">
-                                <span
-                                  class="text-xs px-2 py-1 rounded-full"
-                                  :class="chipClass(getRow(athlete, w, s))"
-                                  >{{ chipText(getRow(athlete, w, s)) }}</span
-                                >
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </details>
+                    :summary="summaryWeek(athlete, w)"
+                    :rows="athlete.rows"
+                    :chip-text="chipText"
+                    :chip-class="chipClass"
+                    :key-of="keyOf"
+                    @update="(week, session, field, val) => athlete.rows[keyOf(week, session)][field] = val"
+                  />
                 </div>
               </details>
             </div>
@@ -298,50 +130,12 @@
           </div>
 
           <div v-else class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <div
+            <PlanWeekCard
               v-for="(w, idx) in activePlan.weeks"
               :key="w.week"
-              class="rounded-2xl border p-4"
-            >
-              <div
-                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
-              >
-                <div>
-                  <div class="font-semibold">Неделя {{ w.week }}</div>
-                  <div class="text-xs text-slate-600 mt-1">
-                    Модель: <b>{{ w.model }}</b>
-                  </div>
-                </div>
-                <div class="text-xs text-slate-600">{{ weekDates(idx) }}</div>
-              </div>
-
-              <div class="mt-3 grid gap-3 lg:grid-cols-3">
-                <div
-                  v-for="t in w.sessions"
-                  :key="t.id"
-                  class="rounded-2xl bg-slate-50 border p-3"
-                >
-                  <div class="flex items-start justify-between gap-3">
-                    <div>
-                      <div class="font-medium">Тренировка {{ t.session }}</div>
-                      <div class="text-xs text-slate-600 mt-1">
-                        V={{ t.V }} кг · P={{ t.P }} · R={{ t.R }} мин
-                      </div>
-                    </div>
-                    <span
-                      class="text-xs px-2 py-1 rounded-full"
-                      :class="statusChip(t)"
-                    >
-                      {{ t.flag }}
-                    </span>
-                  </div>
-
-                  <div class="mt-3 text-sm text-slate-800 whitespace-pre-line">
-                    {{ t.workout }}
-                  </div>
-                </div>
-              </div>
-            </div>
+              :week="w"
+              :dates="weekDates(idx)"
+            />
           </div>
         </UiCard>
       </div>
@@ -353,9 +147,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import UiCard from '~/components/UiCard.vue'
-import Field from '~/components/UiField.vue'
 import UiForm from '~/components/UiForm.vue'
 import PlannerCharts from '~/components/planner/PlannerCharts.vue'
+import PlanWeekCard from '~/components/planner/PlanWeekCard.vue'
+import ObservationWeek from '~/components/planner/ObservationWeek.vue'
 import { usePlannerData } from '~/composables/usePlannerData'
 import { usePlannerProcessing } from '~/composables/usePlannerProcessing'
 import { usePlannerDisplay } from '~/composables/usePlannerDisplay'
@@ -457,28 +252,10 @@ const {
   chipClass,
   summaryWeek,
   selectPlan,
-  statusChip,
   weekDates,
   exportPdf,
 } = display
 
-
-
-  if (!results) return []
-  const rows: Array<{ key: string; label: string; value: string; unit: string }> = []
-  analyteOrder.forEach((key) => {
-    const raw = results[key]
-    if (typeof raw !== "number" || !Number.isFinite(raw)) return
-    const digits = analyteDecimals[key] ?? 2
-    rows.push({
-      key,
-      label: analyteLabels[key] || key,
-      value: raw.toFixed(digits),
-      unit: units?.[key] || "",
-    })
-  })
-  return rows
-}
 
 </script>
 

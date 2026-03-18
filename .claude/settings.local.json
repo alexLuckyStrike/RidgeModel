@@ -31,7 +31,8 @@
       "Bash(node_modules/.bin/tsc --noEmit --project tsconfig.json)",
       "Bash(cd /Users/admin/Documents/loadTrainPlan*копия)",
       "Bash(wc -l /Users/admin/Documents/loadTrainPlan*копия/nuxt/composables/usePlannerMvp.ts)",
-      "Bash(wc -l /Users/admin/Documents/loadTrainPlan*копия/nuxt/pages/planner.vue)"
+      "Bash(wc -l /Users/admin/Documents/loadTrainPlan*копия/nuxt/pages/planner.vue)",
+      "Bash(xxd \"nuxt/pages/planner.vue\")"
     ]
   }
 }
