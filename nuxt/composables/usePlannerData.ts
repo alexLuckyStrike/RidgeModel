@@ -5,12 +5,35 @@ import { useAthletesStore, type Athlete, type RestBaseline, type Row } from '~/s
 import { keyOf } from '~/utils/plannerHelpers'
 import type { PlanVariantId, Plan } from '~/utils/plannerTypes'
 
+
 export interface PlannerDataDeps {
   athletePlans: Ref<Record<string, Partial<Record<PlanVariantId, Plan>>>>
   destroyCharts: () => void
 }
 
 const STORAGE_KEY = 'powerlift-planner:v1'
+
+async function getAllAthletes(backendBase: string) {
+  try {
+    const response = await fetch(`${backendBase}/api/db/getAllAthletes`, {
+      headers: { Accept: 'application/json' },
+    })
+   
+
+    if (!response.ok) {
+      const text = await response.text()
+      console.error('getAllAthletes HTTP error:', response.status, text)
+      return null
+    }
+
+    const json = await response.json()
+    console.log('json:', json)
+    return json
+  } catch (error) {
+    console.error('getAllAthletes failed:', error)
+    return null
+  }
+}
 
 export function usePlannerData(deps: PlannerDataDeps) {
   // ─── Pinia store ───
@@ -167,7 +190,7 @@ export function usePlannerData(deps: PlannerDataDeps) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
   }
 
-  const fillDemo = () => {
+  const fillDemo = async () => {
     if (!athletes.value.length) return
 
     const patterns = [
@@ -177,7 +200,15 @@ export function usePlannerData(deps: PlannerDataDeps) {
       { V: 6800, P: 60, R: 2.9, creatinine: 4.2, protein: 1.6, myoglobin: 12.0, ketones: 0.4 },
     ]
    
-    console.log('athletes:',athletes)
+    console.log('here')
+    const config = useRuntimeConfig()
+    const backendBase = config.public.backendBase || 'http://localhost:3001'
+    const result = await getAllAthletes(backendBase)
+    console.log('result:', result)
+    // console.log("parsedResult:",result)
+
+    console.log('athletes:before',athletes)
+
 
     athletes.value.forEach((athlete, athleteIdx) => {
       if (!athlete.period.startDate) {
@@ -189,6 +220,8 @@ export function usePlannerData(deps: PlannerDataDeps) {
         athlete.period.competitionDate = target.toISOString().slice(0, 10)
       }
 
+     console.log('athletes:after',athletes);
+       
       ensureRowsForAthlete(athlete)
 
       athlete.restBaseline = {

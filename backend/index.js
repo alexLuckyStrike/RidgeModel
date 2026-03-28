@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { createPdf } = require('./pdfGenerator');
 const { checkDbHealth } = require('./db/client');
-
+const pool = require('./db/db.js');
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
@@ -42,6 +42,14 @@ app.get('/api/db/health', async (req, res) => {
   }
   res.json(health);
 });
+
+app.get('/api/db/getAllAthletes', async (req, res) => {
+  const athletes = await pool.query(
+    'SELECT * FROM athletes'
+  )
+  console.log("athletes:", athletes)
+  res.json(athletes);
+})
 
 app.post('/pdf', async (req, res) => {
   console.log('listen')
