@@ -3,6 +3,16 @@ const { Pool } = require('pg');
 let pool;
 
 function getConfig() {
+  const connectionString = process.env.DATABASE_URL;
+  if (connectionString) {
+    return {
+      connectionString,
+      max: Number(process.env.DB_POOL_MAX || 10),
+      idleTimeoutMillis: 10_000,
+      connectionTimeoutMillis: 5_000,
+    };
+  }
+
   return {
     host: process.env.DB_HOST || 'localhost',
     port: Number(process.env.DB_PORT || 5432),

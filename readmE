@@ -1,0 +1,28 @@
+База данных и доступ через терминал
+
+Да, база используется с паролем.
+
+Текущие параметры:
+- DB: loadtrain
+- Host: localhost
+- Port: 5432
+- User: loadtrain_user
+- Password: loadtrain_pass
+
+Подключение к БД:
+PGPASSWORD=loadtrain_pass psql -h localhost -p 5432 -U loadtrain_user -d loadtrain
+
+Полезные команды внутри psql:
+\dt
+SELECT COUNT(*) FROM athletes;
+SELECT COUNT(*) FROM observation_periods;
+SELECT COUNT(*) FROM rest_baselines;
+SELECT COUNT(*) FROM training_sessions;
+SELECT * FROM training_sessions LIMIT 10;
+\q
+
+Команды проекта:
+npm run db:local:reset
+npm run db:local:init
+npm run db:local:import:markers
+npm run db:local:health

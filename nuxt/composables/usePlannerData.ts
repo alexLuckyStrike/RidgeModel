@@ -176,6 +176,8 @@ export function usePlannerData(deps: PlannerDataDeps) {
       { V: 7600, P: 56, R: 2.4, creatinine: 4.8, protein: 2.0, myoglobin: 18.0, ketones: 0.6 },
       { V: 6800, P: 60, R: 2.9, creatinine: 4.2, protein: 1.6, myoglobin: 12.0, ketones: 0.4 },
     ]
+   
+    console.log('athletes:',athletes)
 
     athletes.value.forEach((athlete, athleteIdx) => {
       if (!athlete.period.startDate) {

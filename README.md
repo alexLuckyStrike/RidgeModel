@@ -18,16 +18,31 @@ Powerlift Load Model (Nuxt 3 SPA + Backend)
 
 База данных (PostgreSQL):
 
-1) Поднять только БД
-   docker compose up -d postgres
+Локальный запуск (Homebrew PostgreSQL, без Docker):
 
-2) Поднять весь стек в Docker (Nuxt + Backend + PostgreSQL + Nginx)
-   docker compose up --build
+1) Убедиться, что PostgreSQL запущен
+   brew services start postgresql@15
+
+2) Полный сброс и инициализация БД
+   npm run db:local:reset
 
 3) Проверка подключения backend к БД
    http://localhost:3001/api/db/health
 
+4) Повторно применить только схему (без полного сброса)
+   npm run db:local:init
+
+Docker (опционально):
+- Только БД: `docker compose up -d postgres`
+- Весь стек: `docker compose up --build`
+- В Docker postgres слушает на `localhost:5433`.
+
 Схема и связи:
 - SQL-схема лежит в `backend/db/init.sql`.
-- Таблицы: `athletes`, `sessions`, `uploads`, `analysis_results`, `training_plans`.
-- Внешние ключи уже настроены (athletes -> sessions -> uploads/analysis_results, athletes -> training_plans).
+- Таблицы: `athletes`, `observation_periods`, `rest_baselines`, `training_sessions`.
+- Внешние ключи и ограничения:
+  - `athletes (1) -> (N) observation_periods`
+  - `observation_periods (1) -> (1) rest_baselines` (через `UNIQUE(period_id)`)
+  - `observation_periods (1) -> (N) training_sessions`
+  - уникальность тренировки: `UNIQUE(period_id, week_no, session_no)`
+  - все измеряемые показатели хранятся в едином стандарте `*_points`

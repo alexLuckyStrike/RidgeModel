@@ -9,7 +9,11 @@
     "dev:backend": "npm --prefix backend run dev",
     "install:all": "npm install && npm --prefix nuxt install && npm --prefix backend install && npm --prefix mvp-cv-app/backend install",
     "dev:full": "npm-run-all -p dev:nuxt dev:backend dev:cv",
-    "dev:cv": "npm --prefix mvp-cv-app/backend run dev"
+    "dev:cv": "npm --prefix mvp-cv-app/backend run dev",
+    "db:local:reset": "bash backend/db/reset-local-db.sh",
+    "db:local:init": "PGPASSWORD=loadtrain_pass psql -h localhost -p 5432 -U loadtrain_user -d loadtrain -v ON_ERROR_STOP=1 -f backend/db/init.sql",
+    "db:local:health": "curl -fsS http://localhost:3001/api/db/health",
+    "db:local:import:markers": "node backend/db/import-markers-results.js markersResults.json"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.5"
