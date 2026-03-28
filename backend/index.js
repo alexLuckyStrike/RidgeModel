@@ -44,11 +44,66 @@ app.get('/api/db/health', async (req, res) => {
 });
 
 app.get('/api/db/getAllAthletes', async (req, res) => {
-  const athletes = await pool.query(
-    'SELECT * FROM athletes'
-  )
-  console.log("athletes:", athletes)
-  res.json(athletes);
+  try {
+    const athletes = await pool.query(`
+      WITH latest_period AS (
+        SELECT
+          op.*,
+          ROW_NUMBER() OVER (
+            PARTITION BY op.athlete_id
+            ORDER BY op.start_date DESC, op.created_at DESC, op.id DESC
+          ) AS rn
+        FROM observation_periods op
+      )
+      SELECT
+        COALESCE(a.external_id, a.id::text) AS id,
+        a.full_name AS name,
+        jsonb_build_object(
+          'observationWeeks', lp.weeks_count,
+          'sessionsPerWeek', lp.sessions_per_week,
+          'startDate', lp.start_date,
+          'competitionDate', lp.competition_date
+        ) AS period,
+        COALESCE(
+          (
+            SELECT jsonb_object_agg(
+              ts.week_no::text || '-' || ts.session_no::text,
+              jsonb_build_object(
+                'V', ts.v_points,
+                'P', ts.p_points,
+                'R', ts.r_points,
+                'creatinine', ts.creatinine_points,
+                'protein', ts.protein_points,
+                'myoglobin', ts.myoglobin_points,
+                'ketones', ts.ketones_points
+              )
+            )
+            FROM training_sessions ts
+            WHERE ts.period_id = lp.id
+          ),
+          '{}'::jsonb
+        ) AS rows,
+        jsonb_build_object(
+          'creatinine', rb.creatinine_points,
+          'protein', rb.protein_points,
+          'myoglobin', rb.myoglobin_points,
+          'ketones', rb.ketones_points
+        ) AS "restBaseline"
+      FROM athletes a
+      JOIN latest_period lp
+        ON lp.athlete_id = a.id
+       AND lp.rn = 1
+      LEFT JOIN rest_baselines rb
+        ON rb.period_id = lp.id
+      ORDER BY a.id;
+    `)
+
+    console.log('athletes rows:', athletes.rowCount)
+    res.json(athletes.rows)
+  } catch (error) {
+    console.error('getAllAthletes failed:', error)
+    res.status(500).json({ error: 'Failed to load athletes' })
+  }
 })
 
 app.post('/pdf', async (req, res) => {

@@ -1,0 +1,77 @@
+База данных проекта (PostgreSQL)
+
+Имя БД: loadtrain
+
+Схема инициализации:
+- backend/db/init.sql
+
+Основные таблицы:
+
+1) athletes
+- id (PK)
+- external_id (UNIQUE)
+- full_name
+- sex
+- birth_date
+- weight_category_points
+- created_at, updated_at
+
+2) observation_periods
+- id (PK)
+- athlete_id (FK -> athletes.id, ON DELETE CASCADE)
+- weeks_count
+- sessions_per_week
+- start_date
+- competition_date
+- bench_press_points
+- squat_points
+- deadlift_points
+- total_points
+- sport_rank
+- created_at, updated_at
+- ограничение: start_date < competition_date
+
+3) rest_baselines
+- id (PK)
+- period_id (FK -> observation_periods.id, ON DELETE CASCADE, UNIQUE)
+- creatinine_points
+- protein_points
+- myoglobin_points
+- ketones_points
+- created_at, updated_at
+
+4) training_sessions
+- id (PK)
+- period_id (FK -> observation_periods.id, ON DELETE CASCADE)
+- week_no
+- session_no
+- v_points
+- p_points
+- r_points
+- creatinine_points
+- protein_points
+- myoglobin_points
+- ketones_points
+- created_at, updated_at
+- уникальность: UNIQUE(period_id, week_no, session_no)
+
+Связи (кардинальность):
+- athletes (1) -> (N) observation_periods
+- observation_periods (1) -> (1) rest_baselines
+- observation_periods (1) -> (N) training_sessions
+
+Индексы:
+- idx_observation_periods_athlete (athlete_id, start_date DESC)
+- idx_training_sessions_period_week (period_id, week_no, session_no)
+- idx_training_sessions_period_created (period_id, created_at DESC)
+
+Как подключиться из терминала:
+PGPASSWORD=loadtrain_pass psql -h localhost -p 5432 -U loadtrain_user -d loadtrain
+
+Полезные команды psql:
+\dt
+SELECT COUNT(*) FROM athletes;
+SELECT COUNT(*) FROM observation_periods;
+SELECT COUNT(*) FROM rest_baselines;
+SELECT COUNT(*) FROM training_sessions;
+\q

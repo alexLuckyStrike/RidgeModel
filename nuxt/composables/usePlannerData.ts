@@ -193,54 +193,57 @@ export function usePlannerData(deps: PlannerDataDeps) {
   const fillDemo = async () => {
     if (!athletes.value.length) return
 
-    const patterns = [
-      { V: 9500, P: 72, R: 1.2, creatinine: 5.5, protein: 2.4, myoglobin: 25.0, ketones: 0.9 },
-      { V: 8800, P: 64, R: 1.8, creatinine: 6.2, protein: 3.2, myoglobin: 38.0, ketones: 1.2 },
-      { V: 7600, P: 56, R: 2.4, creatinine: 4.8, protein: 2.0, myoglobin: 18.0, ketones: 0.6 },
-      { V: 6800, P: 60, R: 2.9, creatinine: 4.2, protein: 1.6, myoglobin: 12.0, ketones: 0.4 },
-    ]
-   
     console.log('here')
     const config = useRuntimeConfig()
     const backendBase = config.public.backendBase || 'http://localhost:3001'
     const result = await getAllAthletes(backendBase)
     console.log('result:', result)
-    // console.log("parsedResult:",result)
+    const source: any = Array.isArray(result) ? result[0] : null
+    const athlete = athletes.value[0]
+    if (!source || !athlete) {
+      console.warn('fillDemo: no source athlete at index 0')
+      return
+    }
 
-    console.log('athletes:before',athletes)
+    athlete.name = source.name ?? athlete.name
+    athlete.period = {
+      observationWeeks:
+        Number(source?.period?.observationWeeks) || athlete.period.observationWeeks,
+      sessionsPerWeek:
+        Number(source?.period?.sessionsPerWeek) || athlete.period.sessionsPerWeek,
+      startDate: source?.period?.startDate || athlete.period.startDate,
+      competitionDate: source?.period?.competitionDate || athlete.period.competitionDate,
+    }
 
+    const toNum = (v: any): number | null => {
+      if (v === null || v === undefined) return null
+      const n = Number(v)
+      return Number.isFinite(n) ? n : null
+    }
 
-    athletes.value.forEach((athlete, athleteIdx) => {
-      if (!athlete.period.startDate) {
-        athlete.period.startDate = new Date().toISOString().slice(0, 10)
+    const nextRows: Record<string, Row> = {}
+    for (const [k, row] of Object.entries(source.rows || {})) {
+      const r: any = row || {}
+      nextRows[k] = {
+        V: toNum(r.V),
+        P: toNum(r.P),
+        R: toNum(r.R),
+        creatinine: toNum(r.creatinine),
+        protein: toNum(r.protein),
+        myoglobin: toNum(r.myoglobin),
+        ketones: toNum(r.ketones),
       }
-      if (!athlete.period.competitionDate) {
-        const target = new Date(athlete.period.startDate)
-        target.setDate(target.getDate() + 8 * 7)
-        athlete.period.competitionDate = target.toISOString().slice(0, 10)
-      }
+    }
+    athlete.rows = nextRows
 
-     console.log('athletes:after',athletes);
-       
-      ensureRowsForAthlete(athlete)
+    athlete.restBaseline = {
+      creatinine: toNum(source?.restBaseline?.creatinine),
+      protein: toNum(source?.restBaseline?.protein),
+      myoglobin: toNum(source?.restBaseline?.myoglobin),
+      ketones: toNum(source?.restBaseline?.ketones),
+    }
 
-      athlete.restBaseline = {
-        creatinine: 3.5 + 0.2 * athleteIdx,
-        protein: 1.0 + 0.1 * athleteIdx,
-        myoglobin: 10.0 + 1.5 * athleteIdx,
-        ketones: 0.05 + 0.02 * athleteIdx,
-      }
-
-      for (let w = 1; w <= athlete.period.observationWeeks; w++) {
-        for (let s = 1; s <= athlete.period.sessionsPerWeek; s++) {
-          const patIdx = (w + s + athleteIdx) % patterns.length
-          athlete.rows[keyOf(w, s)] = {
-            ...athlete.rows[keyOf(w, s)],
-            ...patterns[patIdx],
-          }
-        }
-      }
-    })
+    ensureRowsForAthlete(athlete)
 
     const maxWeeks = Math.max(
       ...athletes.value.map((a) => a.period.observationWeeks || 0),
