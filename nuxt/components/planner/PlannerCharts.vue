@@ -111,11 +111,11 @@ defineExpose({
 });
 
 watch(
-  () => [props.hasPlan, props.sessions.length],
+  () => [props.hasPlan, props.sessions],
   () => {
     drawCharts();
   },
-  { immediate: true }
+  { immediate: true, deep: true }
 );
 
 onBeforeUnmount(() => {

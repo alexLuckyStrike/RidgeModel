@@ -1,0 +1,3110 @@
+[
+  {
+    "id": "ath-1",
+    "name": "Спортсмен 1",
+    "period": {
+      "observationWeeks": 4,
+      "sessionsPerWeek": 4,
+      "startDate": "2026-03-22",
+      "competitionDate": "2026-05-17"
+    },
+    "restBaseline": {
+      "creatinine": 4.4,
+      "protein": 0.09,
+      "myoglobin": 2.0,
+      "ketones": 0.0
+    },
+    "rows": {
+      "0-0": {
+        "V": 0,
+        "P": 0,
+        "R": 0.0,
+        "creatinine": 4.4,
+        "protein": 0.09,
+        "myoglobin": 2.0,
+        "ketones": 0.0
+      },
+      "1-1": {
+        "V": 9802,
+        "P": 70,
+        "R": 3.6,
+        "creatinine": 14.6,
+        "protein": 0.44,
+        "myoglobin": 58.0,
+        "ketones": 1.0
+      },
+      "1-2": {
+        "V": 7914,
+        "P": 70,
+        "R": 3.8,
+        "creatinine": 11.5,
+        "protein": 0.26,
+        "myoglobin": 40.0,
+        "ketones": 0.9
+      },
+      "1-3": {
+        "V": 9396,
+        "P": 79,
+        "R": 4.8,
+        "creatinine": 13.1,
+        "protein": 0.36,
+        "myoglobin": 43.0,
+        "ketones": 1.0
+      },
+      "1-4": {
+        "V": 7526,
+        "P": 69,
+        "R": 2.4,
+        "creatinine": 14.0,
+        "protein": 0.19,
+        "myoglobin": 23.0,
+        "ketones": 0.1
+      },
+      "2-1": {
+        "V": 6859,
+        "P": 60,
+        "R": 3.0,
+        "creatinine": 7.9,
+        "protein": 0.17,
+        "myoglobin": 22.0,
+        "ketones": 0.3
+      },
+      "2-2": {
+        "V": 7792,
+        "P": 80,
+        "R": 4.7,
+        "creatinine": 11.0,
+        "protein": 0.16,
+        "myoglobin": 23.0,
+        "ketones": 0.4
+      },
+      "2-3": {
+        "V": 8424,
+        "P": 81,
+        "R": 4.2,
+        "creatinine": 14.3,
+        "protein": 0.23,
+        "myoglobin": 41.0,
+        "ketones": 1.0
+      },
+      "2-4": {
+        "V": 9921,
+        "P": 70,
+        "R": 1.5,
+        "creatinine": 16.2,
+        "protein": 0.54,
+        "myoglobin": 78.0,
+        "ketones": 1.6
+      },
+      "3-1": {
+        "V": 6757,
+        "P": 54,
+        "R": 2.9,
+        "creatinine": 9.7,
+        "protein": 0.24,
+        "myoglobin": 24.0,
+        "ketones": 0.1
+      },
+      "3-2": {
+        "V": 8263,
+        "P": 78,
+        "R": 4.5,
+        "creatinine": 14.4,
+        "protein": 0.15,
+        "myoglobin": 21.0,
+        "ketones": 0.3
+      },
+      "3-3": {
+        "V": 9084,
+        "P": 80,
+        "R": 4.8,
+        "creatinine": 14.1,
+        "protein": 0.54,
+        "myoglobin": 76.0,
+        "ketones": 1.6
+      },
+      "3-4": {
+        "V": 11193,
+        "P": 82,
+        "R": 5.0,
+        "creatinine": 17.9,
+        "protein": 0.35,
+        "myoglobin": 53.0,
+        "ketones": 1.3
+      },
+      "4-1": {
+        "V": 8758,
+        "P": 66,
+        "R": 2.6,
+        "creatinine": 9.8,
+        "protein": 0.12,
+        "myoglobin": 20.0,
+        "ketones": 0.5
+      },
+      "4-2": {
+        "V": 8110,
+        "P": 81,
+        "R": 4.5,
+        "creatinine": 12.4,
+        "protein": 0.28,
+        "myoglobin": 31.0,
+        "ketones": 0.5
+      },
+      "4-3": {
+        "V": 10328,
+        "P": 80,
+        "R": 3.8,
+        "creatinine": 17.8,
+        "protein": 0.52,
+        "myoglobin": 57.0,
+        "ketones": 1.6
+      },
+      "4-4": {
+        "V": 11156,
+        "P": 84,
+        "R": 3.4,
+        "creatinine": 17.9,
+        "protein": 0.45,
+        "myoglobin": 78.0,
+        "ketones": 1.6
+      }
+    },
+    "weightClassKg": 75,
+    "benchKg": 110,
+    "squatKg": 150,
+    "deadliftKg": 145,
+    "totalKg": 405,
+    "rank": "I"
+  },
+  {
+    "id": "ath-2",
+    "name": "Спортсмен 2",
+    "period": {
+      "observationWeeks": 4,
+      "sessionsPerWeek": 4,
+      "startDate": "2026-03-22",
+      "competitionDate": "2026-05-17"
+    },
+    "restBaseline": {
+      "creatinine": 4.5,
+      "protein": 0.08,
+      "myoglobin": 2.0,
+      "ketones": 0.1
+    },
+    "rows": {
+      "0-0": {
+        "V": 0,
+        "P": 0,
+        "R": 0.0,
+        "creatinine": 4.5,
+        "protein": 0.08,
+        "myoglobin": 2.0,
+        "ketones": 0.1
+      },
+      "1-1": {
+        "V": 9072,
+        "P": 70,
+        "R": 3.5,
+        "creatinine": 12.8,
+        "protein": 0.31,
+        "myoglobin": 56.0,
+        "ketones": 1.6
+      },
+      "1-2": {
+        "V": 7303,
+        "P": 70,
+        "R": 3.9,
+        "creatinine": 11.5,
+        "protein": 0.16,
+        "myoglobin": 17.0,
+        "ketones": 0.5
+      },
+      "1-3": {
+        "V": 8952,
+        "P": 79,
+        "R": 4.8,
+        "creatinine": 17.9,
+        "protein": 0.21,
+        "myoglobin": 31.0,
+        "ketones": 1.6
+      },
+      "1-4": {
+        "V": 7275,
+        "P": 70,
+        "R": 2.3,
+        "creatinine": 14.6,
+        "protein": 0.42,
+        "myoglobin": 42.0,
+        "ketones": 0.7
+      },
+      "2-1": {
+        "V": 6463,
+        "P": 59,
+        "R": 3.1,
+        "creatinine": 7.4,
+        "protein": 0.11,
+        "myoglobin": 16.0,
+        "ketones": 0.1
+      },
+      "2-2": {
+        "V": 7322,
+        "P": 80,
+        "R": 4.8,
+        "creatinine": 8.3,
+        "protein": 0.13,
+        "myoglobin": 17.0,
+        "ketones": 0.3
+      },
+      "2-3": {
+        "V": 7828,
+        "P": 82,
+        "R": 4.3,
+        "creatinine": 10.2,
+        "protein": 0.24,
+        "myoglobin": 31.0,
+        "ketones": 0.3
+      },
+      "2-4": {
+        "V": 9150,
+        "P": 69,
+        "R": 1.6,
+        "creatinine": 17.3,
+        "protein": 0.64,
+        "myoglobin": 70.0,
+        "ketones": 1.6
+      },
+      "3-1": {
+        "V": 6426,
+        "P": 54,
+        "R": 3.2,
+        "creatinine": 9.3,
+        "protein": 0.11,
+        "myoglobin": 16.0,
+        "ketones": 0.1
+      },
+      "3-2": {
+        "V": 7794,
+        "P": 79,
+        "R": 4.4,
+        "creatinine": 15.1,
+        "protein": 0.13,
+        "myoglobin": 30.0,
+        "ketones": 1.0
+      },
+      "3-3": {
+        "V": 8337,
+        "P": 81,
+        "R": 4.9,
+        "creatinine": 14.9,
+        "protein": 0.22,
+        "myoglobin": 45.0,
+        "ketones": 1.2
+      },
+      "3-4": {
+        "V": 10517,
+        "P": 85,
+        "R": 5.1,
+        "creatinine": 17.9,
+        "protein": 0.31,
+        "myoglobin": 58.0,
+        "ketones": 1.6
+      },
+      "4-1": {
+        "V": 8687,
+        "P": 67,
+        "R": 2.5,
+        "creatinine": 15.1,
+        "protein": 0.3,
+        "myoglobin": 57.0,
+        "ketones": 1.6
+      },
+      "4-2": {
+        "V": 7474,
+        "P": 82,
+        "R": 4.8,
+        "creatinine": 8.2,
+        "protein": 0.16,
+        "myoglobin": 26.0,
+        "ketones": 0.8
+      },
+      "4-3": {
+        "V": 9621,
+        "P": 81,
+        "R": 4.0,
+        "creatinine": 17.9,
+        "protein": 0.4,
+        "myoglobin": 54.0,
+        "ketones": 1.5
+      },
+      "4-4": {
+        "V": 10281,
+        "P": 86,
+        "R": 3.6,
+        "creatinine": 16.8,
+        "protein": 0.22,
+        "myoglobin": 60.0,
+        "ketones": 1.6
+      }
+    },
+    "weightClassKg": 75,
+    "benchKg": 105,
+    "squatKg": 145,
+    "deadliftKg": 140,
+    "totalKg": 390,
+    "rank": "II"
+  },
+  {
+    "id": "ath-3",
+    "name": "Спортсмен 3",
+    "period": {
+      "observationWeeks": 4,
+      "sessionsPerWeek": 4,
+      "startDate": "2026-03-22",
+      "competitionDate": "2026-05-17"
+    },
+    "restBaseline": {
+      "creatinine": 4.4,
+      "protein": 0.06,
+      "myoglobin": 2.0,
+      "ketones": 0.1
+    },
+    "rows": {
+      "0-0": {
+        "V": 0,
+        "P": 0,
+        "R": 0.0,
+        "creatinine": 4.4,
+        "protein": 0.06,
+        "myoglobin": 2.0,
+        "ketones": 0.1
+      },
+      "1-1": {
+        "V": 8970,
+        "P": 70,
+        "R": 3.4,
+        "creatinine": 8.5,
+        "protein": 0.21,
+        "myoglobin": 21.0,
+        "ketones": 0.1
+      },
+      "1-2": {
+        "V": 8089,
+        "P": 71,
+        "R": 3.7,
+        "creatinine": 11.9,
+        "protein": 0.37,
+        "myoglobin": 53.0,
+        "ketones": 0.7
+      },
+      "1-3": {
+        "V": 9448,
+        "P": 80,
+        "R": 4.8,
+        "creatinine": 11.7,
+        "protein": 0.29,
+        "myoglobin": 38.0,
+        "ketones": 0.5
+      },
+      "1-4": {
+        "V": 7373,
+        "P": 70,
+        "R": 2.3,
+        "creatinine": 8.0,
+        "protein": 0.09,
+        "myoglobin": 25.0,
+        "ketones": 0.8
+      },
+      "2-1": {
+        "V": 6859,
+        "P": 60,
+        "R": 3.0,
+        "creatinine": 7.9,
+        "protein": 0.13,
+        "myoglobin": 22.0,
+        "ketones": 0.3
+      },
+      "2-2": {
+        "V": 7971,
+        "P": 82,
+        "R": 4.7,
+        "creatinine": 11.2,
+        "protein": 0.49,
+        "myoglobin": 29.0,
+        "ketones": 0.4
+      },
+      "2-3": {
+        "V": 8663,
+        "P": 84,
+        "R": 4.1,
+        "creatinine": 10.0,
+        "protein": 0.5,
+        "myoglobin": 55.0,
+        "ketones": 0.9
+      },
+      "2-4": {
+        "V": 9557,
+        "P": 71,
+        "R": 1.8,
+        "creatinine": 16.4,
+        "protein": 0.12,
+        "myoglobin": 33.0,
+        "ketones": 1.6
+      },
+      "3-1": {
+        "V": 6728,
+        "P": 54,
+        "R": 2.9,
+        "creatinine": 7.8,
+        "protein": 0.09,
+        "myoglobin": 11.0,
+        "ketones": 0.2
+      },
+      "3-2": {
+        "V": 8260,
+        "P": 80,
+        "R": 4.4,
+        "creatinine": 12.0,
+        "protein": 0.22,
+        "myoglobin": 37.0,
+        "ketones": 0.7
+      },
+      "3-3": {
+        "V": 8402,
+        "P": 80,
+        "R": 5.0,
+        "creatinine": 9.4,
+        "protein": 0.09,
+        "myoglobin": 20.0,
+        "ketones": 0.6
+      },
+      "3-4": {
+        "V": 11110,
+        "P": 84,
+        "R": 5.0,
+        "creatinine": 12.3,
+        "protein": 0.48,
+        "myoglobin": 45.0,
+        "ketones": 0.7
+      },
+      "4-1": {
+        "V": 8852,
+        "P": 67,
+        "R": 2.4,
+        "creatinine": 11.4,
+        "protein": 0.14,
+        "myoglobin": 20.0,
+        "ketones": 0.9
+      },
+      "4-2": {
+        "V": 7912,
+        "P": 82,
+        "R": 4.4,
+        "creatinine": 11.9,
+        "protein": 0.18,
+        "myoglobin": 22.0,
+        "ketones": 0.4
+      },
+      "4-3": {
+        "V": 9935,
+        "P": 81,
+        "R": 4.0,
+        "creatinine": 10.7,
+        "protein": 0.44,
+        "myoglobin": 61.0,
+        "ketones": 1.6
+      },
+      "4-4": {
+        "V": 11061,
+        "P": 85,
+        "R": 3.5,
+        "creatinine": 14.7,
+        "protein": 0.41,
+        "myoglobin": 57.0,
+        "ketones": 1.4
+      }
+    },
+    "weightClassKg": 75,
+    "benchKg": 112.5,
+    "squatKg": 152.5,
+    "deadliftKg": 150,
+    "totalKg": 415,
+    "rank": "I"
+  },
+  {
+     "id": "ath-4",
+     "name": "Спортсмен 4",
+     "period": {
+       "observationWeeks": 4,
+       "sessionsPerWeek": 4,
+       "startDate": "2026-03-22",
+       "competitionDate": "2026-05-17"
+     },
+     "restBaseline": {
+       "creatinine": 4.5,
+       "protein": 0.05,
+       "myoglobin": 3.0,
+       "ketones": 0.0
+     },
+     "rows": {
+       "0-0": {
+         "V": 0,
+         "P": 0,
+         "R": 0.0,
+         "creatinine": 4.5,
+         "protein": 0.05,
+         "myoglobin": 3.0,
+         "ketones": 0.0
+       },
+       "1-1": {
+         "V": 8860,
+         "P": 69,
+         "R": 3.6,
+         "creatinine": 11.3,
+         "protein": 0.13,
+         "myoglobin": 16.0,
+         "ketones": 0.3
+       },
+       "1-2": {
+         "V": 7440,
+         "P": 69,
+         "R": 3.9,
+         "creatinine": 10.3,
+         "protein": 0.11,
+         "myoglobin": 14.0,
+         "ketones": 0.1
+       },
+       "1-3": {
+         "V": 9025,
+         "P": 79,
+         "R": 4.9,
+         "creatinine": 10.4,
+         "protein": 0.19,
+         "myoglobin": 22.0,
+         "ketones": 0.3
+       },
+       "1-4": {
+         "V": 7130,
+         "P": 69,
+         "R": 2.2,
+         "creatinine": 10.1,
+         "protein": 0.13,
+         "myoglobin": 23.0,
+         "ketones": 0.9
+       },
+       "2-1": {
+         "V": 6505,
+         "P": 59,
+         "R": 3.1,
+         "creatinine": 7.4,
+         "protein": 0.11,
+         "myoglobin": 14.0,
+         "ketones": 0.2
+       },
+       "2-2": {
+         "V": 7280,
+         "P": 81,
+         "R": 4.8,
+         "creatinine": 9.4,
+         "protein": 0.17,
+         "myoglobin": 26.0,
+         "ketones": 0.4
+       },
+       "2-3": {
+         "V": 7815,
+         "P": 82,
+         "R": 4.3,
+         "creatinine": 7.5,
+         "protein": 0.16,
+         "myoglobin": 26.0,
+         "ketones": 1.0
+       },
+       "2-4": {
+         "V": 9058,
+         "P": 69,
+         "R": 1.7,
+         "creatinine": 9.1,
+         "protein": 0.18,
+         "myoglobin": 27.0,
+         "ketones": 0.6
+       },
+       "3-1": {
+         "V": 6412,
+         "P": 53,
+         "R": 3.1,
+         "creatinine": 5.8,
+         "protein": 0.09,
+         "myoglobin": 9.0,
+         "ketones": 0.0
+       },
+       "3-2": {
+         "V": 7660,
+         "P": 79,
+         "R": 4.5,
+         "creatinine": 8.0,
+         "protein": 0.14,
+         "myoglobin": 27.0,
+         "ketones": 0.7
+       },
+       "3-3": {
+         "V": 8158,
+         "P": 80,
+         "R": 4.9,
+         "creatinine": 11.9,
+         "protein": 0.22,
+         "myoglobin": 24.0,
+         "ketones": 0.4
+       },
+       "3-4": {
+         "V": 10190,
+         "P": 84,
+         "R": 5.1,
+         "creatinine": 14.3,
+         "protein": 0.21,
+         "myoglobin": 45.0,
+         "ketones": 1.6
+       },
+       "4-1": {
+         "V": 8440,
+         "P": 66,
+         "R": 2.4,
+         "creatinine": 8.9,
+         "protein": 0.10,
+         "myoglobin": 27.0,
+         "ketones": 0.9
+       },
+       "4-2": {
+         "V": 7395,
+         "P": 82,
+         "R": 4.6,
+         "creatinine": 10.3,
+         "protein": 0.16,
+         "myoglobin": 29.0,
+         "ketones": 1.1
+       },
+       "4-3": {
+         "V": 9260,
+         "P": 80,
+         "R": 4.0,
+         "creatinine": 10.1,
+         "protein": 0.17,
+         "myoglobin": 24.0,
+         "ketones": 0.5
+       },
+       "4-4": {
+         "V": 10085,
+         "P": 85,
+         "R": 3.6,
+         "creatinine": 13.3,
+         "protein": 0.19,
+         "myoglobin": 39.0,
+         "ketones": 1.6
+       }
+     },
+     "weightClassKg": 75,
+     "benchKg": 107.5,
+     "squatKg": 147.5,
+     "deadliftKg": 142.5,
+     "totalKg": 397.5,
+     "rank": "II"
+   },
+   {
+     "id": "ath-5",
+     "name": "Спортсмен 5",
+     "period": {
+       "observationWeeks": 4,
+       "sessionsPerWeek": 4,
+       "startDate": "2026-03-22",
+       "competitionDate": "2026-05-17"
+     },
+     "restBaseline": {
+       "creatinine": 4.5,
+       "protein": 0.06,
+       "myoglobin": 3.0,
+       "ketones": 0.0
+     },
+     "rows": {
+       "0-0": {
+         "V": 0,
+         "P": 0,
+         "R": 0.0,
+         "creatinine": 4.5,
+         "protein": 0.06,
+         "myoglobin": 3.0,
+         "ketones": 0.0
+       },
+       "1-1": {
+         "V": 9440,
+         "P": 70,
+         "R": 3.5,
+         "creatinine": 11.9,
+         "protein": 0.22,
+         "myoglobin": 32.0,
+         "ketones": 0.3
+       },
+       "1-2": {
+         "V": 7535,
+         "P": 70,
+         "R": 3.8,
+         "creatinine": 7.5,
+         "protein": 0.09,
+         "myoglobin": 9.0,
+         "ketones": 0.1
+       },
+       "1-3": {
+         "V": 9305,
+         "P": 79,
+         "R": 4.8,
+         "creatinine": 12.1,
+         "protein": 0.19,
+         "myoglobin": 23.0,
+         "ketones": 0.7
+       },
+       "1-4": {
+         "V": 7240,
+         "P": 70,
+         "R": 2.3,
+         "creatinine": 9.5,
+         "protein": 0.17,
+         "myoglobin": 24.0,
+         "ketones": 0.3
+       },
+       "2-1": {
+         "V": 6668,
+         "P": 60,
+         "R": 3.0,
+         "creatinine": 7.7,
+         "protein": 0.11,
+         "myoglobin": 13.0,
+         "ketones": 0.1
+       },
+       "2-2": {
+         "V": 7600,
+         "P": 80,
+         "R": 4.7,
+         "creatinine": 9.2,
+         "protein": 0.15,
+         "myoglobin": 20.0,
+         "ketones": 0.2
+       },
+       "2-3": {
+         "V": 8145,
+         "P": 82,
+         "R": 4.2,
+         "creatinine": 9.4,
+         "protein": 0.17,
+         "myoglobin": 30.0,
+         "ketones": 0.2
+       },
+       "2-4": {
+         "V": 9465,
+         "P": 70,
+         "R": 1.8,
+         "creatinine": 12.0,
+         "protein": 0.29,
+         "myoglobin": 31.0,
+         "ketones": 0.6
+       },
+       "3-1": {
+         "V": 6500,
+         "P": 54,
+         "R": 3.0,
+         "creatinine": 6.6,
+         "protein": 0.20,
+         "myoglobin": 20.0,
+         "ketones": 0.1
+       },
+       "3-2": {
+         "V": 7938,
+         "P": 79,
+         "R": 4.4,
+         "creatinine": 8.5,
+         "protein": 0.13,
+         "myoglobin": 19.0,
+         "ketones": 0.2
+       },
+       "3-3": {
+         "V": 8425,
+         "P": 80,
+         "R": 4.8,
+         "creatinine": 9.9,
+         "protein": 0.22,
+         "myoglobin": 39.0,
+         "ketones": 0.7
+       },
+       "3-4": {
+         "V": 10755,
+         "P": 83,
+         "R": 4.9,
+         "creatinine": 15.0,
+         "protein": 0.23,
+         "myoglobin": 46.0,
+         "ketones": 1.6
+       },
+       "4-1": {
+         "V": 8895,
+         "P": 67,
+         "R": 2.5,
+         "creatinine": 14.6,
+         "protein": 0.43,
+         "myoglobin": 52.0,
+         "ketones": 1.3
+       },
+       "4-2": {
+         "V": 7765,
+         "P": 81,
+         "R": 4.5,
+         "creatinine": 10.9,
+         "protein": 0.13,
+         "myoglobin": 19.0,
+         "ketones": 0.3
+       },
+       "4-3": {
+         "V": 9815,
+         "P": 80,
+         "R": 4.0,
+         "creatinine": 17.2,
+         "protein": 0.43,
+         "myoglobin": 50.0,
+         "ketones": 0.9
+       },
+       "4-4": {
+         "V": 10590,
+         "P": 84,
+         "R": 3.5,
+         "creatinine": 13.4,
+         "protein": 0.25,
+         "myoglobin": 29.0,
+         "ketones": 0.8
+       }
+     },
+     "weightClassKg": 75,
+     "benchKg": 115,
+     "squatKg": 155,
+     "deadliftKg": 152.5,
+     "totalKg": 422.5,
+     "rank": "I"
+   },
+   {
+     "id": "ath-6",
+     "name": "Спортсмен 6",
+     "period": {
+       "observationWeeks": 4,
+       "sessionsPerWeek": 4,
+       "startDate": "2026-03-22",
+       "competitionDate": "2026-05-17"
+     },
+     "restBaseline": {
+       "creatinine": 4.4,
+       "protein": 0.06,
+       "myoglobin": 3.0,
+       "ketones": 0.1
+     },
+     "rows": {
+       "0-0": {
+         "V": 0,
+         "P": 0,
+         "R": 0.0,
+         "creatinine": 4.4,
+         "protein": 0.06,
+         "myoglobin": 3.0,
+         "ketones": 0.1
+       },
+       "1-1": {
+         "V": 8935,
+         "P": 69,
+         "R": 3.5,
+         "creatinine": 15.3,
+         "protein": 0.15,
+         "myoglobin": 18.0,
+         "ketones": 0.3
+       },
+       "1-2": {
+         "V": 7450,
+         "P": 69,
+         "R": 3.8,
+         "creatinine": 11.8,
+         "protein": 0.16,
+         "myoglobin": 24.0,
+         "ketones": 0.4
+       },
+       "1-3": {
+         "V": 9050,
+         "P": 79,
+         "R": 4.9,
+         "creatinine": 16.2,
+         "protein": 0.47,
+         "myoglobin": 60.0,
+         "ketones": 1.6
+       },
+       "1-4": {
+         "V": 7060,
+         "P": 69,
+         "R": 2.3,
+         "creatinine": 11.1,
+         "protein": 0.11,
+         "myoglobin": 20.0,
+         "ketones": 0.2
+       },
+       "2-1": {
+         "V": 6535,
+         "P": 59,
+         "R": 3.1,
+         "creatinine": 10.4,
+         "protein": 0.16,
+         "myoglobin": 12.0,
+         "ketones": 0.0
+       },
+       "2-2": {
+         "V": 7315,
+         "P": 80,
+         "R": 4.8,
+         "creatinine": 9.4,
+         "protein": 0.10,
+         "myoglobin": 15.0,
+         "ketones": 0.2
+       },
+       "2-3": {
+         "V": 7862,
+         "P": 82,
+         "R": 4.3,
+         "creatinine": 9.0,
+         "protein": 0.10,
+         "myoglobin": 21.0,
+         "ketones": 0.4
+       },
+       "2-4": {
+         "V": 9128,
+         "P": 69,
+         "R": 1.8,
+         "creatinine": 15.8,
+         "protein": 0.35,
+         "myoglobin": 44.0,
+         "ketones": 0.7
+       },
+       "3-1": {
+         "V": 6445,
+         "P": 53,
+         "R": 3.1,
+         "creatinine": 7.6,
+         "protein": 0.11,
+         "myoglobin": 15.0,
+         "ketones": 0.2
+       },
+       "3-2": {
+         "V": 7668,
+         "P": 79,
+         "R": 4.5,
+         "creatinine": 8.6,
+         "protein": 0.22,
+         "myoglobin": 38.0,
+         "ketones": 1.6
+       },
+       "3-3": {
+         "V": 8160,
+         "P": 80,
+         "R": 4.9,
+         "creatinine": 14.6,
+         "protein": 0.19,
+         "myoglobin": 46.0,
+         "ketones": 1.5
+       },
+       "3-4": {
+         "V": 10170,
+         "P": 84,
+         "R": 5.0,
+         "creatinine": 10.8,
+         "protein": 0.30,
+         "myoglobin": 37.0,
+         "ketones": 0.6
+       },
+       "4-1": {
+         "V": 8450,
+         "P": 66,
+         "R": 2.5,
+         "creatinine": 10.3,
+         "protein": 0.12,
+         "myoglobin": 24.0,
+         "ketones": 0.5
+       },
+       "4-2": {
+         "V": 7390,
+         "P": 82,
+         "R": 4.6,
+         "creatinine": 10.0,
+         "protein": 0.13,
+         "myoglobin": 19.0,
+         "ketones": 0.3
+       },
+       "4-3": {
+         "V": 9290,
+         "P": 80,
+         "R": 4.1,
+         "creatinine": 9.7,
+         "protein": 0.19,
+         "myoglobin": 26.0,
+         "ketones": 0.2
+       },
+       "4-4": {
+         "V": 10095,
+         "P": 85,
+         "R": 3.6,
+         "creatinine": 17.9,
+         "protein": 0.39,
+         "myoglobin": 60.0,
+         "ketones": 1.6
+       }
+     },
+     "weightClassKg": 75,
+     "benchKg": 102.5,
+     "squatKg": 142.5,
+     "deadliftKg": 137.5,
+     "totalKg": 382.5,
+     "rank": "II"
+   },
+   {
+      "id": "ath-7",
+      "name": "Спортсмен 7",
+      "period": {
+        "observationWeeks": 4,
+        "sessionsPerWeek": 4,
+        "startDate": "2026-03-22",
+        "competitionDate": "2026-05-17"
+      },
+      "restBaseline": {
+        "creatinine": 4.5,
+        "protein": 0.08,
+        "myoglobin": 2.0,
+        "ketones": 0.1
+      },
+      "rows": {
+        "0-0": {
+          "V": 0,
+          "P": 0,
+          "R": 0.0,
+          "creatinine": 4.5,
+          "protein": 0.08,
+          "myoglobin": 2.0,
+          "ketones": 0.1
+        },
+        "1-1": {
+          "V": 9505,
+          "P": 70,
+          "R": 3.5,
+          "creatinine": 14.9,
+          "protein": 0.15,
+          "myoglobin": 29.0,
+          "ketones": 0.9
+        },
+        "1-2": {
+          "V": 7690,
+          "P": 70,
+          "R": 3.8,
+          "creatinine": 12.2,
+          "protein": 0.18,
+          "myoglobin": 23.0,
+          "ketones": 0.7
+        },
+        "1-3": {
+          "V": 9348,
+          "P": 79,
+          "R": 4.8,
+          "creatinine": 13.9,
+          "protein": 0.21,
+          "myoglobin": 40.0,
+          "ketones": 1.5
+        },
+        "1-4": {
+          "V": 7308,
+          "P": 70,
+          "R": 2.3,
+          "creatinine": 11.1,
+          "protein": 0.13,
+          "myoglobin": 17.0,
+          "ketones": 0.1
+        },
+        "2-1": {
+          "V": 6688,
+          "P": 60,
+          "R": 3.0,
+          "creatinine": 6.0,
+          "protein": 0.14,
+          "myoglobin": 16.0,
+          "ketones": 0.0
+        },
+        "2-2": {
+          "V": 7602,
+          "P": 80,
+          "R": 4.7,
+          "creatinine": 9.8,
+          "protein": 0.09,
+          "myoglobin": 10.0,
+          "ketones": 0.1
+        },
+        "2-3": {
+          "V": 8165,
+          "P": 82,
+          "R": 4.2,
+          "creatinine": 11.7,
+          "protein": 0.30,
+          "myoglobin": 33.0,
+          "ketones": 0.4
+        },
+        "2-4": {
+          "V": 9508,
+          "P": 70,
+          "R": 1.8,
+          "creatinine": 15.9,
+          "protein": 0.48,
+          "myoglobin": 78.0,
+          "ketones": 1.6
+        },
+        "3-1": {
+          "V": 6515,
+          "P": 54,
+          "R": 3.0,
+          "creatinine": 8.5,
+          "protein": 0.09,
+          "myoglobin": 10.0,
+          "ketones": 0.1
+        },
+        "3-2": {
+          "V": 7950,
+          "P": 79,
+          "R": 4.4,
+          "creatinine": 8.4,
+          "protein": 0.09,
+          "myoglobin": 12.0,
+          "ketones": 0.1
+        },
+        "3-3": {
+          "V": 8460,
+          "P": 80,
+          "R": 4.8,
+          "creatinine": 11.3,
+          "protein": 0.13,
+          "myoglobin": 18.0,
+          "ketones": 0.2
+        },
+        "3-4": {
+          "V": 10752,
+          "P": 83,
+          "R": 4.9,
+          "creatinine": 17.9,
+          "protein": 0.31,
+          "myoglobin": 51.0,
+          "ketones": 1.6
+        },
+        "4-1": {
+          "V": 8925,
+          "P": 67,
+          "R": 2.5,
+          "creatinine": 11.8,
+          "protein": 0.48,
+          "myoglobin": 41.0,
+          "ketones": 0.7
+        },
+        "4-2": {
+          "V": 7820,
+          "P": 81,
+          "R": 4.5,
+          "creatinine": 17.9,
+          "protein": 0.20,
+          "myoglobin": 31.0,
+          "ketones": 1.6
+        },
+        "4-3": {
+          "V": 9805,
+          "P": 80,
+          "R": 4.0,
+          "creatinine": 10.2,
+          "protein": 0.26,
+          "myoglobin": 33.0,
+          "ketones": 0.4
+        },
+        "4-4": {
+          "V": 10602,
+          "P": 84,
+          "R": 3.5,
+          "creatinine": 14.7,
+          "protein": 0.29,
+          "myoglobin": 49.0,
+          "ketones": 1.1
+        }
+      },
+      "weightClassKg": 75,
+      "benchKg": 117.5,
+      "squatKg": 160,
+      "deadliftKg": 157.5,
+      "totalKg": 435,
+      "rank": "I"
+    },
+    {
+      "id": "ath-8",
+      "name": "Спортсмен 8",
+      "period": {
+        "observationWeeks": 4,
+        "sessionsPerWeek": 4,
+        "startDate": "2026-03-22",
+        "competitionDate": "2026-05-17"
+      },
+      "restBaseline": {
+        "creatinine": 4.5,
+        "protein": 0.07,
+        "myoglobin": 2.0,
+        "ketones": 0.0
+      },
+      "rows": {
+        "0-0": {
+          "V": 0,
+          "P": 0,
+          "R": 0.0,
+          "creatinine": 4.5,
+          "protein": 0.07,
+          "myoglobin": 2.0,
+          "ketones": 0.0
+        },
+        "1-1": {
+          "V": 9018,
+          "P": 69,
+          "R": 3.5,
+          "creatinine": 14.0,
+          "protein": 0.49,
+          "myoglobin": 49.0,
+          "ketones": 0.5
+        },
+        "1-2": {
+          "V": 7512,
+          "P": 69,
+          "R": 3.8,
+          "creatinine": 14.3,
+          "protein": 0.29,
+          "myoglobin": 43.0,
+          "ketones": 0.9
+        },
+        "1-3": {
+          "V": 9135,
+          "P": 79,
+          "R": 4.8,
+          "creatinine": 11.1,
+          "protein": 0.12,
+          "myoglobin": 26.0,
+          "ketones": 1.0
+        },
+        "1-4": {
+          "V": 7175,
+          "P": 69,
+          "R": 2.3,
+          "creatinine": 13.2,
+          "protein": 0.24,
+          "myoglobin": 28.0,
+          "ketones": 0.3
+        },
+        "2-1": {
+          "V": 6575,
+          "P": 59,
+          "R": 3.0,
+          "creatinine": 17.6,
+          "protein": 0.19,
+          "myoglobin": 32.0,
+          "ketones": 0.8
+        },
+        "2-2": {
+          "V": 7448,
+          "P": 81,
+          "R": 4.7,
+          "creatinine": 13.0,
+          "protein": 0.14,
+          "myoglobin": 20.0,
+          "ketones": 0.3
+        },
+        "2-3": {
+          "V": 7984,
+          "P": 82,
+          "R": 4.2,
+          "creatinine": 12.8,
+          "protein": 0.28,
+          "myoglobin": 30.0,
+          "ketones": 0.7
+        },
+        "2-4": {
+          "V": 9302,
+          "P": 69,
+          "R": 1.8,
+          "creatinine": 17.9,
+          "protein": 0.40,
+          "myoglobin": 78.0,
+          "ketones": 1.6
+        },
+        "3-1": {
+          "V": 6418,
+          "P": 53,
+          "R": 3.0,
+          "creatinine": 10.4,
+          "protein": 0.09,
+          "myoglobin": 26.0,
+          "ketones": 0.6
+        },
+        "3-2": {
+          "V": 7768,
+          "P": 79,
+          "R": 4.4,
+          "creatinine": 12.2,
+          "protein": 0.14,
+          "myoglobin": 28.0,
+          "ketones": 0.4
+        },
+        "3-3": {
+          "V": 8275,
+          "P": 80,
+          "R": 4.8,
+          "creatinine": 17.2,
+          "protein": 0.36,
+          "myoglobin": 68.0,
+          "ketones": 1.6
+        },
+        "3-4": {
+          "V": 10590,
+          "P": 83,
+          "R": 4.9,
+          "creatinine": 17.9,
+          "protein": 0.32,
+          "myoglobin": 39.0,
+          "ketones": 0.7
+        },
+        "4-1": {
+          "V": 8758,
+          "P": 66,
+          "R": 2.5,
+          "creatinine": 17.9,
+          "protein": 0.50,
+          "myoglobin": 54.0,
+          "ketones": 0.6
+        },
+        "4-2": {
+          "V": 7640,
+          "P": 82,
+          "R": 4.5,
+          "creatinine": 16.6,
+          "protein": 0.16,
+          "myoglobin": 30.0,
+          "ketones": 0.7
+        },
+        "4-3": {
+          "V": 9570,
+          "P": 80,
+          "R": 4.0,
+          "creatinine": 17.1,
+          "protein": 0.14,
+          "myoglobin": 42.0,
+          "ketones": 1.2
+        },
+        "4-4": {
+          "V": 10382,
+          "P": 85,
+          "R": 3.5,
+          "creatinine": 17.3,
+          "protein": 0.36,
+          "myoglobin": 35.0,
+          "ketones": 0.5
+        }
+      },
+      "weightClassKg": 75,
+      "benchKg": 108,
+      "squatKg": 148,
+      "deadliftKg": 144,
+      "totalKg": 400,
+      "rank": "II"
+    },
+    {
+      "id": "ath-9",
+      "name": "Спортсмен 9",
+      "period": {
+        "observationWeeks": 4,
+        "sessionsPerWeek": 4,
+        "startDate": "2026-03-22",
+        "competitionDate": "2026-05-17"
+      },
+      "restBaseline": {
+        "creatinine": 4.3,
+        "protein": 0.1,
+        "myoglobin": 2.0,
+        "ketones": 0.1
+      },
+      "rows": {
+        "0-0": {
+          "V": 0,
+          "P": 0,
+          "R": 0.0,
+          "creatinine": 4.3,
+          "protein": 0.1,
+          "myoglobin": 2.0,
+          "ketones": 0.1
+        },
+        "1-1": {
+          "V": 8875,
+          "P": 69,
+          "R": 3.5,
+          "creatinine": 15.6,
+          "protein": 0.43,
+          "myoglobin": 54.0,
+          "ketones": 1.1
+        },
+        "1-2": {
+          "V": 7380,
+          "P": 69,
+          "R": 3.8,
+          "creatinine": 13.7,
+          "protein": 0.21,
+          "myoglobin": 35.0,
+          "ketones": 1.0
+        },
+        "1-3": {
+          "V": 8962,
+          "P": 79,
+          "R": 4.8,
+          "creatinine": 9.2,
+          "protein": 0.15,
+          "myoglobin": 21.0,
+          "ketones": 0.4
+        },
+        "1-4": {
+          "V": 7038,
+          "P": 69,
+          "R": 2.3,
+          "creatinine": 11.1,
+          "protein": 0.41,
+          "myoglobin": 56.0,
+          "ketones": 1.0
+        },
+        "2-1": {
+          "V": 6472,
+          "P": 59,
+          "R": 3.0,
+          "creatinine": 12.0,
+          "protein": 0.22,
+          "myoglobin": 24.0,
+          "ketones": 0.4
+        },
+        "2-2": {
+          "V": 7348,
+          "P": 81,
+          "R": 4.7,
+          "creatinine": 8.7,
+          "protein": 0.16,
+          "myoglobin": 29.0,
+          "ketones": 0.6
+        },
+        "2-3": {
+          "V": 7882,
+          "P": 82,
+          "R": 4.2,
+          "creatinine": 12.0,
+          "protein": 0.21,
+          "myoglobin": 41.0,
+          "ketones": 0.7
+        },
+        "2-4": {
+          "V": 9215,
+          "P": 69,
+          "R": 1.8,
+          "creatinine": 17.9,
+          "protein": 0.55,
+          "myoglobin": 55.0,
+          "ketones": 1.4
+        },
+        "3-1": {
+          "V": 6335,
+          "P": 53,
+          "R": 3.0,
+          "creatinine": 7.0,
+          "protein": 0.09,
+          "myoglobin": 9.0,
+          "ketones": 0.0
+        },
+        "3-2": {
+          "V": 7688,
+          "P": 79,
+          "R": 4.4,
+          "creatinine": 9.9,
+          "protein": 0.22,
+          "myoglobin": 43.0,
+          "ketones": 0.7
+        },
+        "3-3": {
+          "V": 8200,
+          "P": 80,
+          "R": 4.8,
+          "creatinine": 9.9,
+          "protein": 0.09,
+          "myoglobin": 16.0,
+          "ketones": 0.2
+        },
+        "3-4": {
+          "V": 10495,
+          "P": 83,
+          "R": 4.9,
+          "creatinine": 13.8,
+          "protein": 0.18,
+          "myoglobin": 36.0,
+          "ketones": 1.2
+        },
+        "4-1": {
+          "V": 8690,
+          "P": 66,
+          "R": 2.5,
+          "creatinine": 11.5,
+          "protein": 0.36,
+          "myoglobin": 54.0,
+          "ketones": 0.4
+        },
+        "4-2": {
+          "V": 7550,
+          "P": 82,
+          "R": 4.5,
+          "creatinine": 7.0,
+          "protein": 0.12,
+          "myoglobin": 15.0,
+          "ketones": 0.2
+        },
+        "4-3": {
+          "V": 9442,
+          "P": 80,
+          "R": 4.0,
+          "creatinine": 15.0,
+          "protein": 0.17,
+          "myoglobin": 25.0,
+          "ketones": 0.8
+        },
+        "4-4": {
+          "V": 10288,
+          "P": 85,
+          "R": 3.5,
+          "creatinine": 17.9,
+          "protein": 0.37,
+          "myoglobin": 63.0,
+          "ketones": 1.6
+        }
+      },
+      "weightClassKg": 75,
+      "benchKg": 104,
+      "squatKg": 144,
+      "deadliftKg": 139,
+      "totalKg": 387,
+      "rank": "II"
+    },
+    {
+        "id": "ath-10",
+        "name": "Спортсмен 10",
+        "period": {
+          "observationWeeks": 4,
+          "sessionsPerWeek": 4,
+          "startDate": "2026-03-22",
+          "competitionDate": "2026-05-17"
+        },
+        "restBaseline": {
+          "creatinine": 4.4,
+          "protein": 0.07,
+          "myoglobin": 2.0,
+          "ketones": 0.0
+        },
+        "rows": {
+          "0-0": {
+            "V": 0,
+            "P": 0,
+            "R": 0.0,
+            "creatinine": 4.4,
+            "protein": 0.07,
+            "myoglobin": 2.0,
+            "ketones": 0.0
+          },
+          "1-1": {
+            "V": 9560,
+            "P": 70,
+            "R": 3.5,
+            "creatinine": 13.8,
+            "protein": 0.24,
+            "myoglobin": 36.0,
+            "ketones": 0.6
+          },
+          "1-2": {
+            "V": 7755,
+            "P": 70,
+            "R": 3.8,
+            "creatinine": 10.2,
+            "protein": 0.12,
+            "myoglobin": 18.0,
+            "ketones": 0.2
+          },
+          "1-3": {
+            "V": 9432,
+            "P": 79,
+            "R": 4.8,
+            "creatinine": 14.7,
+            "protein": 0.21,
+            "myoglobin": 44.0,
+            "ketones": 0.8
+          },
+          "1-4": {
+            "V": 7345,
+            "P": 70,
+            "R": 2.3,
+            "creatinine": 12.4,
+            "protein": 0.18,
+            "myoglobin": 25.0,
+            "ketones": 0.4
+          },
+          "2-1": {
+            "V": 6712,
+            "P": 60,
+            "R": 3.0,
+            "creatinine": 7.8,
+            "protein": 0.10,
+            "myoglobin": 14.0,
+            "ketones": 0.1
+          },
+          "2-2": {
+            "V": 7644,
+            "P": 80,
+            "R": 4.7,
+            "creatinine": 10.1,
+            "protein": 0.13,
+            "myoglobin": 19.0,
+            "ketones": 0.2
+          },
+          "2-3": {
+            "V": 8210,
+            "P": 82,
+            "R": 4.2,
+            "creatinine": 13.5,
+            "protein": 0.22,
+            "myoglobin": 35.0,
+            "ketones": 0.6
+          },
+          "2-4": {
+            "V": 9615,
+            "P": 70,
+            "R": 1.8,
+            "creatinine": 17.4,
+            "protein": 0.49,
+            "myoglobin": 62.0,
+            "ketones": 1.4
+          },
+          "3-1": {
+            "V": 6550,
+            "P": 54,
+            "R": 3.0,
+            "creatinine": 7.1,
+            "protein": 0.09,
+            "myoglobin": 10.0,
+            "ketones": 0.0
+          },
+          "3-2": {
+            "V": 8012,
+            "P": 79,
+            "R": 4.4,
+            "creatinine": 10.9,
+            "protein": 0.15,
+            "myoglobin": 24.0,
+            "ketones": 0.3
+          },
+          "3-3": {
+            "V": 8538,
+            "P": 80,
+            "R": 4.8,
+            "creatinine": 12.7,
+            "protein": 0.19,
+            "myoglobin": 31.0,
+            "ketones": 0.5
+          },
+          "3-4": {
+            "V": 10840,
+            "P": 83,
+            "R": 4.9,
+            "creatinine": 17.9,
+            "protein": 0.29,
+            "myoglobin": 49.0,
+            "ketones": 1.5
+          },
+          "4-1": {
+            "V": 8990,
+            "P": 67,
+            "R": 2.5,
+            "creatinine": 13.2,
+            "protein": 0.31,
+            "myoglobin": 46.0,
+            "ketones": 0.8
+          },
+          "4-2": {
+            "V": 7858,
+            "P": 81,
+            "R": 4.5,
+            "creatinine": 11.6,
+            "protein": 0.16,
+            "myoglobin": 26.0,
+            "ketones": 0.4
+          },
+          "4-3": {
+            "V": 9885,
+            "P": 80,
+            "R": 4.0,
+            "creatinine": 16.8,
+            "protein": 0.34,
+            "myoglobin": 52.0,
+            "ketones": 1.0
+          },
+          "4-4": {
+            "V": 10710,
+            "P": 84,
+            "R": 3.5,
+            "creatinine": 17.9,
+            "protein": 0.36,
+            "myoglobin": 65.0,
+            "ketones": 1.6
+          }
+        },
+        "weightClassKg": 75,
+        "benchKg": 118,
+        "squatKg": 162,
+        "deadliftKg": 160,
+        "totalKg": 440,
+        "rank": "I"
+      },
+      {
+        "id": "ath-11",
+        "name": "Спортсмен 11",
+        "period": {
+          "observationWeeks": 4,
+          "sessionsPerWeek": 4,
+          "startDate": "2026-03-22",
+          "competitionDate": "2026-05-17"
+        },
+        "restBaseline": {
+          "creatinine": 4.5,
+          "protein": 0.08,
+          "myoglobin": 2.0,
+          "ketones": 0.0
+        },
+        "rows": {
+          "0-0": {
+            "V": 0,
+            "P": 0,
+            "R": 0.0,
+            "creatinine": 4.5,
+            "protein": 0.08,
+            "myoglobin": 2.0,
+            "ketones": 0.0
+          },
+          "1-1": {
+            "V": 9488,
+            "P": 70,
+            "R": 3.5,
+            "creatinine": 12.4,
+            "protein": 0.20,
+            "myoglobin": 31.0,
+            "ketones": 0.4
+          },
+          "1-2": {
+            "V": 7705,
+            "P": 70,
+            "R": 3.8,
+            "creatinine": 9.4,
+            "protein": 0.11,
+            "myoglobin": 14.0,
+            "ketones": 0.2
+          },
+          "1-3": {
+            "V": 9355,
+            "P": 79,
+            "R": 4.8,
+            "creatinine": 13.1,
+            "protein": 0.18,
+            "myoglobin": 38.0,
+            "ketones": 0.6
+          },
+          "1-4": {
+            "V": 7312,
+            "P": 70,
+            "R": 2.3,
+            "creatinine": 10.8,
+            "protein": 0.15,
+            "myoglobin": 23.0,
+            "ketones": 0.4
+          },
+          "2-1": {
+            "V": 6680,
+            "P": 60,
+            "R": 3.0,
+            "creatinine": 7.4,
+            "protein": 0.09,
+            "myoglobin": 12.0,
+            "ketones": 0.1
+          },
+          "2-2": {
+            "V": 7605,
+            "P": 80,
+            "R": 4.7,
+            "creatinine": 9.5,
+            "protein": 0.12,
+            "myoglobin": 17.0,
+            "ketones": 0.2
+          },
+          "2-3": {
+            "V": 8172,
+            "P": 82,
+            "R": 4.2,
+            "creatinine": 12.6,
+            "protein": 0.20,
+            "myoglobin": 31.0,
+            "ketones": 0.5
+          },
+          "2-4": {
+            "V": 9550,
+            "P": 70,
+            "R": 1.8,
+            "creatinine": 16.8,
+            "protein": 0.44,
+            "myoglobin": 58.0,
+            "ketones": 1.3
+          },
+          "3-1": {
+            "V": 6518,
+            "P": 54,
+            "R": 3.0,
+            "creatinine": 6.9,
+            "protein": 0.08,
+            "myoglobin": 9.0,
+            "ketones": 0.0
+          },
+          "3-2": {
+            "V": 7960,
+            "P": 79,
+            "R": 4.4,
+            "creatinine": 10.4,
+            "protein": 0.14,
+            "myoglobin": 22.0,
+            "ketones": 0.3
+          },
+          "3-3": {
+            "V": 8490,
+            "P": 80,
+            "R": 4.8,
+            "creatinine": 12.0,
+            "protein": 0.17,
+            "myoglobin": 28.0,
+            "ketones": 0.4
+          },
+          "3-4": {
+            "V": 10765,
+            "P": 83,
+            "R": 4.9,
+            "creatinine": 17.3,
+            "protein": 0.27,
+            "myoglobin": 46.0,
+            "ketones": 1.4
+          },
+          "4-1": {
+            "V": 8928,
+            "P": 67,
+            "R": 2.5,
+            "creatinine": 12.4,
+            "protein": 0.27,
+            "myoglobin": 41.0,
+            "ketones": 0.7
+          },
+          "4-2": {
+            "V": 7808,
+            "P": 81,
+            "R": 4.5,
+            "creatinine": 11.0,
+            "protein": 0.15,
+            "myoglobin": 24.0,
+            "ketones": 0.3
+          },
+          "4-3": {
+            "V": 9818,
+            "P": 80,
+            "R": 4.0,
+            "creatinine": 16.0,
+            "protein": 0.31,
+            "myoglobin": 48.0,
+            "ketones": 0.9
+          },
+          "4-4": {
+            "V": 10640,
+            "P": 84,
+            "R": 3.5,
+            "creatinine": 17.5,
+            "protein": 0.33,
+            "myoglobin": 60.0,
+            "ketones": 1.5
+          }
+        },
+        "weightClassKg": 82.5,
+        "benchKg": 115,
+        "squatKg": 160,
+        "deadliftKg": 150,
+        "totalKg": 425,
+        "rank": "I"
+      },
+      {
+        "id": "ath-12",
+        "name": "Спортсмен 12",
+        "period": {
+          "observationWeeks": 4,
+          "sessionsPerWeek": 4,
+          "startDate": "2026-03-22",
+          "competitionDate": "2026-05-17"
+        },
+        "restBaseline": {
+          "creatinine": 4.5,
+          "protein": 0.08,
+          "myoglobin": 2.0,
+          "ketones": 0.0
+        },
+        "rows": {
+          "0-0": {
+            "V": 0,
+            "P": 0,
+            "R": 0.0,
+            "creatinine": 4.5,
+            "protein": 0.08,
+            "myoglobin": 2.0,
+            "ketones": 0.0
+          },
+          "1-1": {
+            "V": 9532,
+            "P": 70,
+            "R": 3.5,
+            "creatinine": 13.1,
+            "protein": 0.22,
+            "myoglobin": 34.0,
+            "ketones": 0.5
+          },
+          "1-2": {
+            "V": 7740,
+            "P": 70,
+            "R": 3.8,
+            "creatinine": 9.9,
+            "protein": 0.12,
+            "myoglobin": 16.0,
+            "ketones": 0.2
+          },
+          "1-3": {
+            "V": 9408,
+            "P": 79,
+            "R": 4.8,
+            "creatinine": 13.8,
+            "protein": 0.19,
+            "myoglobin": 40.0,
+            "ketones": 0.7
+          },
+          "1-4": {
+            "V": 7338,
+            "P": 70,
+            "R": 2.3,
+            "creatinine": 11.3,
+            "protein": 0.16,
+            "myoglobin": 24.0,
+            "ketones": 0.4
+          },
+          "2-1": {
+            "V": 6705,
+            "P": 60,
+            "R": 3.0,
+            "creatinine": 7.6,
+            "protein": 0.09,
+            "myoglobin": 12.0,
+            "ketones": 0.1
+          },
+          "2-2": {
+            "V": 7628,
+            "P": 80,
+            "R": 4.7,
+            "creatinine": 9.8,
+            "protein": 0.12,
+            "myoglobin": 18.0,
+            "ketones": 0.2
+          },
+          "2-3": {
+            "V": 8188,
+            "P": 82,
+            "R": 4.2,
+            "creatinine": 13.0,
+            "protein": 0.21,
+            "myoglobin": 32.0,
+            "ketones": 0.5
+          },
+          "2-4": {
+            "V": 9582,
+            "P": 70,
+            "R": 1.8,
+            "creatinine": 17.0,
+            "protein": 0.46,
+            "myoglobin": 60.0,
+            "ketones": 1.4
+          },
+          "3-1": {
+            "V": 6540,
+            "P": 54,
+            "R": 3.0,
+            "creatinine": 7.0,
+            "protein": 0.08,
+            "myoglobin": 9.0,
+            "ketones": 0.0
+          },
+          "3-2": {
+            "V": 7990,
+            "P": 79,
+            "R": 4.4,
+            "creatinine": 10.7,
+            "protein": 0.14,
+            "myoglobin": 23.0,
+            "ketones": 0.3
+          },
+          "3-3": {
+            "V": 8515,
+            "P": 80,
+            "R": 4.8,
+            "creatinine": 12.4,
+            "protein": 0.18,
+            "myoglobin": 29.0,
+            "ketones": 0.4
+          },
+          "3-4": {
+            "V": 10805,
+            "P": 83,
+            "R": 4.9,
+            "creatinine": 17.5,
+            "protein": 0.28,
+            "myoglobin": 47.0,
+            "ketones": 1.5
+          },
+          "4-1": {
+            "V": 8962,
+            "P": 67,
+            "R": 2.5,
+            "creatinine": 12.8,
+            "protein": 0.28,
+            "myoglobin": 42.0,
+            "ketones": 0.7
+          },
+          "4-2": {
+            "V": 7838,
+            "P": 81,
+            "R": 4.5,
+            "creatinine": 11.3,
+            "protein": 0.15,
+            "myoglobin": 25.0,
+            "ketones": 0.3
+          },
+          "4-3": {
+            "V": 9850,
+            "P": 80,
+            "R": 4.0,
+            "creatinine": 16.3,
+            "protein": 0.32,
+            "myoglobin": 49.0,
+            "ketones": 0.9
+          },
+          "4-4": {
+            "V": 10678,
+            "P": 84,
+            "R": 3.5,
+            "creatinine": 17.7,
+            "protein": 0.34,
+            "myoglobin": 61.0,
+            "ketones": 1.5
+          }
+        },
+        "weightClassKg": 82.5,
+        "benchKg": 117.5,
+        "squatKg": 162.5,
+        "deadliftKg": 155,
+        "totalKg": 435,
+        "rank": "I"
+      },
+      {
+          "id": "ath-13",
+          "name": "Спортсмен 13",
+          "period": {
+            "observationWeeks": 4,
+            "sessionsPerWeek": 4,
+            "startDate": "2026-03-22",
+            "competitionDate": "2026-05-17"
+          },
+          "restBaseline": {
+            "creatinine": 4.4,
+            "protein": 0.07,
+            "myoglobin": 2.0,
+            "ketones": 0.0
+          },
+          "rows": {
+            "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.4, "protein": 0.07, "myoglobin": 2.0, "ketones": 0.0 },
+            "1-1": { "V": 9005, "P": 69, "R": 3.6, "creatinine": 11.8, "protein": 0.18, "myoglobin": 27.0, "ketones": 0.4 },
+            "1-2": { "V": 7315, "P": 69, "R": 3.9, "creatinine": 9.0, "protein": 0.11, "myoglobin": 13.0, "ketones": 0.2 },
+            "1-3": { "V": 9068, "P": 79, "R": 4.9, "creatinine": 12.8, "protein": 0.17, "myoglobin": 34.0, "ketones": 0.6 },
+            "1-4": { "V": 7048, "P": 69, "R": 2.3, "creatinine": 10.7, "protein": 0.15, "myoglobin": 22.0, "ketones": 0.3 },
+            "2-1": { "V": 6468, "P": 59, "R": 3.1, "creatinine": 7.1, "protein": 0.08, "myoglobin": 10.0, "ketones": 0.1 },
+            "2-2": { "V": 7345, "P": 81, "R": 4.8, "creatinine": 9.1, "protein": 0.11, "myoglobin": 16.0, "ketones": 0.2 },
+            "2-3": { "V": 7892, "P": 82, "R": 4.3, "creatinine": 11.9, "protein": 0.18, "myoglobin": 27.0, "ketones": 0.5 },
+            "2-4": { "V": 9238, "P": 69, "R": 1.8, "creatinine": 16.0, "protein": 0.39, "myoglobin": 52.0, "ketones": 1.2 },
+            "3-1": { "V": 6338, "P": 53, "R": 3.1, "creatinine": 6.6, "protein": 0.08, "myoglobin": 8.0, "ketones": 0.0 },
+            "3-2": { "V": 7715, "P": 79, "R": 4.5, "creatinine": 9.9, "protein": 0.13, "myoglobin": 21.0, "ketones": 0.3 },
+            "3-3": { "V": 8210, "P": 80, "R": 4.9, "creatinine": 11.3, "protein": 0.15, "myoglobin": 25.0, "ketones": 0.4 },
+            "3-4": { "V": 10470, "P": 84, "R": 5.1, "creatinine": 16.9, "protein": 0.25, "myoglobin": 42.0, "ketones": 1.3 },
+            "4-1": { "V": 8662, "P": 66, "R": 2.5, "creatinine": 11.9, "protein": 0.24, "myoglobin": 37.0, "ketones": 0.6 },
+            "4-2": { "V": 7558, "P": 82, "R": 4.6, "creatinine": 10.5, "protein": 0.14, "myoglobin": 23.0, "ketones": 0.3 },
+            "4-3": { "V": 9465, "P": 80, "R": 4.0, "creatinine": 15.2, "protein": 0.28, "myoglobin": 44.0, "ketones": 0.8 },
+            "4-4": { "V": 10275, "P": 85, "R": 3.6, "creatinine": 17.2, "protein": 0.30, "myoglobin": 55.0, "ketones": 1.4 }
+          },
+          "weightClassKg": 82.5,
+          "benchKg": 112.5,
+          "squatKg": 157.5,
+          "deadliftKg": 147.5,
+          "totalKg": 417.5,
+          "rank": "II"
+        },
+        {
+          "id": "ath-14",
+          "name": "Спортсмен 14",
+          "period": {
+            "observationWeeks": 4,
+            "sessionsPerWeek": 4,
+            "startDate": "2026-03-22",
+            "competitionDate": "2026-05-17"
+          },
+          "restBaseline": {
+            "creatinine": 4.5,
+            "protein": 0.08,
+            "myoglobin": 2.0,
+            "ketones": 0.0
+          },
+          "rows": {
+            "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.5, "protein": 0.08, "myoglobin": 2.0, "ketones": 0.0 },
+            "1-1": { "V": 9582, "P": 70, "R": 3.5, "creatinine": 13.5, "protein": 0.23, "myoglobin": 35.0, "ketones": 0.5 },
+            "1-2": { "V": 7762, "P": 70, "R": 3.8, "creatinine": 10.0, "protein": 0.12, "myoglobin": 16.0, "ketones": 0.2 },
+            "1-3": { "V": 9442, "P": 79, "R": 4.8, "creatinine": 14.2, "protein": 0.20, "myoglobin": 41.0, "ketones": 0.7 },
+            "1-4": { "V": 7358, "P": 70, "R": 2.3, "creatinine": 11.4, "protein": 0.17, "myoglobin": 24.0, "ketones": 0.4 },
+            "2-1": { "V": 6720, "P": 60, "R": 3.0, "creatinine": 7.6, "protein": 0.09, "myoglobin": 12.0, "ketones": 0.1 },
+            "2-2": { "V": 7648, "P": 80, "R": 4.7, "creatinine": 9.9, "protein": 0.12, "myoglobin": 18.0, "ketones": 0.2 },
+            "2-3": { "V": 8218, "P": 82, "R": 4.2, "creatinine": 13.1, "protein": 0.21, "myoglobin": 33.0, "ketones": 0.5 },
+            "2-4": { "V": 9625, "P": 70, "R": 1.8, "creatinine": 17.1, "protein": 0.46, "myoglobin": 61.0, "ketones": 1.4 },
+            "3-1": { "V": 6545, "P": 54, "R": 3.0, "creatinine": 7.0, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+            "3-2": { "V": 7995, "P": 79, "R": 4.4, "creatinine": 10.8, "protein": 0.14, "myoglobin": 23.0, "ketones": 0.3 },
+            "3-3": { "V": 8525, "P": 80, "R": 4.8, "creatinine": 12.5, "protein": 0.18, "myoglobin": 29.0, "ketones": 0.4 },
+            "3-4": { "V": 10818, "P": 83, "R": 4.9, "creatinine": 17.6, "protein": 0.28, "myoglobin": 48.0, "ketones": 1.5 },
+            "4-1": { "V": 8975, "P": 67, "R": 2.5, "creatinine": 12.9, "protein": 0.29, "myoglobin": 43.0, "ketones": 0.7 },
+            "4-2": { "V": 7848, "P": 81, "R": 4.5, "creatinine": 11.4, "protein": 0.15, "myoglobin": 25.0, "ketones": 0.3 },
+            "4-3": { "V": 9868, "P": 80, "R": 4.0, "creatinine": 16.4, "protein": 0.32, "myoglobin": 50.0, "ketones": 0.9 },
+            "4-4": { "V": 10695, "P": 84, "R": 3.5, "creatinine": 17.8, "protein": 0.34, "myoglobin": 62.0, "ketones": 1.5 }
+          },
+          "weightClassKg": 82.5,
+          "benchKg": 120,
+          "squatKg": 165,
+          "deadliftKg": 160,
+          "totalKg": 445,
+          "rank": "I"
+        },
+        {
+          "id": "ath-15",
+          "name": "Спортсмен 15",
+          "period": {
+            "observationWeeks": 4,
+            "sessionsPerWeek": 4,
+            "startDate": "2026-03-22",
+            "competitionDate": "2026-05-17"
+          },
+          "restBaseline": {
+            "creatinine": 4.5,
+            "protein": 0.08,
+            "myoglobin": 2.0,
+            "ketones": 0.0
+          },
+          "rows": {
+            "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.5, "protein": 0.08, "myoglobin": 2.0, "ketones": 0.0 },
+            "1-1": { "V": 9512, "P": 70, "R": 3.5, "creatinine": 12.9, "protein": 0.21, "myoglobin": 33.0, "ketones": 0.4 },
+            "1-2": { "V": 7722, "P": 70, "R": 3.8, "creatinine": 9.8, "protein": 0.12, "myoglobin": 15.0, "ketones": 0.2 },
+            "1-3": { "V": 9388, "P": 79, "R": 4.8, "creatinine": 13.7, "protein": 0.19, "myoglobin": 39.0, "ketones": 0.7 },
+            "1-4": { "V": 7328, "P": 70, "R": 2.3, "creatinine": 11.1, "protein": 0.16, "myoglobin": 23.0, "ketones": 0.4 },
+            "2-1": { "V": 6695, "P": 60, "R": 3.0, "creatinine": 7.5, "protein": 0.09, "myoglobin": 12.0, "ketones": 0.1 },
+            "2-2": { "V": 7618, "P": 80, "R": 4.7, "creatinine": 9.7, "protein": 0.12, "myoglobin": 17.0, "ketones": 0.2 },
+            "2-3": { "V": 8180, "P": 82, "R": 4.2, "creatinine": 12.8, "protein": 0.20, "myoglobin": 32.0, "ketones": 0.5 },
+            "2-4": { "V": 9570, "P": 70, "R": 1.8, "creatinine": 16.9, "protein": 0.45, "myoglobin": 59.0, "ketones": 1.4 },
+            "3-1": { "V": 6530, "P": 54, "R": 3.0, "creatinine": 6.9, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+            "3-2": { "V": 7975, "P": 79, "R": 4.4, "creatinine": 10.6, "protein": 0.14, "myoglobin": 22.0, "ketones": 0.3 },
+            "3-3": { "V": 8502, "P": 80, "R": 4.8, "creatinine": 12.2, "protein": 0.18, "myoglobin": 28.0, "ketones": 0.4 },
+            "3-4": { "V": 10782, "P": 83, "R": 4.9, "creatinine": 17.4, "protein": 0.27, "myoglobin": 47.0, "ketones": 1.5 },
+            "4-1": { "V": 8948, "P": 67, "R": 2.5, "creatinine": 12.6, "protein": 0.28, "myoglobin": 42.0, "ketones": 0.7 },
+            "4-2": { "V": 7825, "P": 81, "R": 4.5, "creatinine": 11.2, "protein": 0.15, "myoglobin": 24.0, "ketones": 0.3 },
+            "4-3": { "V": 9838, "P": 80, "R": 4.0, "creatinine": 16.2, "protein": 0.31, "myoglobin": 49.0, "ketones": 0.9 },
+            "4-4": { "V": 10662, "P": 84, "R": 3.5, "creatinine": 17.7, "protein": 0.34, "myoglobin": 61.0, "ketones": 1.5 }
+          },
+          "weightClassKg": 82.5,
+          "benchKg": 118,
+          "squatKg": 163,
+          "deadliftKg": 157,
+          "totalKg": 438,
+          "rank": "I"
+        },
+        {
+          "id": "ath-16",
+          "name": "Спортсмен 16",
+          "period": {
+            "observationWeeks": 4,
+            "sessionsPerWeek": 4,
+            "startDate": "2026-03-22",
+            "competitionDate": "2026-05-17"
+          },
+          "restBaseline": {
+            "creatinine": 4.5,
+            "protein": 0.08,
+            "myoglobin": 2.0,
+            "ketones": 0.0
+          },
+          "rows": {
+            "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.5, "protein": 0.08, "myoglobin": 2.0, "ketones": 0.0 },
+            "1-1": { "V": 9675, "P": 71, "R": 3.5, "creatinine": 14.1, "protein": 0.24, "myoglobin": 37.0, "ketones": 0.5 },
+            "1-2": { "V": 7828, "P": 71, "R": 3.8, "creatinine": 10.4, "protein": 0.13, "myoglobin": 17.0, "ketones": 0.2 },
+            "1-3": { "V": 9510, "P": 80, "R": 4.8, "creatinine": 14.8, "protein": 0.21, "myoglobin": 43.0, "ketones": 0.7 },
+            "1-4": { "V": 7420, "P": 70, "R": 2.3, "creatinine": 11.9, "protein": 0.18, "myoglobin": 25.0, "ketones": 0.4 },
+            "2-1": { "V": 6768, "P": 60, "R": 3.0, "creatinine": 7.8, "protein": 0.09, "myoglobin": 12.0, "ketones": 0.1 },
+            "2-2": { "V": 7705, "P": 81, "R": 4.7, "creatinine": 10.1, "protein": 0.12, "myoglobin": 18.0, "ketones": 0.2 },
+            "2-3": { "V": 8278, "P": 83, "R": 4.2, "creatinine": 13.4, "protein": 0.22, "myoglobin": 34.0, "ketones": 0.5 },
+            "2-4": { "V": 9705, "P": 70, "R": 1.8, "creatinine": 17.4, "protein": 0.47, "myoglobin": 63.0, "ketones": 1.4 },
+            "3-1": { "V": 6608, "P": 54, "R": 3.0, "creatinine": 7.1, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+            "3-2": { "V": 8062, "P": 80, "R": 4.4, "creatinine": 11.0, "protein": 0.14, "myoglobin": 23.0, "ketones": 0.3 },
+            "3-3": { "V": 8590, "P": 81, "R": 4.8, "creatinine": 12.7, "protein": 0.18, "myoglobin": 29.0, "ketones": 0.4 },
+            "3-4": { "V": 10918, "P": 84, "R": 4.9, "creatinine": 17.8, "protein": 0.29, "myoglobin": 49.0, "ketones": 1.5 },
+            "4-1": { "V": 9055, "P": 67, "R": 2.5, "creatinine": 13.2, "protein": 0.30, "myoglobin": 44.0, "ketones": 0.7 },
+            "4-2": { "V": 7908, "P": 82, "R": 4.5, "creatinine": 11.6, "protein": 0.15, "myoglobin": 25.0, "ketones": 0.3 },
+            "4-3": { "V": 9932, "P": 81, "R": 4.0, "creatinine": 16.6, "protein": 0.33, "myoglobin": 51.0, "ketones": 1.0 },
+            "4-4": { "V": 10785, "P": 85, "R": 3.5, "creatinine": 17.9, "protein": 0.35, "myoglobin": 63.0, "ketones": 1.5 }
+          },
+          "weightClassKg": 82.5,
+          "benchKg": 122.5,
+          "squatKg": 170,
+          "deadliftKg": 165,
+          "totalKg": 457.5,
+          "rank": "I"
+        },
+        {
+          "id": "ath-17",
+          "name": "Спортсмен 17",
+          "period": {
+            "observationWeeks": 4,
+            "sessionsPerWeek": 4,
+            "startDate": "2026-03-22",
+            "competitionDate": "2026-05-17"
+          },
+          "restBaseline": {
+            "creatinine": 4.4,
+            "protein": 0.07,
+            "myoglobin": 2.0,
+            "ketones": 0.0
+          },
+          "rows": {
+            "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.4, "protein": 0.07, "myoglobin": 2.0, "ketones": 0.0 },
+            "1-1": { "V": 8932, "P": 69, "R": 3.6, "creatinine": 11.4, "protein": 0.17, "myoglobin": 26.0, "ketones": 0.4 },
+            "1-2": { "V": 7248, "P": 69, "R": 3.9, "creatinine": 8.8, "protein": 0.11, "myoglobin": 13.0, "ketones": 0.2 },
+            "1-3": { "V": 9010, "P": 79, "R": 4.9, "creatinine": 12.4, "protein": 0.17, "myoglobin": 33.0, "ketones": 0.6 },
+            "1-4": { "V": 6995, "P": 69, "R": 2.3, "creatinine": 10.4, "protein": 0.14, "myoglobin": 21.0, "ketones": 0.3 },
+            "2-1": { "V": 6412, "P": 59, "R": 3.1, "creatinine": 6.9, "protein": 0.08, "myoglobin": 10.0, "ketones": 0.1 },
+            "2-2": { "V": 7298, "P": 81, "R": 4.8, "creatinine": 8.9, "protein": 0.11, "myoglobin": 16.0, "ketones": 0.2 },
+            "2-3": { "V": 7845, "P": 82, "R": 4.3, "creatinine": 11.6, "protein": 0.18, "myoglobin": 26.0, "ketones": 0.5 },
+            "2-4": { "V": 9188, "P": 69, "R": 1.8, "creatinine": 15.8, "protein": 0.38, "myoglobin": 50.0, "ketones": 1.2 },
+            "3-1": { "V": 6295, "P": 53, "R": 3.1, "creatinine": 6.5, "protein": 0.08, "myoglobin": 8.0, "ketones": 0.0 },
+            "3-2": { "V": 7660, "P": 79, "R": 4.5, "creatinine": 9.6, "protein": 0.13, "myoglobin": 20.0, "ketones": 0.3 },
+            "3-3": { "V": 8155, "P": 80, "R": 4.9, "creatinine": 11.0, "protein": 0.15, "myoglobin": 24.0, "ketones": 0.4 },
+            "3-4": { "V": 10388, "P": 84, "R": 5.1, "creatinine": 16.7, "protein": 0.24, "myoglobin": 41.0, "ketones": 1.3 },
+            "4-1": { "V": 8592, "P": 66, "R": 2.5, "creatinine": 11.6, "protein": 0.23, "myoglobin": 36.0, "ketones": 0.6 },
+            "4-2": { "V": 7508, "P": 82, "R": 4.6, "creatinine": 10.2, "protein": 0.14, "myoglobin": 22.0, "ketones": 0.3 },
+            "4-3": { "V": 9408, "P": 80, "R": 4.0, "creatinine": 14.9, "protein": 0.27, "myoglobin": 43.0, "ketones": 0.8 },
+            "4-4": { "V": 10218, "P": 85, "R": 3.6, "creatinine": 17.0, "protein": 0.29, "myoglobin": 54.0, "ketones": 1.4 }
+          },
+          "weightClassKg": 82.5,
+          "benchKg": 110,
+          "squatKg": 152.5,
+          "deadliftKg": 145,
+          "totalKg": 407.5,
+          "rank": "II"
+        },
+        {
+          "id": "ath-18",
+          "name": "Спортсмен 18",
+          "period": {
+            "observationWeeks": 4,
+            "sessionsPerWeek": 4,
+            "startDate": "2026-03-22",
+            "competitionDate": "2026-05-17"
+          },
+          "restBaseline": {
+            "creatinine": 4.5,
+            "protein": 0.08,
+            "myoglobin": 2.0,
+            "ketones": 0.0
+          },
+          "rows": {
+            "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.5, "protein": 0.08, "myoglobin": 2.0, "ketones": 0.0 },
+            "1-1": { "V": 9690, "P": 71, "R": 3.5, "creatinine": 14.4, "protein": 0.24, "myoglobin": 38.0, "ketones": 0.5 },
+            "1-2": { "V": 7842, "P": 71, "R": 3.8, "creatinine": 10.6, "protein": 0.13, "myoglobin": 17.0, "ketones": 0.2 },
+            "1-3": { "V": 9520, "P": 80, "R": 4.8, "creatinine": 15.0, "protein": 0.21, "myoglobin": 44.0, "ketones": 0.7 },
+            "1-4": { "V": 7438, "P": 70, "R": 2.3, "creatinine": 12.0, "protein": 0.18, "myoglobin": 25.0, "ketones": 0.4 },
+            "2-1": { "V": 6782, "P": 60, "R": 3.0, "creatinine": 7.9, "protein": 0.09, "myoglobin": 12.0, "ketones": 0.1 },
+            "2-2": { "V": 7715, "P": 81, "R": 4.7, "creatinine": 10.2, "protein": 0.12, "myoglobin": 18.0, "ketones": 0.2 },
+            "2-3": { "V": 8292, "P": 83, "R": 4.2, "creatinine": 13.6, "protein": 0.22, "myoglobin": 35.0, "ketones": 0.5 },
+            "2-4": { "V": 9722, "P": 70, "R": 1.8, "creatinine": 17.5, "protein": 0.48, "myoglobin": 64.0, "ketones": 1.4 },
+            "3-1": { "V": 6620, "P": 54, "R": 3.0, "creatinine": 7.1, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+            "3-2": { "V": 8075, "P": 80, "R": 4.4, "creatinine": 11.1, "protein": 0.14, "myoglobin": 23.0, "ketones": 0.3 },
+            "3-3": { "V": 8610, "P": 81, "R": 4.8, "creatinine": 12.8, "protein": 0.18, "myoglobin": 30.0, "ketones": 0.4 },
+            "3-4": { "V": 10935, "P": 84, "R": 4.9, "creatinine": 17.9, "protein": 0.29, "myoglobin": 50.0, "ketones": 1.5 },
+            "4-1": { "V": 9072, "P": 67, "R": 2.5, "creatinine": 13.3, "protein": 0.30, "myoglobin": 45.0, "ketones": 0.7 },
+            "4-2": { "V": 7920, "P": 82, "R": 4.5, "creatinine": 11.7, "protein": 0.15, "myoglobin": 25.0, "ketones": 0.3 },
+            "4-3": { "V": 9948, "P": 81, "R": 4.0, "creatinine": 16.7, "protein": 0.33, "myoglobin": 52.0, "ketones": 1.0 },
+            "4-4": { "V": 10805, "P": 85, "R": 3.5, "creatinine": 17.9, "protein": 0.35, "myoglobin": 64.0, "ketones": 1.5 }
+          },
+          "weightClassKg": 82.5,
+          "benchKg": 124,
+          "squatKg": 171,
+          "deadliftKg": 167,
+          "totalKg": 462,
+          "rank": "I"
+        },
+        {
+            "id": "ath-19",
+            "name": "Спортсмен 19",
+            "period": {
+              "observationWeeks": 4,
+              "sessionsPerWeek": 4,
+              "startDate": "2026-03-22",
+              "competitionDate": "2026-05-17"
+            },
+            "restBaseline": {
+              "creatinine": 4.5,
+              "protein": 0.08,
+              "myoglobin": 2.0,
+              "ketones": 0.0
+            },
+            "rows": {
+              "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.5, "protein": 0.08, "myoglobin": 2.0, "ketones": 0.0 },
+              "1-1": { "V": 9495, "P": 70, "R": 3.5, "creatinine": 13.0, "protein": 0.22, "myoglobin": 34.0, "ketones": 0.5 },
+              "1-2": { "V": 7710, "P": 70, "R": 3.8, "creatinine": 9.8, "protein": 0.12, "myoglobin": 16.0, "ketones": 0.2 },
+              "1-3": { "V": 9380, "P": 79, "R": 4.8, "creatinine": 13.8, "protein": 0.19, "myoglobin": 40.0, "ketones": 0.7 },
+              "1-4": { "V": 7320, "P": 70, "R": 2.3, "creatinine": 11.2, "protein": 0.16, "myoglobin": 24.0, "ketones": 0.4 },
+              "2-1": { "V": 6690, "P": 60, "R": 3.0, "creatinine": 7.5, "protein": 0.09, "myoglobin": 12.0, "ketones": 0.1 },
+              "2-2": { "V": 7610, "P": 80, "R": 4.7, "creatinine": 9.7, "protein": 0.12, "myoglobin": 17.0, "ketones": 0.2 },
+              "2-3": { "V": 8175, "P": 82, "R": 4.2, "creatinine": 12.9, "protein": 0.20, "myoglobin": 32.0, "ketones": 0.5 },
+              "2-4": { "V": 9560, "P": 70, "R": 1.8, "creatinine": 17.0, "protein": 0.45, "myoglobin": 59.0, "ketones": 1.4 },
+              "3-1": { "V": 6532, "P": 54, "R": 3.0, "creatinine": 6.9, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+              "3-2": { "V": 7978, "P": 79, "R": 4.4, "creatinine": 10.7, "protein": 0.14, "myoglobin": 22.0, "ketones": 0.3 },
+              "3-3": { "V": 8505, "P": 80, "R": 4.8, "creatinine": 12.3, "protein": 0.18, "myoglobin": 28.0, "ketones": 0.4 },
+              "3-4": { "V": 10788, "P": 83, "R": 4.9, "creatinine": 17.5, "protein": 0.28, "myoglobin": 47.0, "ketones": 1.5 },
+              "4-1": { "V": 8952, "P": 67, "R": 2.5, "creatinine": 12.7, "protein": 0.28, "myoglobin": 42.0, "ketones": 0.7 },
+              "4-2": { "V": 7830, "P": 81, "R": 4.5, "creatinine": 11.2, "protein": 0.15, "myoglobin": 24.0, "ketones": 0.3 },
+              "4-3": { "V": 9842, "P": 80, "R": 4.0, "creatinine": 16.2, "protein": 0.31, "myoglobin": 49.0, "ketones": 0.9 },
+              "4-4": { "V": 10670, "P": 84, "R": 3.5, "creatinine": 17.7, "protein": 0.34, "myoglobin": 61.0, "ketones": 1.5 }
+            },
+            "weightClassKg": 82.5,
+            "benchKg": 116,
+            "squatKg": 159,
+            "deadliftKg": 151,
+            "totalKg": 426,
+            "rank": "I"
+          },
+          {
+            "id": "ath-20",
+            "name": "Спортсмен 20",
+            "period": {
+              "observationWeeks": 4,
+              "sessionsPerWeek": 4,
+              "startDate": "2026-03-22",
+              "competitionDate": "2026-05-17"
+            },
+            "restBaseline": {
+              "creatinine": 4.5,
+              "protein": 0.08,
+              "myoglobin": 2.0,
+              "ketones": 0.0
+            },
+            "rows": {
+              "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.5, "protein": 0.08, "myoglobin": 2.0, "ketones": 0.0 },
+              "1-1": { "V": 9628, "P": 70, "R": 3.5, "creatinine": 13.9, "protein": 0.24, "myoglobin": 37.0, "ketones": 0.5 },
+              "1-2": { "V": 7815, "P": 70, "R": 3.8, "creatinine": 10.3, "protein": 0.13, "myoglobin": 17.0, "ketones": 0.2 },
+              "1-3": { "V": 9495, "P": 79, "R": 4.8, "creatinine": 14.6, "protein": 0.20, "myoglobin": 42.0, "ketones": 0.7 },
+              "1-4": { "V": 7418, "P": 70, "R": 2.3, "creatinine": 11.8, "protein": 0.18, "myoglobin": 25.0, "ketones": 0.4 },
+              "2-1": { "V": 6778, "P": 60, "R": 3.0, "creatinine": 7.8, "protein": 0.09, "myoglobin": 12.0, "ketones": 0.1 },
+              "2-2": { "V": 7702, "P": 80, "R": 4.7, "creatinine": 10.0, "protein": 0.12, "myoglobin": 18.0, "ketones": 0.2 },
+              "2-3": { "V": 8268, "P": 82, "R": 4.2, "creatinine": 13.3, "protein": 0.21, "myoglobin": 34.0, "ketones": 0.5 },
+              "2-4": { "V": 9680, "P": 70, "R": 1.8, "creatinine": 17.3, "protein": 0.47, "myoglobin": 62.0, "ketones": 1.4 },
+              "3-1": { "V": 6608, "P": 54, "R": 3.0, "creatinine": 7.1, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+              "3-2": { "V": 8058, "P": 79, "R": 4.4, "creatinine": 11.0, "protein": 0.14, "myoglobin": 23.0, "ketones": 0.3 },
+              "3-3": { "V": 8588, "P": 80, "R": 4.8, "creatinine": 12.6, "protein": 0.18, "myoglobin": 29.0, "ketones": 0.4 },
+              "3-4": { "V": 10925, "P": 83, "R": 4.9, "creatinine": 17.8, "protein": 0.29, "myoglobin": 49.0, "ketones": 1.5 },
+              "4-1": { "V": 9068, "P": 67, "R": 2.5, "creatinine": 13.1, "protein": 0.30, "myoglobin": 44.0, "ketones": 0.7 },
+              "4-2": { "V": 7925, "P": 81, "R": 4.5, "creatinine": 11.5, "protein": 0.15, "myoglobin": 25.0, "ketones": 0.3 },
+              "4-3": { "V": 9960, "P": 80, "R": 4.0, "creatinine": 16.6, "protein": 0.33, "myoglobin": 51.0, "ketones": 0.9 },
+              "4-4": { "V": 10805, "P": 84, "R": 3.5, "creatinine": 17.9, "protein": 0.35, "myoglobin": 63.0, "ketones": 1.5 }
+            },
+            "weightClassKg": 82.5,
+            "benchKg": 121,
+            "squatKg": 168,
+            "deadliftKg": 161,
+            "totalKg": 450,
+            "rank": "I"
+          },
+          {
+            "id": "ath-21",
+            "name": "Спортсмен 21",
+            "period": {
+              "observationWeeks": 4,
+              "sessionsPerWeek": 4,
+              "startDate": "2026-03-22",
+              "competitionDate": "2026-05-17"
+            },
+            "restBaseline": {
+              "creatinine": 4.6,
+              "protein": 0.09,
+              "myoglobin": 2.0,
+              "ketones": 0.0
+            },
+            "rows": {
+              "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.6, "protein": 0.09, "myoglobin": 2.0, "ketones": 0.0 },
+              "1-1": { "V": 9955, "P": 71, "R": 3.5, "creatinine": 14.6, "protein": 0.26, "myoglobin": 39.0, "ketones": 0.5 },
+              "1-2": { "V": 8095, "P": 71, "R": 3.8, "creatinine": 10.8, "protein": 0.14, "myoglobin": 18.0, "ketones": 0.2 },
+              "1-3": { "V": 9758, "P": 80, "R": 4.7, "creatinine": 15.4, "protein": 0.22, "myoglobin": 46.0, "ketones": 0.7 },
+              "1-4": { "V": 7565, "P": 70, "R": 2.3, "creatinine": 12.4, "protein": 0.19, "myoglobin": 27.0, "ketones": 0.4 },
+              "2-1": { "V": 6885, "P": 61, "R": 2.9, "creatinine": 8.0, "protein": 0.10, "myoglobin": 13.0, "ketones": 0.1 },
+              "2-2": { "V": 7842, "P": 82, "R": 4.6, "creatinine": 10.4, "protein": 0.13, "myoglobin": 19.0, "ketones": 0.2 },
+              "2-3": { "V": 8425, "P": 83, "R": 4.1, "creatinine": 14.1, "protein": 0.23, "myoglobin": 36.0, "ketones": 0.5 },
+              "2-4": { "V": 9888, "P": 70, "R": 1.7, "creatinine": 17.8, "protein": 0.50, "myoglobin": 66.0, "ketones": 1.4 },
+              "3-1": { "V": 6695, "P": 55, "R": 2.9, "creatinine": 7.3, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+              "3-2": { "V": 8190, "P": 80, "R": 4.3, "creatinine": 11.6, "protein": 0.15, "myoglobin": 24.0, "ketones": 0.3 },
+              "3-3": { "V": 8730, "P": 81, "R": 4.7, "creatinine": 13.4, "protein": 0.19, "myoglobin": 31.0, "ketones": 0.4 },
+              "3-4": { "V": 11165, "P": 84, "R": 4.8, "creatinine": 17.9, "protein": 0.31, "myoglobin": 52.0, "ketones": 1.5 },
+              "4-1": { "V": 9265, "P": 68, "R": 2.4, "creatinine": 13.9, "protein": 0.32, "myoglobin": 47.0, "ketones": 0.7 },
+              "4-2": { "V": 8075, "P": 82, "R": 4.4, "creatinine": 12.1, "protein": 0.16, "myoglobin": 27.0, "ketones": 0.3 },
+              "4-3": { "V": 10180, "P": 81, "R": 3.9, "creatinine": 17.1, "protein": 0.35, "myoglobin": 54.0, "ketones": 1.0 },
+              "4-4": { "V": 11058, "P": 85, "R": 3.4, "creatinine": 17.9, "protein": 0.37, "myoglobin": 66.0, "ketones": 1.5 }
+            },
+            "weightClassKg": 82.5,
+            "benchKg": 127.5,
+            "squatKg": 177.5,
+            "deadliftKg": 172.5,
+            "totalKg": 477.5,
+            "rank": "KMS"
+          },
+          {
+            "id": "ath-22",
+            "name": "Спортсмен 22",
+            "period": {
+              "observationWeeks": 4,
+              "sessionsPerWeek": 4,
+              "startDate": "2026-03-22",
+              "competitionDate": "2026-05-17"
+            },
+            "restBaseline": {
+              "creatinine": 4.7,
+              "protein": 0.09,
+              "myoglobin": 2.0,
+              "ketones": 0.0
+            },
+            "rows": {
+              "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.7, "protein": 0.09, "myoglobin": 2.0, "ketones": 0.0 },
+              "1-1": { "V": 10240, "P": 72, "R": 3.4, "creatinine": 15.2, "protein": 0.28, "myoglobin": 42.0, "ketones": 0.6 },
+              "1-2": { "V": 8325, "P": 72, "R": 3.7, "creatinine": 11.2, "protein": 0.15, "myoglobin": 19.0, "ketones": 0.2 },
+              "1-3": { "V": 10015, "P": 81, "R": 4.6, "creatinine": 16.1, "protein": 0.23, "myoglobin": 49.0, "ketones": 0.8 },
+              "1-4": { "V": 7740, "P": 71, "R": 2.2, "creatinine": 13.0, "protein": 0.21, "myoglobin": 29.0, "ketones": 0.4 },
+              "2-1": { "V": 7035, "P": 62, "R": 2.8, "creatinine": 8.4, "protein": 0.10, "myoglobin": 13.0, "ketones": 0.1 },
+              "2-2": { "V": 8022, "P": 83, "R": 4.5, "creatinine": 10.8, "protein": 0.13, "myoglobin": 20.0, "ketones": 0.2 },
+              "2-3": { "V": 8620, "P": 84, "R": 4.0, "creatinine": 14.8, "protein": 0.24, "myoglobin": 38.0, "ketones": 0.6 },
+              "2-4": { "V": 10155, "P": 71, "R": 1.7, "creatinine": 17.9, "protein": 0.54, "myoglobin": 71.0, "ketones": 1.5 },
+              "3-1": { "V": 6830, "P": 56, "R": 2.8, "creatinine": 7.5, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+              "3-2": { "V": 8390, "P": 81, "R": 4.2, "creatinine": 12.2, "protein": 0.16, "myoglobin": 25.0, "ketones": 0.3 },
+              "3-3": { "V": 8945, "P": 82, "R": 4.6, "creatinine": 14.2, "protein": 0.20, "myoglobin": 33.0, "ketones": 0.4 },
+              "3-4": { "V": 11460, "P": 85, "R": 4.7, "creatinine": 17.9, "protein": 0.33, "myoglobin": 56.0, "ketones": 1.6 },
+              "4-1": { "V": 9510, "P": 69, "R": 2.3, "creatinine": 14.6, "protein": 0.35, "myoglobin": 50.0, "ketones": 0.8 },
+              "4-2": { "V": 8288, "P": 83, "R": 4.3, "creatinine": 12.7, "protein": 0.17, "myoglobin": 29.0, "ketones": 0.3 },
+              "4-3": { "V": 10430, "P": 82, "R": 3.8, "creatinine": 17.6, "protein": 0.38, "myoglobin": 58.0, "ketones": 1.1 },
+              "4-4": { "V": 11348, "P": 86, "R": 3.3, "creatinine": 17.9, "protein": 0.40, "myoglobin": 71.0, "ketones": 1.6 }
+            },
+            "weightClassKg": 82.5,
+            "benchKg": 130,
+            "squatKg": 185,
+            "deadliftKg": 185,
+            "totalKg": 500,
+            "rank": "MS"
+          },
+          {
+            "id": "ath-23",
+            "name": "Спортсмен 23",
+            "period": {
+              "observationWeeks": 4,
+              "sessionsPerWeek": 4,
+              "startDate": "2026-03-22",
+              "competitionDate": "2026-05-17"
+            },
+            "restBaseline": {
+              "creatinine": 4.5,
+              "protein": 0.08,
+              "myoglobin": 2.0,
+              "ketones": 0.0
+            },
+            "rows": {
+              "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.5, "protein": 0.08, "myoglobin": 2.0, "ketones": 0.0 },
+              "1-1": { "V": 9660, "P": 70, "R": 3.5, "creatinine": 14.0, "protein": 0.24, "myoglobin": 37.0, "ketones": 0.5 },
+              "1-2": { "V": 7840, "P": 70, "R": 3.8, "creatinine": 10.4, "protein": 0.13, "myoglobin": 17.0, "ketones": 0.2 },
+              "1-3": { "V": 9520, "P": 79, "R": 4.8, "creatinine": 14.7, "protein": 0.21, "myoglobin": 42.0, "ketones": 0.7 },
+              "1-4": { "V": 7420, "P": 70, "R": 2.3, "creatinine": 11.8, "protein": 0.18, "myoglobin": 25.0, "ketones": 0.4 },
+              "2-1": { "V": 6785, "P": 60, "R": 3.0, "creatinine": 7.8, "protein": 0.09, "myoglobin": 12.0, "ketones": 0.1 },
+              "2-2": { "V": 7710, "P": 80, "R": 4.7, "creatinine": 10.0, "protein": 0.12, "myoglobin": 18.0, "ketones": 0.2 },
+              "2-3": { "V": 8275, "P": 82, "R": 4.2, "creatinine": 13.4, "protein": 0.21, "myoglobin": 34.0, "ketones": 0.5 },
+              "2-4": { "V": 9688, "P": 70, "R": 1.8, "creatinine": 17.3, "protein": 0.47, "myoglobin": 62.0, "ketones": 1.4 },
+              "3-1": { "V": 6615, "P": 54, "R": 3.0, "creatinine": 7.1, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+              "3-2": { "V": 8065, "P": 79, "R": 4.4, "creatinine": 11.0, "protein": 0.14, "myoglobin": 23.0, "ketones": 0.3 },
+              "3-3": { "V": 8595, "P": 80, "R": 4.8, "creatinine": 12.7, "protein": 0.18, "myoglobin": 29.0, "ketones": 0.4 },
+              "3-4": { "V": 10935, "P": 83, "R": 4.9, "creatinine": 17.8, "protein": 0.29, "myoglobin": 49.0, "ketones": 1.5 },
+              "4-1": { "V": 9080, "P": 67, "R": 2.5, "creatinine": 13.2, "protein": 0.30, "myoglobin": 44.0, "ketones": 0.7 },
+              "4-2": { "V": 7935, "P": 81, "R": 4.5, "creatinine": 11.7, "protein": 0.15, "myoglobin": 25.0, "ketones": 0.3 },
+              "4-3": { "V": 9965, "P": 80, "R": 4.0, "creatinine": 16.7, "protein": 0.33, "myoglobin": 52.0, "ketones": 0.9 },
+              "4-4": { "V": 10812, "P": 84, "R": 3.5, "creatinine": 17.9, "protein": 0.35, "myoglobin": 64.0, "ketones": 1.5 }
+            },
+            "weightClassKg": 90,
+            "benchKg": 122.5,
+            "squatKg": 170,
+            "deadliftKg": 160,
+            "totalKg": 452.5,
+            "rank": "I"
+          },
+          {
+            "id": "ath-24",
+            "name": "Спортсмен 24",
+            "period": {
+              "observationWeeks": 4,
+              "sessionsPerWeek": 4,
+              "startDate": "2026-03-22",
+              "competitionDate": "2026-05-17"
+            },
+            "restBaseline": {
+              "creatinine": 4.5,
+              "protein": 0.08,
+              "myoglobin": 2.0,
+              "ketones": 0.0
+            },
+            "rows": {
+              "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.5, "protein": 0.08, "myoglobin": 2.0, "ketones": 0.0 },
+              "1-1": { "V": 9755, "P": 70, "R": 3.5, "creatinine": 14.5, "protein": 0.25, "myoglobin": 38.0, "ketones": 0.5 },
+              "1-2": { "V": 7920, "P": 70, "R": 3.8, "creatinine": 10.7, "protein": 0.13, "myoglobin": 18.0, "ketones": 0.2 },
+              "1-3": { "V": 9605, "P": 79, "R": 4.8, "creatinine": 15.1, "protein": 0.21, "myoglobin": 44.0, "ketones": 0.7 },
+              "1-4": { "V": 7485, "P": 70, "R": 2.3, "creatinine": 12.1, "protein": 0.18, "myoglobin": 26.0, "ketones": 0.4 },
+              "2-1": { "V": 6845, "P": 60, "R": 3.0, "creatinine": 7.9, "protein": 0.09, "myoglobin": 12.0, "ketones": 0.1 },
+              "2-2": { "V": 7780, "P": 80, "R": 4.7, "creatinine": 10.2, "protein": 0.12, "myoglobin": 18.0, "ketones": 0.2 },
+              "2-3": { "V": 8355, "P": 82, "R": 4.2, "creatinine": 13.8, "protein": 0.22, "myoglobin": 35.0, "ketones": 0.5 },
+              "2-4": { "V": 9778, "P": 70, "R": 1.8, "creatinine": 17.6, "protein": 0.48, "myoglobin": 64.0, "ketones": 1.4 },
+              "3-1": { "V": 6670, "P": 54, "R": 3.0, "creatinine": 7.2, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+              "3-2": { "V": 8138, "P": 79, "R": 4.4, "creatinine": 11.3, "protein": 0.14, "myoglobin": 23.0, "ketones": 0.3 },
+              "3-3": { "V": 8675, "P": 80, "R": 4.8, "creatinine": 13.0, "protein": 0.18, "myoglobin": 30.0, "ketones": 0.4 },
+              "3-4": { "V": 11038, "P": 83, "R": 4.9, "creatinine": 17.9, "protein": 0.30, "myoglobin": 50.0, "ketones": 1.5 },
+              "4-1": { "V": 9155, "P": 67, "R": 2.5, "creatinine": 13.5, "protein": 0.31, "myoglobin": 45.0, "ketones": 0.7 },
+              "4-2": { "V": 8008, "P": 81, "R": 4.5, "creatinine": 11.9, "protein": 0.15, "myoglobin": 26.0, "ketones": 0.3 },
+              "4-3": { "V": 10062, "P": 80, "R": 4.0, "creatinine": 16.9, "protein": 0.34, "myoglobin": 53.0, "ketones": 0.9 },
+              "4-4": { "V": 10915, "P": 84, "R": 3.5, "creatinine": 17.9, "protein": 0.36, "myoglobin": 65.0, "ketones": 1.5 }
+            },
+            "weightClassKg": 90,
+            "benchKg": 125,
+            "squatKg": 175,
+            "deadliftKg": 165,
+            "totalKg": 465,
+            "rank": "I"
+          },
+          {
+              "id": "ath-25",
+              "name": "Спортсмен 25",
+              "period": {
+                "observationWeeks": 4,
+                "sessionsPerWeek": 4,
+                "startDate": "2026-03-22",
+                "competitionDate": "2026-05-17"
+              },
+              "restBaseline": {
+                "creatinine": 4.4,
+                "protein": 0.07,
+                "myoglobin": 2.0,
+                "ketones": 0.0
+              },
+              "rows": {
+                "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.4, "protein": 0.07, "myoglobin": 2.0, "ketones": 0.0 },
+                "1-1": { "V": 9145, "P": 69, "R": 3.6, "creatinine": 12.0, "protein": 0.18, "myoglobin": 27.0, "ketones": 0.4 },
+                "1-2": { "V": 7420, "P": 69, "R": 3.9, "creatinine": 9.1, "protein": 0.11, "myoglobin": 13.0, "ketones": 0.2 },
+                "1-3": { "V": 9188, "P": 79, "R": 4.9, "creatinine": 12.9, "protein": 0.17, "myoglobin": 34.0, "ketones": 0.6 },
+                "1-4": { "V": 7128, "P": 69, "R": 2.3, "creatinine": 10.8, "protein": 0.15, "myoglobin": 22.0, "ketones": 0.3 },
+                "2-1": { "V": 6525, "P": 59, "R": 3.1, "creatinine": 7.1, "protein": 0.08, "myoglobin": 10.0, "ketones": 0.1 },
+                "2-2": { "V": 7422, "P": 81, "R": 4.8, "creatinine": 9.1, "protein": 0.11, "myoglobin": 16.0, "ketones": 0.2 },
+                "2-3": { "V": 7978, "P": 82, "R": 4.3, "creatinine": 12.0, "protein": 0.18, "myoglobin": 27.0, "ketones": 0.5 },
+                "2-4": { "V": 9348, "P": 69, "R": 1.8, "creatinine": 16.1, "protein": 0.39, "myoglobin": 52.0, "ketones": 1.2 },
+                "3-1": { "V": 6385, "P": 53, "R": 3.1, "creatinine": 6.6, "protein": 0.08, "myoglobin": 8.0, "ketones": 0.0 },
+                "3-2": { "V": 7785, "P": 79, "R": 4.5, "creatinine": 10.0, "protein": 0.13, "myoglobin": 21.0, "ketones": 0.3 },
+                "3-3": { "V": 8290, "P": 80, "R": 4.9, "creatinine": 11.4, "protein": 0.15, "myoglobin": 25.0, "ketones": 0.4 },
+                "3-4": { "V": 10572, "P": 84, "R": 5.1, "creatinine": 16.9, "protein": 0.25, "myoglobin": 42.0, "ketones": 1.3 },
+                "4-1": { "V": 8750, "P": 66, "R": 2.5, "creatinine": 11.9, "protein": 0.24, "myoglobin": 37.0, "ketones": 0.6 },
+                "4-2": { "V": 7655, "P": 82, "R": 4.6, "creatinine": 10.5, "protein": 0.14, "myoglobin": 23.0, "ketones": 0.3 },
+                "4-3": { "V": 9588, "P": 80, "R": 4.0, "creatinine": 15.3, "protein": 0.28, "myoglobin": 44.0, "ketones": 0.8 },
+                "4-4": { "V": 10415, "P": 85, "R": 3.6, "creatinine": 17.1, "protein": 0.30, "myoglobin": 55.0, "ketones": 1.4 }
+              },
+              "weightClassKg": 90,
+              "benchKg": 120,
+              "squatKg": 167.5,
+              "deadliftKg": 157.5,
+              "totalKg": 445,
+              "rank": "II"
+            },
+            {
+              "id": "ath-26",
+              "name": "Спортсмен 26",
+              "period": {
+                "observationWeeks": 4,
+                "sessionsPerWeek": 4,
+                "startDate": "2026-03-22",
+                "competitionDate": "2026-05-17"
+              },
+              "restBaseline": {
+                "creatinine": 4.5,
+                "protein": 0.08,
+                "myoglobin": 2.0,
+                "ketones": 0.0
+              },
+              "rows": {
+                "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.5, "protein": 0.08, "myoglobin": 2.0, "ketones": 0.0 },
+                "1-1": { "V": 9845, "P": 70, "R": 3.5, "creatinine": 14.7, "protein": 0.25, "myoglobin": 39.0, "ketones": 0.5 },
+                "1-2": { "V": 7995, "P": 70, "R": 3.8, "creatinine": 10.8, "protein": 0.13, "myoglobin": 18.0, "ketones": 0.2 },
+                "1-3": { "V": 9678, "P": 79, "R": 4.8, "creatinine": 15.2, "protein": 0.21, "myoglobin": 45.0, "ketones": 0.7 },
+                "1-4": { "V": 7525, "P": 70, "R": 2.3, "creatinine": 12.2, "protein": 0.18, "myoglobin": 26.0, "ketones": 0.4 },
+                "2-1": { "V": 6872, "P": 60, "R": 3.0, "creatinine": 8.0, "protein": 0.09, "myoglobin": 12.0, "ketones": 0.1 },
+                "2-2": { "V": 7808, "P": 80, "R": 4.7, "creatinine": 10.3, "protein": 0.12, "myoglobin": 18.0, "ketones": 0.2 },
+                "2-3": { "V": 8382, "P": 82, "R": 4.2, "creatinine": 13.9, "protein": 0.22, "myoglobin": 35.0, "ketones": 0.5 },
+                "2-4": { "V": 9815, "P": 70, "R": 1.8, "creatinine": 17.7, "protein": 0.48, "myoglobin": 64.0, "ketones": 1.4 },
+                "3-1": { "V": 6688, "P": 54, "R": 3.0, "creatinine": 7.2, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+                "3-2": { "V": 8158, "P": 79, "R": 4.4, "creatinine": 11.4, "protein": 0.14, "myoglobin": 23.0, "ketones": 0.3 },
+                "3-3": { "V": 8692, "P": 80, "R": 4.8, "creatinine": 13.1, "protein": 0.18, "myoglobin": 30.0, "ketones": 0.4 },
+                "3-4": { "V": 11055, "P": 83, "R": 4.9, "creatinine": 17.9, "protein": 0.30, "myoglobin": 51.0, "ketones": 1.5 },
+                "4-1": { "V": 9168, "P": 67, "R": 2.5, "creatinine": 13.6, "protein": 0.31, "myoglobin": 46.0, "ketones": 0.7 },
+                "4-2": { "V": 8028, "P": 81, "R": 4.5, "creatinine": 12.0, "protein": 0.15, "myoglobin": 26.0, "ketones": 0.3 },
+                "4-3": { "V": 10072, "P": 80, "R": 4.0, "creatinine": 17.0, "protein": 0.34, "myoglobin": 53.0, "ketones": 0.9 },
+                "4-4": { "V": 10918, "P": 84, "R": 3.5, "creatinine": 17.9, "protein": 0.36, "myoglobin": 65.0, "ketones": 1.5 }
+              },
+              "weightClassKg": 90,
+              "benchKg": 128,
+              "squatKg": 178,
+              "deadliftKg": 169,
+              "totalKg": 475,
+              "rank": "I"
+            },
+            {
+              "id": "ath-27",
+              "name": "Спортсмен 27",
+              "period": {
+                "observationWeeks": 4,
+                "sessionsPerWeek": 4,
+                "startDate": "2026-03-22",
+                "competitionDate": "2026-05-17"
+              },
+              "restBaseline": {
+                "creatinine": 4.6,
+                "protein": 0.09,
+                "myoglobin": 2.0,
+                "ketones": 0.0
+              },
+              "rows": {
+                "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.6, "protein": 0.09, "myoglobin": 2.0, "ketones": 0.0 },
+                "1-1": { "V": 10035, "P": 71, "R": 3.5, "creatinine": 14.8, "protein": 0.26, "myoglobin": 40.0, "ketones": 0.5 },
+                "1-2": { "V": 8148, "P": 71, "R": 3.8, "creatinine": 11.0, "protein": 0.14, "myoglobin": 18.0, "ketones": 0.2 },
+                "1-3": { "V": 9825, "P": 80, "R": 4.7, "creatinine": 15.6, "protein": 0.22, "myoglobin": 47.0, "ketones": 0.7 },
+                "1-4": { "V": 7615, "P": 70, "R": 2.3, "creatinine": 12.5, "protein": 0.19, "myoglobin": 27.0, "ketones": 0.4 },
+                "2-1": { "V": 6935, "P": 61, "R": 2.9, "creatinine": 8.1, "protein": 0.10, "myoglobin": 13.0, "ketones": 0.1 },
+                "2-2": { "V": 7895, "P": 82, "R": 4.6, "creatinine": 10.5, "protein": 0.13, "myoglobin": 19.0, "ketones": 0.2 },
+                "2-3": { "V": 8478, "P": 83, "R": 4.1, "creatinine": 14.3, "protein": 0.23, "myoglobin": 36.0, "ketones": 0.5 },
+                "2-4": { "V": 9952, "P": 70, "R": 1.7, "creatinine": 17.9, "protein": 0.50, "myoglobin": 67.0, "ketones": 1.4 },
+                "3-1": { "V": 6742, "P": 55, "R": 2.9, "creatinine": 7.3, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+                "3-2": { "V": 8248, "P": 80, "R": 4.3, "creatinine": 11.8, "protein": 0.15, "myoglobin": 24.0, "ketones": 0.3 },
+                "3-3": { "V": 8790, "P": 81, "R": 4.7, "creatinine": 13.6, "protein": 0.19, "myoglobin": 31.0, "ketones": 0.4 },
+                "3-4": { "V": 11235, "P": 84, "R": 4.8, "creatinine": 17.9, "protein": 0.31, "myoglobin": 53.0, "ketones": 1.5 },
+                "4-1": { "V": 9325, "P": 68, "R": 2.4, "creatinine": 14.1, "protein": 0.33, "myoglobin": 48.0, "ketones": 0.7 },
+                "4-2": { "V": 8125, "P": 82, "R": 4.4, "creatinine": 12.3, "protein": 0.16, "myoglobin": 27.0, "ketones": 0.3 },
+                "4-3": { "V": 10258, "P": 81, "R": 3.9, "creatinine": 17.3, "protein": 0.35, "myoglobin": 55.0, "ketones": 1.0 },
+                "4-4": { "V": 11135, "P": 85, "R": 3.4, "creatinine": 17.9, "protein": 0.37, "myoglobin": 67.0, "ketones": 1.5 }
+              },
+              "weightClassKg": 90,
+              "benchKg": 132.5,
+              "squatKg": 185,
+              "deadliftKg": 185,
+              "totalKg": 502.5,
+              "rank": "KMS"
+            },
+            {
+              "id": "ath-28",
+              "name": "Спортсмен 28",
+              "period": {
+                "observationWeeks": 4,
+                "sessionsPerWeek": 4,
+                "startDate": "2026-03-22",
+                "competitionDate": "2026-05-17"
+              },
+              "restBaseline": {
+                "creatinine": 4.5,
+                "protein": 0.08,
+                "myoglobin": 2.0,
+                "ketones": 0.0
+              },
+              "rows": {
+                "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.5, "protein": 0.08, "myoglobin": 2.0, "ketones": 0.0 },
+                "1-1": { "V": 9888, "P": 70, "R": 3.5, "creatinine": 14.9, "protein": 0.25, "myoglobin": 40.0, "ketones": 0.5 },
+                "1-2": { "V": 8025, "P": 70, "R": 3.8, "creatinine": 10.9, "protein": 0.13, "myoglobin": 18.0, "ketones": 0.2 },
+                "1-3": { "V": 9702, "P": 79, "R": 4.8, "creatinine": 15.3, "protein": 0.21, "myoglobin": 45.0, "ketones": 0.7 },
+                "1-4": { "V": 7548, "P": 70, "R": 2.3, "creatinine": 12.3, "protein": 0.18, "myoglobin": 26.0, "ketones": 0.4 },
+                "2-1": { "V": 6895, "P": 60, "R": 3.0, "creatinine": 8.0, "protein": 0.09, "myoglobin": 12.0, "ketones": 0.1 },
+                "2-2": { "V": 7830, "P": 80, "R": 4.7, "creatinine": 10.3, "protein": 0.12, "myoglobin": 18.0, "ketones": 0.2 },
+                "2-3": { "V": 8402, "P": 82, "R": 4.2, "creatinine": 13.9, "protein": 0.22, "myoglobin": 35.0, "ketones": 0.5 },
+                "2-4": { "V": 9825, "P": 70, "R": 1.8, "creatinine": 17.8, "protein": 0.48, "myoglobin": 65.0, "ketones": 1.4 },
+                "3-1": { "V": 6705, "P": 54, "R": 3.0, "creatinine": 7.2, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+                "3-2": { "V": 8178, "P": 79, "R": 4.4, "creatinine": 11.5, "protein": 0.14, "myoglobin": 23.0, "ketones": 0.3 },
+                "3-3": { "V": 8712, "P": 80, "R": 4.8, "creatinine": 13.2, "protein": 0.18, "myoglobin": 30.0, "ketones": 0.4 },
+                "3-4": { "V": 11108, "P": 83, "R": 4.9, "creatinine": 17.9, "protein": 0.30, "myoglobin": 51.0, "ketones": 1.5 },
+                "4-1": { "V": 9212, "P": 67, "R": 2.5, "creatinine": 13.7, "protein": 0.31, "myoglobin": 46.0, "ketones": 0.7 },
+                "4-2": { "V": 8060, "P": 81, "R": 4.5, "creatinine": 12.1, "protein": 0.15, "myoglobin": 26.0, "ketones": 0.3 },
+                "4-3": { "V": 10105, "P": 80, "R": 4.0, "creatinine": 17.1, "protein": 0.34, "myoglobin": 54.0, "ketones": 0.9 },
+                "4-4": { "V": 10952, "P": 84, "R": 3.5, "creatinine": 17.9, "protein": 0.36, "myoglobin": 66.0, "ketones": 1.5 }
+              },
+              "weightClassKg": 90,
+              "benchKg": 140,
+              "squatKg": 205,
+              "deadliftKg": 195,
+              "totalKg": 540,
+              "rank": "I"
+            },
+            {
+              "id": "ath-29",
+              "name": "Спортсмен 29",
+              "period": {
+                "observationWeeks": 4,
+                "sessionsPerWeek": 4,
+                "startDate": "2026-03-22",
+                "competitionDate": "2026-05-17"
+              },
+              "restBaseline": {
+                "creatinine": 4.5,
+                "protein": 0.08,
+                "myoglobin": 2.0,
+                "ketones": 0.0
+              },
+              "rows": {
+                "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.5, "protein": 0.08, "myoglobin": 2.0, "ketones": 0.0 },
+                "1-1": { "V": 9715, "P": 70, "R": 3.5, "creatinine": 14.2, "protein": 0.24, "myoglobin": 37.0, "ketones": 0.5 },
+                "1-2": { "V": 7888, "P": 70, "R": 3.8, "creatinine": 10.5, "protein": 0.13, "myoglobin": 17.0, "ketones": 0.2 },
+                "1-3": { "V": 9565, "P": 79, "R": 4.8, "creatinine": 14.9, "protein": 0.21, "myoglobin": 43.0, "ketones": 0.7 },
+                "1-4": { "V": 7475, "P": 70, "R": 2.3, "creatinine": 12.0, "protein": 0.18, "myoglobin": 25.0, "ketones": 0.4 },
+                "2-1": { "V": 6828, "P": 60, "R": 3.0, "creatinine": 7.9, "protein": 0.09, "myoglobin": 12.0, "ketones": 0.1 },
+                "2-2": { "V": 7760, "P": 80, "R": 4.7, "creatinine": 10.2, "protein": 0.12, "myoglobin": 18.0, "ketones": 0.2 },
+                "2-3": { "V": 8332, "P": 82, "R": 4.2, "creatinine": 13.6, "protein": 0.22, "myoglobin": 34.0, "ketones": 0.5 },
+                "2-4": { "V": 9758, "P": 70, "R": 1.8, "creatinine": 17.5, "protein": 0.48, "myoglobin": 63.0, "ketones": 1.4 },
+                "3-1": { "V": 6652, "P": 54, "R": 3.0, "creatinine": 7.2, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+                "3-2": { "V": 8115, "P": 79, "R": 4.4, "creatinine": 11.2, "protein": 0.14, "myoglobin": 23.0, "ketones": 0.3 },
+                "3-3": { "V": 8652, "P": 80, "R": 4.8, "creatinine": 12.9, "protein": 0.18, "myoglobin": 30.0, "ketones": 0.4 },
+                "3-4": { "V": 11018, "P": 83, "R": 4.9, "creatinine": 17.9, "protein": 0.30, "myoglobin": 50.0, "ketones": 1.5 },
+                "4-1": { "V": 9142, "P": 67, "R": 2.5, "creatinine": 13.4, "protein": 0.31, "myoglobin": 45.0, "ketones": 0.7 },
+                "4-2": { "V": 7990, "P": 81, "R": 4.5, "creatinine": 11.9, "protein": 0.15, "myoglobin": 26.0, "ketones": 0.3 },
+                "4-3": { "V": 10028, "P": 80, "R": 4.0, "creatinine": 16.8, "protein": 0.34, "myoglobin": 53.0, "ketones": 0.9 },
+                "4-4": { "V": 10878, "P": 84, "R": 3.5, "creatinine": 17.9, "protein": 0.36, "myoglobin": 65.0, "ketones": 1.5 }
+              },
+              "weightClassKg": 90,
+              "benchKg": 123,
+              "squatKg": 172,
+              "deadliftKg": 163,
+              "totalKg": 458,
+              "rank": "I"
+            },
+            {
+              "id": "ath-30",
+              "name": "Спортсмен 30",
+              "period": {
+                "observationWeeks": 4,
+                "sessionsPerWeek": 4,
+                "startDate": "2026-03-22",
+                "competitionDate": "2026-05-17"
+              },
+              "restBaseline": {
+                "creatinine": 4.5,
+                "protein": 0.08,
+                "myoglobin": 2.0,
+                "ketones": 0.0
+              },
+              "rows": {
+                "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.5, "protein": 0.08, "myoglobin": 2.0, "ketones": 0.0 },
+                "1-1": { "V": 9810, "P": 70, "R": 3.5, "creatinine": 14.6, "protein": 0.25, "myoglobin": 38.0, "ketones": 0.5 },
+                "1-2": { "V": 7960, "P": 70, "R": 3.8, "creatinine": 10.7, "protein": 0.13, "myoglobin": 18.0, "ketones": 0.2 },
+                "1-3": { "V": 9645, "P": 79, "R": 4.8, "creatinine": 15.1, "protein": 0.21, "myoglobin": 44.0, "ketones": 0.7 },
+                "1-4": { "V": 7518, "P": 70, "R": 2.3, "creatinine": 12.1, "protein": 0.18, "myoglobin": 26.0, "ketones": 0.4 },
+                "2-1": { "V": 6868, "P": 60, "R": 3.0, "creatinine": 7.9, "protein": 0.09, "myoglobin": 12.0, "ketones": 0.1 },
+                "2-2": { "V": 7805, "P": 80, "R": 4.7, "creatinine": 10.2, "protein": 0.12, "myoglobin": 18.0, "ketones": 0.2 },
+                "2-3": { "V": 8378, "P": 82, "R": 4.2, "creatinine": 13.8, "protein": 0.22, "myoglobin": 35.0, "ketones": 0.5 },
+                "2-4": { "V": 9805, "P": 70, "R": 1.8, "creatinine": 17.7, "protein": 0.48, "myoglobin": 64.0, "ketones": 1.4 },
+                "3-1": { "V": 6692, "P": 54, "R": 3.0, "creatinine": 7.2, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+                "3-2": { "V": 8158, "P": 79, "R": 4.4, "creatinine": 11.4, "protein": 0.14, "myoglobin": 23.0, "ketones": 0.3 },
+                "3-3": { "V": 8698, "P": 80, "R": 4.8, "creatinine": 13.1, "protein": 0.18, "myoglobin": 30.0, "ketones": 0.4 },
+                "3-4": { "V": 11082, "P": 83, "R": 4.9, "creatinine": 17.9, "protein": 0.30, "myoglobin": 51.0, "ketones": 1.5 },
+                "4-1": { "V": 9195, "P": 67, "R": 2.5, "creatinine": 13.6, "protein": 0.31, "myoglobin": 46.0, "ketones": 0.7 },
+                "4-2": { "V": 8042, "P": 81, "R": 4.5, "creatinine": 12.0, "protein": 0.15, "myoglobin": 26.0, "ketones": 0.3 },
+                "4-3": { "V": 10085, "P": 80, "R": 4.0, "creatinine": 17.0, "protein": 0.34, "myoglobin": 54.0, "ketones": 0.9 },
+                "4-4": { "V": 10935, "P": 84, "R": 3.5, "creatinine": 17.9, "protein": 0.36, "myoglobin": 65.0, "ketones": 1.5 }
+              },
+              "weightClassKg": 90,
+              "benchKg": 126,
+              "squatKg": 176,
+              "deadliftKg": 168,
+              "totalKg": 470,
+              "rank": "I"
+            },
+            {
+                "id": "ath-31",
+                "name": "Спортсмен 31",
+                "period": {
+                  "observationWeeks": 4,
+                  "sessionsPerWeek": 4,
+                  "startDate": "2026-03-22",
+                  "competitionDate": "2026-05-17"
+                },
+                "restBaseline": {
+                  "creatinine": 4.5,
+                  "protein": 0.08,
+                  "myoglobin": 2.0,
+                  "ketones": 0.0
+                },
+                "rows": {
+                  "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.5, "protein": 0.08, "myoglobin": 2.0, "ketones": 0.0 },
+                  "1-1": { "V": 9895, "P": 70, "R": 3.5, "creatinine": 14.8, "protein": 0.25, "myoglobin": 39.0, "ketones": 0.5 },
+                  "1-2": { "V": 8035, "P": 70, "R": 3.8, "creatinine": 10.9, "protein": 0.13, "myoglobin": 18.0, "ketones": 0.2 },
+                  "1-3": { "V": 9720, "P": 79, "R": 4.8, "creatinine": 15.2, "protein": 0.21, "myoglobin": 45.0, "ketones": 0.7 },
+                  "1-4": { "V": 7575, "P": 70, "R": 2.3, "creatinine": 12.3, "protein": 0.18, "myoglobin": 26.0, "ketones": 0.4 },
+                  "2-1": { "V": 6915, "P": 60, "R": 3.0, "creatinine": 8.0, "protein": 0.09, "myoglobin": 12.0, "ketones": 0.1 },
+                  "2-2": { "V": 7855, "P": 80, "R": 4.7, "creatinine": 10.3, "protein": 0.12, "myoglobin": 18.0, "ketones": 0.2 },
+                  "2-3": { "V": 8435, "P": 82, "R": 4.2, "creatinine": 13.9, "protein": 0.22, "myoglobin": 35.0, "ketones": 0.5 },
+                  "2-4": { "V": 9868, "P": 70, "R": 1.8, "creatinine": 17.8, "protein": 0.49, "myoglobin": 65.0, "ketones": 1.4 },
+                  "3-1": { "V": 6745, "P": 54, "R": 3.0, "creatinine": 7.2, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+                  "3-2": { "V": 8215, "P": 79, "R": 4.4, "creatinine": 11.5, "protein": 0.14, "myoglobin": 23.0, "ketones": 0.3 },
+                  "3-3": { "V": 8755, "P": 80, "R": 4.8, "creatinine": 13.2, "protein": 0.18, "myoglobin": 30.0, "ketones": 0.4 },
+                  "3-4": { "V": 11148, "P": 83, "R": 4.9, "creatinine": 17.9, "protein": 0.30, "myoglobin": 51.0, "ketones": 1.5 },
+                  "4-1": { "V": 9252, "P": 67, "R": 2.5, "creatinine": 13.7, "protein": 0.31, "myoglobin": 46.0, "ketones": 0.7 },
+                  "4-2": { "V": 8095, "P": 81, "R": 4.5, "creatinine": 12.1, "protein": 0.15, "myoglobin": 26.0, "ketones": 0.3 },
+                  "4-3": { "V": 10145, "P": 80, "R": 4.0, "creatinine": 17.1, "protein": 0.34, "myoglobin": 54.0, "ketones": 0.9 },
+                  "4-4": { "V": 10998, "P": 84, "R": 3.5, "creatinine": 17.9, "protein": 0.36, "myoglobin": 66.0, "ketones": 1.5 }
+                },
+                "weightClassKg": 100,
+                "benchKg": 127.5,
+                "squatKg": 180,
+                "deadliftKg": 172.5,
+                "totalKg": 480,
+                "rank": "I"
+              },
+              {
+                "id": "ath-32",
+                "name": "Спортсмен 32",
+                "period": {
+                  "observationWeeks": 4,
+                  "sessionsPerWeek": 4,
+                  "startDate": "2026-03-22",
+                  "competitionDate": "2026-05-17"
+                },
+                "restBaseline": {
+                  "creatinine": 4.5,
+                  "protein": 0.08,
+                  "myoglobin": 2.0,
+                  "ketones": 0.0
+                },
+                "rows": {
+                  "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.5, "protein": 0.08, "myoglobin": 2.0, "ketones": 0.0 },
+                  "1-1": { "V": 9992, "P": 70, "R": 3.5, "creatinine": 15.0, "protein": 0.26, "myoglobin": 40.0, "ketones": 0.5 },
+                  "1-2": { "V": 8120, "P": 70, "R": 3.8, "creatinine": 11.1, "protein": 0.14, "myoglobin": 18.0, "ketones": 0.2 },
+                  "1-3": { "V": 9805, "P": 79, "R": 4.8, "creatinine": 15.4, "protein": 0.21, "myoglobin": 46.0, "ketones": 0.7 },
+                  "1-4": { "V": 7630, "P": 70, "R": 2.3, "creatinine": 12.4, "protein": 0.19, "myoglobin": 27.0, "ketones": 0.4 },
+                  "2-1": { "V": 6978, "P": 60, "R": 3.0, "creatinine": 8.1, "protein": 0.09, "myoglobin": 12.0, "ketones": 0.1 },
+                  "2-2": { "V": 7920, "P": 80, "R": 4.7, "creatinine": 10.4, "protein": 0.12, "myoglobin": 18.0, "ketones": 0.2 },
+                  "2-3": { "V": 8502, "P": 82, "R": 4.2, "creatinine": 14.1, "protein": 0.22, "myoglobin": 36.0, "ketones": 0.5 },
+                  "2-4": { "V": 9945, "P": 70, "R": 1.8, "creatinine": 17.9, "protein": 0.50, "myoglobin": 66.0, "ketones": 1.4 },
+                  "3-1": { "V": 6808, "P": 54, "R": 3.0, "creatinine": 7.3, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+                  "3-2": { "V": 8288, "P": 79, "R": 4.4, "creatinine": 11.7, "protein": 0.14, "myoglobin": 23.0, "ketones": 0.3 },
+                  "3-3": { "V": 8832, "P": 80, "R": 4.8, "creatinine": 13.4, "protein": 0.18, "myoglobin": 30.0, "ketones": 0.4 },
+                  "3-4": { "V": 11235, "P": 83, "R": 4.9, "creatinine": 17.9, "protein": 0.31, "myoglobin": 52.0, "ketones": 1.5 },
+                  "4-1": { "V": 9340, "P": 67, "R": 2.5, "creatinine": 13.9, "protein": 0.32, "myoglobin": 47.0, "ketones": 0.7 },
+                  "4-2": { "V": 8178, "P": 81, "R": 4.5, "creatinine": 12.2, "protein": 0.15, "myoglobin": 26.0, "ketones": 0.3 },
+                  "4-3": { "V": 10240, "P": 80, "R": 4.0, "creatinine": 17.2, "protein": 0.35, "myoglobin": 55.0, "ketones": 0.9 },
+                  "4-4": { "V": 11100, "P": 84, "R": 3.5, "creatinine": 17.9, "protein": 0.37, "myoglobin": 67.0, "ketones": 1.5 }
+                },
+                "weightClassKg": 100,
+                "benchKg": 130,
+                "squatKg": 185,
+                "deadliftKg": 180,
+                "totalKg": 495,
+                "rank": "I"
+              },
+              {
+                "id": "ath-33",
+                "name": "Спортсмен 33",
+                "period": {
+                  "observationWeeks": 4,
+                  "sessionsPerWeek": 4,
+                  "startDate": "2026-03-22",
+                  "competitionDate": "2026-05-17"
+                },
+                "restBaseline": {
+                  "creatinine": 4.6,
+                  "protein": 0.09,
+                  "myoglobin": 2.0,
+                  "ketones": 0.0
+                },
+                "rows": {
+                  "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.6, "protein": 0.09, "myoglobin": 2.0, "ketones": 0.0 },
+                  "1-1": { "V": 10125, "P": 71, "R": 3.5, "creatinine": 14.9, "protein": 0.27, "myoglobin": 41.0, "ketones": 0.5 },
+                  "1-2": { "V": 8215, "P": 71, "R": 3.8, "creatinine": 11.2, "protein": 0.14, "myoglobin": 19.0, "ketones": 0.2 },
+                  "1-3": { "V": 9908, "P": 80, "R": 4.7, "creatinine": 15.8, "protein": 0.22, "myoglobin": 48.0, "ketones": 0.7 },
+                  "1-4": { "V": 7705, "P": 70, "R": 2.3, "creatinine": 12.7, "protein": 0.20, "myoglobin": 28.0, "ketones": 0.4 },
+                  "2-1": { "V": 7028, "P": 61, "R": 2.9, "creatinine": 8.2, "protein": 0.10, "myoglobin": 13.0, "ketones": 0.1 },
+                  "2-2": { "V": 7998, "P": 82, "R": 4.6, "creatinine": 10.6, "protein": 0.13, "myoglobin": 19.0, "ketones": 0.2 },
+                  "2-3": { "V": 8595, "P": 83, "R": 4.1, "creatinine": 14.6, "protein": 0.24, "myoglobin": 37.0, "ketones": 0.6 },
+                  "2-4": { "V": 10118, "P": 70, "R": 1.7, "creatinine": 17.9, "protein": 0.52, "myoglobin": 69.0, "ketones": 1.4 },
+                  "3-1": { "V": 6855, "P": 55, "R": 2.9, "creatinine": 7.4, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+                  "3-2": { "V": 8368, "P": 80, "R": 4.3, "creatinine": 12.0, "protein": 0.15, "myoglobin": 24.0, "ketones": 0.3 },
+                  "3-3": { "V": 8918, "P": 81, "R": 4.7, "creatinine": 13.8, "protein": 0.19, "myoglobin": 32.0, "ketones": 0.4 },
+                  "3-4": { "V": 11398, "P": 84, "R": 4.8, "creatinine": 17.9, "protein": 0.32, "myoglobin": 54.0, "ketones": 1.5 },
+                  "4-1": { "V": 9478, "P": 68, "R": 2.4, "creatinine": 14.2, "protein": 0.34, "myoglobin": 49.0, "ketones": 0.8 },
+                  "4-2": { "V": 8252, "P": 82, "R": 4.4, "creatinine": 12.4, "protein": 0.16, "myoglobin": 27.0, "ketones": 0.3 },
+                  "4-3": { "V": 10412, "P": 81, "R": 3.9, "creatinine": 17.5, "protein": 0.36, "myoglobin": 57.0, "ketones": 1.0 },
+                  "4-4": { "V": 11308, "P": 85, "R": 3.4, "creatinine": 17.9, "protein": 0.38, "myoglobin": 69.0, "ketones": 1.5 }
+                },
+                "weightClassKg": 100,
+                "benchKg": 135,
+                "squatKg": 192.5,
+                "deadliftKg": 187.5,
+                "totalKg": 515,
+                "rank": "KMS"
+              },
+              {
+                "id": "ath-34",
+                "name": "Спортсмен 34",
+                "period": {
+                  "observationWeeks": 4,
+                  "sessionsPerWeek": 4,
+                  "startDate": "2026-03-22",
+                  "competitionDate": "2026-05-17"
+                },
+                "restBaseline": {
+                  "creatinine": 4.6,
+                  "protein": 0.09,
+                  "myoglobin": 2.0,
+                  "ketones": 0.0
+                },
+                "rows": {
+                  "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.6, "protein": 0.09, "myoglobin": 2.0, "ketones": 0.0 },
+                  "1-1": { "V": 10285, "P": 71, "R": 3.5, "creatinine": 15.1, "protein": 0.28, "myoglobin": 42.0, "ketones": 0.5 },
+                  "1-2": { "V": 8342, "P": 71, "R": 3.8, "creatinine": 11.4, "protein": 0.15, "myoglobin": 19.0, "ketones": 0.2 },
+                  "1-3": { "V": 10058, "P": 80, "R": 4.7, "creatinine": 16.0, "protein": 0.23, "myoglobin": 49.0, "ketones": 0.7 },
+                  "1-4": { "V": 7812, "P": 70, "R": 2.3, "creatinine": 12.9, "protein": 0.20, "myoglobin": 29.0, "ketones": 0.4 },
+                  "2-1": { "V": 7125, "P": 61, "R": 2.9, "creatinine": 8.3, "protein": 0.10, "myoglobin": 13.0, "ketones": 0.1 },
+                  "2-2": { "V": 8108, "P": 82, "R": 4.6, "creatinine": 10.7, "protein": 0.13, "myoglobin": 19.0, "ketones": 0.2 },
+                  "2-3": { "V": 8708, "P": 83, "R": 4.1, "creatinine": 14.8, "protein": 0.24, "myoglobin": 38.0, "ketones": 0.6 },
+                  "2-4": { "V": 10265, "P": 70, "R": 1.7, "creatinine": 17.9, "protein": 0.53, "myoglobin": 70.0, "ketones": 1.5 },
+                  "3-1": { "V": 6945, "P": 55, "R": 2.9, "creatinine": 7.5, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+                  "3-2": { "V": 8488, "P": 80, "R": 4.3, "creatinine": 12.2, "protein": 0.15, "myoglobin": 24.0, "ketones": 0.3 },
+                  "3-3": { "V": 9048, "P": 81, "R": 4.7, "creatinine": 14.0, "protein": 0.19, "myoglobin": 32.0, "ketones": 0.4 },
+                  "3-4": { "V": 11575, "P": 84, "R": 4.8, "creatinine": 17.9, "protein": 0.33, "myoglobin": 55.0, "ketones": 1.5 },
+                  "4-1": { "V": 9622, "P": 68, "R": 2.4, "creatinine": 14.5, "protein": 0.35, "myoglobin": 50.0, "ketones": 0.8 },
+                  "4-2": { "V": 8380, "P": 82, "R": 4.4, "creatinine": 12.6, "protein": 0.16, "myoglobin": 27.0, "ketones": 0.3 },
+                  "4-3": { "V": 10582, "P": 81, "R": 3.9, "creatinine": 17.7, "protein": 0.37, "myoglobin": 58.0, "ketones": 1.0 },
+                  "4-4": { "V": 11508, "P": 85, "R": 3.4, "creatinine": 17.9, "protein": 0.39, "myoglobin": 70.0, "ketones": 1.5 }
+                },
+                "weightClassKg": 100,
+                "benchKg": 142.5,
+                "squatKg": 200,
+                "deadliftKg": 185,
+                "totalKg": 527.5,
+                "rank": "KMS"
+              },
+              {
+                "id": "ath-35",
+                "name": "Спортсмен 35",
+                "period": {
+                  "observationWeeks": 4,
+                  "sessionsPerWeek": 4,
+                  "startDate": "2026-03-22",
+                  "competitionDate": "2026-05-17"
+                },
+                "restBaseline": {
+                  "creatinine": 4.8,
+                  "protein": 0.09,
+                  "myoglobin": 2.0,
+                  "ketones": 0.0
+                },
+                "rows": {
+                  "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.8, "protein": 0.09, "myoglobin": 2.0, "ketones": 0.0 },
+                  "1-1": { "V": 10780, "P": 72, "R": 3.4, "creatinine": 15.8, "protein": 0.30, "myoglobin": 45.0, "ketones": 0.6 },
+                  "1-2": { "V": 8755, "P": 72, "R": 3.7, "creatinine": 11.8, "protein": 0.16, "myoglobin": 20.0, "ketones": 0.2 },
+                  "1-3": { "V": 10485, "P": 81, "R": 4.6, "creatinine": 16.8, "protein": 0.24, "myoglobin": 53.0, "ketones": 0.8 },
+                  "1-4": { "V": 8128, "P": 72, "R": 2.2, "creatinine": 13.8, "protein": 0.22, "myoglobin": 31.0, "ketones": 0.4 },
+                  "2-1": { "V": 7412, "P": 63, "R": 2.8, "creatinine": 8.7, "protein": 0.10, "myoglobin": 13.0, "ketones": 0.1 },
+                  "2-2": { "V": 8458, "P": 84, "R": 4.5, "creatinine": 11.2, "protein": 0.13, "myoglobin": 20.0, "ketones": 0.2 },
+                  "2-3": { "V": 9092, "P": 85, "R": 4.0, "creatinine": 15.5, "protein": 0.25, "myoglobin": 40.0, "ketones": 0.6 },
+                  "2-4": { "V": 10758, "P": 72, "R": 1.7, "creatinine": 17.9, "protein": 0.57, "myoglobin": 75.0, "ketones": 1.5 },
+                  "3-1": { "V": 7220, "P": 57, "R": 2.8, "creatinine": 7.7, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+                  "3-2": { "V": 8805, "P": 82, "R": 4.2, "creatinine": 12.8, "protein": 0.16, "myoglobin": 25.0, "ketones": 0.3 },
+                  "3-3": { "V": 9418, "P": 83, "R": 4.6, "creatinine": 14.9, "protein": 0.20, "myoglobin": 34.0, "ketones": 0.4 },
+                  "3-4": { "V": 11850, "P": 86, "R": 4.7, "creatinine": 17.9, "protein": 0.35, "myoglobin": 58.0, "ketones": 1.6 },
+                  "4-1": { "V": 9848, "P": 69, "R": 2.3, "creatinine": 15.1, "protein": 0.38, "myoglobin": 54.0, "ketones": 0.8 },
+                  "4-2": { "V": 8575, "P": 84, "R": 4.3, "creatinine": 13.0, "protein": 0.17, "myoglobin": 28.0, "ketones": 0.3 },
+                  "4-3": { "V": 10880, "P": 83, "R": 3.8, "creatinine": 17.9, "protein": 0.40, "myoglobin": 62.0, "ketones": 1.1 },
+                  "4-4": { "V": 11850, "P": 87, "R": 3.2, "creatinine": 17.9, "protein": 0.42, "myoglobin": 75.0, "ketones": 1.6 }
+                },
+                "weightClassKg": 100,
+                "benchKg": 150,
+                "squatKg": 225,
+                "deadliftKg": 235,
+                "totalKg": 610,
+                "rank": "MS"
+              },
+              {
+                "id": "ath-36",
+                "name": "Спортсмен 36",
+                "period": {
+                  "observationWeeks": 4,
+                  "sessionsPerWeek": 4,
+                  "startDate": "2026-03-22",
+                  "competitionDate": "2026-05-17"
+                },
+                "restBaseline": {
+                  "creatinine": 4.7,
+                  "protein": 0.09,
+                  "myoglobin": 2.0,
+                  "ketones": 0.0
+                },
+                "rows": {
+                  "0-0": { "V": 0, "P": 0, "R": 0.0, "creatinine": 4.7, "protein": 0.09, "myoglobin": 2.0, "ketones": 0.0 },
+                  "1-1": { "V": 10520, "P": 71, "R": 3.5, "creatinine": 15.4, "protein": 0.28, "myoglobin": 43.0, "ketones": 0.5 },
+                  "1-2": { "V": 8538, "P": 71, "R": 3.8, "creatinine": 11.6, "protein": 0.15, "myoglobin": 19.0, "ketones": 0.2 },
+                  "1-3": { "V": 10275, "P": 80, "R": 4.7, "creatinine": 16.2, "protein": 0.23, "myoglobin": 50.0, "ketones": 0.7 },
+                  "1-4": { "V": 7952, "P": 71, "R": 2.3, "creatinine": 13.2, "protein": 0.21, "myoglobin": 30.0, "ketones": 0.4 },
+                  "2-1": { "V": 7245, "P": 62, "R": 2.9, "creatinine": 8.5, "protein": 0.10, "myoglobin": 13.0, "ketones": 0.1 },
+                  "2-2": { "V": 8265, "P": 83, "R": 4.6, "creatinine": 10.9, "protein": 0.13, "myoglobin": 20.0, "ketones": 0.2 },
+                  "2-3": { "V": 8878, "P": 84, "R": 4.1, "creatinine": 15.1, "protein": 0.24, "myoglobin": 39.0, "ketones": 0.6 },
+                  "2-4": { "V": 10518, "P": 71, "R": 1.7, "creatinine": 17.9, "protein": 0.55, "myoglobin": 73.0, "ketones": 1.5 },
+                  "3-1": { "V": 7048, "P": 56, "R": 2.9, "creatinine": 7.6, "protein": 0.08, "myoglobin": 9.0, "ketones": 0.0 },
+                  "3-2": { "V": 8608, "P": 81, "R": 4.3, "creatinine": 12.5, "protein": 0.15, "myoglobin": 24.0, "ketones": 0.3 },
+                  "3-3": { "V": 9198, "P": 82, "R": 4.7, "creatinine": 14.5, "protein": 0.19, "myoglobin": 33.0, "ketones": 0.4 },
+                  "3-4": { "V": 11748, "P": 85, "R": 4.8, "creatinine": 17.9, "protein": 0.34, "myoglobin": 57.0, "ketones": 1.5 },
+                  "4-1": { "V": 9755, "P": 68, "R": 2.4, "creatinine": 14.8, "protein": 0.36, "myoglobin": 52.0, "ketones": 0.8 },
+                  "4-2": { "V": 8488, "P": 83, "R": 4.4, "creatinine": 12.8, "protein": 0.17, "myoglobin": 28.0, "ketones": 0.3 },
+                  "4-3": { "V": 10715, "P": 82, "R": 3.9, "creatinine": 17.8, "protein": 0.38, "myoglobin": 60.0, "ketones": 1.0 },
+                  "4-4": { "V": 11655, "P": 86, "R": 3.3, "creatinine": 17.9, "protein": 0.40, "myoglobin": 73.0, "ketones": 1.5 }
+                },
+                "weightClassKg": 100,
+                "benchKg": 145,
+                "squatKg": 215,
+                "deadliftKg": 210,
+                "totalKg": 570,
+                "rank": "KMS"
+              }
+]

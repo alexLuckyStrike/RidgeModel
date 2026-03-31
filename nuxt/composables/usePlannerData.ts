@@ -35,6 +35,12 @@ async function getAllAthletes(backendBase: string) {
   }
 }
 
+const toNum = (v: unknown): number | null => {
+  if (v === null || v === undefined) return null
+  const n = Number(v)
+  return Number.isFinite(n) ? n : null
+}
+
 export function usePlannerData(deps: PlannerDataDeps) {
   // ─── Pinia store ───
   const athletesStore = useAthletesStore()
@@ -191,62 +197,63 @@ export function usePlannerData(deps: PlannerDataDeps) {
   }
 
   const fillDemo = async () => {
-    if (!athletes.value.length) return
-
-    console.log('here')
     const config = useRuntimeConfig()
     const backendBase = config.public.backendBase || 'http://localhost:3001'
     const result = await getAllAthletes(backendBase)
-    console.log('result:', result)
-    const source: any = Array.isArray(result) ? result[0] : null
-    const athlete = athletes.value[0]
-    if (!source || !athlete) {
-      console.warn('fillDemo: no source athlete at index 0')
+    const sourceList: any[] = Array.isArray(result) ? result : []
+
+    if (!sourceList.length) {
+      console.warn('fillDemo: no athletes returned from DB')
       return
     }
 
-    athlete.name = source.name ?? athlete.name
-    athlete.period = {
-      observationWeeks:
-        Number(source?.period?.observationWeeks) || athlete.period.observationWeeks,
-      sessionsPerWeek:
-        Number(source?.period?.sessionsPerWeek) || athlete.period.sessionsPerWeek,
-      startDate: source?.period?.startDate || athlete.period.startDate,
-      competitionDate: source?.period?.competitionDate || athlete.period.competitionDate,
-    }
-
-    const toNum = (v: any): number | null => {
-      if (v === null || v === undefined) return null
-      const n = Number(v)
-      return Number.isFinite(n) ? n : null
-    }
-
-    const nextRows: Record<string, Row> = {}
-    for (const [k, row] of Object.entries(source.rows || {})) {
-      const r: any = row || {}
-      nextRows[k] = {
-        V: toNum(r.V),
-        P: toNum(r.P),
-        R: toNum(r.R),
-        creatinine: toNum(r.creatinine),
-        protein: toNum(r.protein),
-        myoglobin: toNum(r.myoglobin),
-        ketones: toNum(r.ketones),
+    const mapped: Athlete[] = sourceList.map((source, idx) => {
+      const rows: Record<string, Row> = {}
+      for (const [k, row] of Object.entries(source?.rows || {})) {
+        const r: any = row || {}
+        rows[k] = {
+          V: toNum(r.V),
+          P: toNum(r.P),
+          R: toNum(r.R),
+          creatinine: toNum(r.creatinine),
+          protein: toNum(r.protein),
+          myoglobin: toNum(r.myoglobin),
+          ketones: toNum(r.ketones),
+        }
       }
-    }
-    athlete.rows = nextRows
 
-    athlete.restBaseline = {
-      creatinine: toNum(source?.restBaseline?.creatinine),
-      protein: toNum(source?.restBaseline?.protein),
-      myoglobin: toNum(source?.restBaseline?.myoglobin),
-      ketones: toNum(source?.restBaseline?.ketones),
-    }
+      return {
+        id:
+          typeof source?.id === 'string' && source.id.trim()
+            ? source.id
+            : `db-athlete-${idx + 1}`,
+        name:
+          typeof source?.name === 'string' && source.name.trim()
+            ? source.name
+            : `Спортсмен ${idx + 1}`,
+        period: {
+          observationWeeks: Number(source?.period?.observationWeeks) || 4,
+          sessionsPerWeek: Number(source?.period?.sessionsPerWeek) || 3,
+          startDate:
+            source?.period?.startDate || new Date().toISOString().slice(0, 10),
+          competitionDate: source?.period?.competitionDate || '',
+        },
+        rows,
+        restBaseline: {
+          creatinine: toNum(source?.restBaseline?.creatinine),
+          protein: toNum(source?.restBaseline?.protein),
+          myoglobin: toNum(source?.restBaseline?.myoglobin),
+          ketones: toNum(source?.restBaseline?.ketones),
+        },
+      }
+    })
 
-    ensureRowsForAthlete(athlete)
+    setAthletes(mapped)
+    ensureRowsForAllAthletes()
+    activeAthleteId.value = mapped[0]?.id || ''
 
     const maxWeeks = Math.max(
-      ...athletes.value.map((a) => a.period.observationWeeks || 0),
+      ...mapped.map((a) => a.period.observationWeeks || 0),
       0
     )
     expandedWeeks.value = Array.from({ length: maxWeeks }, (_, i) => i + 1)
