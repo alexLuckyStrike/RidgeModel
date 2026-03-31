@@ -11,8 +11,6 @@ export interface PlannerDataDeps {
   destroyCharts: () => void
 }
 
-const STORAGE_KEY = 'powerlift-planner:v1'
-
 async function getAllAthletes(backendBase: string) {
   try {
     const response = await fetch(`${backendBase}/api/db/getAllAthletes`, {
@@ -181,21 +179,6 @@ export function usePlannerData(deps: PlannerDataDeps) {
     return Math.max(1, Math.ceil(ms / (7 * 24 * 60 * 60 * 1000)))
   }
 
-  const saveState = () => {
-    if (!process.client) return
-    const payload = {
-      athleteCount: athletes.value.length,
-      athletes: athletes.value.map((athlete) => ({
-        id: athlete.id,
-        name: athlete.name,
-        period: athlete.period,
-        rows: athlete.rows,
-        restBaseline: athlete.restBaseline,
-      })),
-    }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
-  }
-
   const fillDemo = async () => {
     const config = useRuntimeConfig()
     const backendBase = config.public.backendBase || 'http://localhost:3001'
@@ -293,12 +276,6 @@ export function usePlannerData(deps: PlannerDataDeps) {
   watch(athletes, ensureRowsForAllAthletes, { immediate: true, deep: true })
 
   watch(
-    () => athletes.value,
-    saveState,
-    { deep: true }
-  )
-
-  watch(
     () => activeAthlete.value?.period.observationWeeks,
     (n) => {
       if (!n) return
@@ -311,25 +288,7 @@ export function usePlannerData(deps: PlannerDataDeps) {
   // ─── Lifecycle ───
   onMounted(() => {
     if (!process.client) return
-
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      if (!raw) return
-      const parsed = JSON.parse(raw)
-      if (Array.isArray(parsed?.athletes)) {
-        setAthletes(parsed.athletes)
-      } else if (typeof parsed?.athleteCount === 'number') {
-        setAthleteCount(parsed.athleteCount)
-      }
-    } catch {
-      // ignore
-    }
-
-    ensureRowsForAllAthletes()
-    expandedWeeks.value = Array.from(
-      { length: observationWeeks.value },
-      (_, i) => i + 1
-    )
+    void fillDemo()
   })
 
   return {
@@ -354,7 +313,6 @@ export function usePlannerData(deps: PlannerDataDeps) {
     getRow,
     fillDemo,
     resetAll,
-    saveState,
     getPlanWeeksFor,
   }
 }

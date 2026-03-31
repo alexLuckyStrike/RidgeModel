@@ -201,9 +201,18 @@ async function importData(athletes) {
   try {
     await client.query('BEGIN');
 
-    for (const athlete of athletes) {
-      await client.query('DELETE FROM athletes WHERE external_id = $1', [athlete.externalId]);
+    await client.query(
+      `
+        TRUNCATE TABLE
+          training_sessions,
+          rest_baselines,
+          observation_periods,
+          athletes
+        RESTART IDENTITY CASCADE
+      `
+    );
 
+    for (const athlete of athletes) {
       const athleteRes = await client.query(
         `
           INSERT INTO athletes (external_id, full_name, weight_category_points)
@@ -305,39 +314,17 @@ async function importData(athletes) {
 
     await client.query('COMMIT');
 
-    const externalIds = athletes.map((a) => a.externalId);
     const verifyAthletes = await client.query(
-      'SELECT COUNT(*)::int AS count FROM athletes WHERE external_id = ANY($1::text[])',
-      [externalIds]
+      'SELECT COUNT(*)::int AS count FROM athletes'
     );
     const verifyPeriods = await client.query(
-      `
-        SELECT COUNT(*)::int AS count
-        FROM observation_periods op
-        JOIN athletes a ON a.id = op.athlete_id
-        WHERE a.external_id = ANY($1::text[])
-      `,
-      [externalIds]
+      'SELECT COUNT(*)::int AS count FROM observation_periods'
     );
     const verifyBaselines = await client.query(
-      `
-        SELECT COUNT(*)::int AS count
-        FROM rest_baselines rb
-        JOIN observation_periods op ON op.id = rb.period_id
-        JOIN athletes a ON a.id = op.athlete_id
-        WHERE a.external_id = ANY($1::text[])
-      `,
-      [externalIds]
+      'SELECT COUNT(*)::int AS count FROM rest_baselines'
     );
     const verifySessions = await client.query(
-      `
-        SELECT COUNT(*)::int AS count
-        FROM training_sessions ts
-        JOIN observation_periods op ON op.id = ts.period_id
-        JOIN athletes a ON a.id = op.athlete_id
-        WHERE a.external_id = ANY($1::text[])
-      `,
-      [externalIds]
+      'SELECT COUNT(*)::int AS count FROM training_sessions'
     );
 
     return {
@@ -364,7 +351,7 @@ async function importData(athletes) {
 }
 
 async function main() {
-  const inputArg = process.argv[2] || 'markersResults.json';
+  const inputArg = process.argv[2] || 'MarkersPhis.json';
   const inputPath = path.resolve(process.cwd(), inputArg);
 
   if (!fs.existsSync(inputPath)) {

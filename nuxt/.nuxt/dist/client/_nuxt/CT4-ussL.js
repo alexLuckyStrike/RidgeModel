@@ -1,0 +1,1 @@
+import{C as e}from"./D4gRRwi6.js";import{j as o,m as r,o as t}from"./DkqCqAzL.js";const p=o({__name:"regression",setup(s){return(n,a)=>(t(),r(e,{slug:"regression",title:"Логарифмическая регрессия"}))}});export{p as default};
