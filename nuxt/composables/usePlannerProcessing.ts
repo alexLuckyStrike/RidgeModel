@@ -131,6 +131,7 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
 
   const mkDelta = (x: number, x0: number) => (x - x0) / Math.max(1e-9, x0)
   const applyDelta = (x0: number, d: number) => x0 * (1 + d)
+  const clamp = (x: number, min: number, max: number) => Math.min(max, Math.max(min, x))
 
   const baselineFor = (athlete: Athlete) => {
     const all = Object.values(athlete.rows).filter(isFilled)
@@ -150,6 +151,49 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
       myoglobin: avg('myoglobin') ?? 20.0,
       ketones: avg('ketones') ?? 0.5,
     }
+  }
+
+  const quantile = (values: number[], q: number) => {
+    if (!values.length) return 0
+    const sorted = values.slice().sort((a, b) => a - b)
+    const idx = clamp(Math.floor((sorted.length - 1) * q), 0, sorted.length - 1)
+    return sorted[idx]
+  }
+
+  const getDefaultDeltaTargets = (modelName: string) => {
+    if (modelName.includes('Объём')) return { dV: 0.12, dP: 0.08 }
+    if (modelName.includes('Интенсив')) return { dV: -0.05, dP: -0.15 }
+    if (modelName.includes('Восстанов')) return { dV: -0.25, dP: 0.15 }
+    return { dV: -0.35, dP: -0.2 } // taper
+  }
+
+  const getAthleteDeltaTargets = (athlete: Athlete, modelName: string) => {
+    const b = baselineFor(athlete)
+    const rows = Object.values(athlete.rows).filter(isFilled)
+    if (rows.length < 6) return getDefaultDeltaTargets(modelName)
+
+    const dVs = rows.map((r) => mkDelta(r.V as number, b.V))
+    const dPs = rows.map((r) => mkDelta(r.P as number, b.P))
+
+    const vLow = quantile(dVs, 0.2)
+    const vMid = quantile(dVs, 0.5)
+    const vHigh = quantile(dVs, 0.8)
+    const pLow = quantile(dPs, 0.2)
+    const pMid = quantile(dPs, 0.5)
+    const pHigh = quantile(dPs, 0.8)
+    const vSpread = Math.max(0, vHigh - vLow)
+    const pSpread = Math.max(0, pHigh - pLow)
+
+    if (modelName.includes('Объём')) {
+      return { dV: vHigh, dP: pMid + 0.5 * (pHigh - pMid) }
+    }
+    if (modelName.includes('Интенсив')) {
+      return { dV: vMid, dP: pLow }
+    }
+    if (modelName.includes('Восстанов')) {
+      return { dV: vLow, dP: pHigh }
+    }
+    return { dV: vLow - 0.5 * vSpread, dP: pLow - 0.25 * pSpread } // taper
   }
 
   const getRestY0 = (m: MarkerKey): number => {
@@ -359,26 +403,9 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     const out: PlannedWeek[] = []
     for (let i = 0; i < total; i++) {
       const modelName = pickModel(i, total)
-
-      let Vmul = 1.0
-      let Pmul = 1.0
-
-      if (modelName.includes('Объём')) {
-        Vmul = 1.12
-        Pmul = 1.08
-      } else if (modelName.includes('Интенсив')) {
-        Vmul = 0.95
-        Pmul = 0.85
-      } else if (modelName.includes('Восстанов')) {
-        Vmul = 0.75
-        Pmul = 1.15
-      } else if (modelName.includes('Пиков')) {
-        Vmul = 0.65
-        Pmul = 0.8
-      }
-
-      Vmul *= settings.V
-      Pmul *= settings.P
+      const athleteTargets = getAthleteDeltaTargets(athlete, modelName)
+      let weekDV = (1 + athleteTargets.dV) * settings.V - 1
+      let weekDP = (1 + athleteTargets.dP) * settings.P - 1
 
       const sessions: PlannedSession[] = []
       for (let s = 1; s <= athlete.period.sessionsPerWeek; s++) {
@@ -393,23 +420,18 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
             : 0
         const withinWeekWave = Math.sin(withinWeekPhase * Math.PI * 2)
         const acrossWeeksWave = Math.sin((i + 1) * 0.9)
-
-        const V = Math.max(
-          0,
-          Math.round(
-            base.V *
-              Vmul *
-              (1 + 0.06 * settings.wave * withinWeekWave + 0.03 * acrossWeeksWave)
-          )
+        const dVSession = clamp(
+          weekDV + 0.06 * settings.wave * withinWeekWave + 0.03 * acrossWeeksWave,
+          -0.65,
+          0.65
         )
-        const P = Math.max(
-          10,
-          Math.round(
-            base.P *
-              Pmul *
-              (1 - 0.05 * settings.wave * withinWeekWave - 0.02 * acrossWeeksWave)
-          )
+        const dPSession = clamp(
+          weekDP - 0.05 * settings.wave * withinWeekWave - 0.02 * acrossWeeksWave,
+          -0.65,
+          0.65
         )
+        const V = Math.max(0, Math.round(base.V * (1 + dVSession)))
+        const P = Math.max(10, Math.round(base.P * (1 + dPSession)))
 
         const dV = mkDelta(V, base.V)
         const dP = mkDelta(P, base.P)
