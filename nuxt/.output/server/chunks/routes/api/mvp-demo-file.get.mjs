@@ -1,4 +1,4 @@
-globalThis.__timing__.logStart('Load chunks/routes/api/mvp-demo-file.get');import { d as defineEventHandler, g as getQuery, c as createError, s as setResponseHeader } from '../../nitro/nitro.mjs';
+import { d as defineEventHandler, g as getQuery, c as createError, s as setResponseHeader } from '../../nitro/nitro.mjs';
 import fs from 'fs/promises';
 import path from 'path';
 import 'node:http';
@@ -54,5 +54,5 @@ const mvpDemoFile_get = defineEventHandler(async (event) => {
   return fileData;
 });
 
-export { mvpDemoFile_get as default };;globalThis.__timing__.logEnd('Load chunks/routes/api/mvp-demo-file.get');
+export { mvpDemoFile_get as default };
 //# sourceMappingURL=mvp-demo-file.get.mjs.map

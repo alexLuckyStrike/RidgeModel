@@ -152,6 +152,15 @@
                 <div class="rounded-xl bg-rose-50 border border-rose-100 p-3"><div class="font-medium">Много</div><div>50.1–250</div></div>
               </div>
             </div>
+            <div>
+              <div class="font-semibold">Кетоны (ммоль/л)</div>
+              <div class="mt-1 grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <div class="rounded-xl bg-slate-50 border border-slate-200 p-3"><div class="font-medium">Следы</div><div>0.5</div></div>
+                <div class="rounded-xl bg-emerald-50 border border-emerald-100 p-3"><div class="font-medium">Незначительно</div><div>1.5</div></div>
+                <div class="rounded-xl bg-amber-50 border border-amber-100 p-3"><div class="font-medium">Средне</div><div>4.0</div></div>
+                <div class="rounded-xl bg-rose-50 border border-rose-100 p-3"><div class="font-medium">Много</div><div>8.0–16</div></div>
+              </div>
+            </div>
           </div>
         </UiCard>
 

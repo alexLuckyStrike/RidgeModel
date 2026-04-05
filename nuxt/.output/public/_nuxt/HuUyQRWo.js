@@ -1,0 +1,1 @@
+import{C as t}from"./C0yOmNn8.js";import{j as e,m as o,o as a}from"./Buz9ctvt.js";const p=e({__name:"algorithm",setup(r){return(n,m)=>(a(),o(t,{slug:"algorithm",title:"Алгоритм размышлений"}))}});export{p as default};

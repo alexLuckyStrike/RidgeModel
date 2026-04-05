@@ -84,6 +84,26 @@ const VARIANT_DEFAULTS: Record<PlanVariantId, VariantSettings> = {
   },
 }
 
+type EnsembleStrategy =
+  | 'dominant_capped'
+  | 'balanced'
+  | 'volume_bias'
+  | 'intensity_bias'
+  | 'recovery_bias'
+
+const VARIANT_STRATEGY: Record<PlanVariantId, EnsembleStrategy> = {
+  balanced: 'balanced',
+  volume: 'volume_bias',
+  intensity: 'intensity_bias',
+  recovery: 'recovery_bias',
+  performance: 'dominant_capped',
+}
+
+const DELTA_STEP = 0.01 // 1%
+const DELTA_MIN_NON_ZERO = 0.01 // 1%
+const DELTA_MAX_ABS = 0.65
+const LEADER_CONTRIB_MAX_RATIO = 1.25
+
 export function usePlannerProcessing(deps: PlannerProcessingDeps) {
   // ─── Computed ───
   const hasFilledData = computed(() => {
@@ -132,6 +152,142 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
   const mkDelta = (x: number, x0: number) => (x - x0) / Math.max(1e-9, x0)
   const applyDelta = (x0: number, d: number) => x0 * (1 + d)
   const clamp = (x: number, min: number, max: number) => Math.min(max, Math.max(min, x))
+  const quantizeStep = (x: number, step = DELTA_STEP) =>
+    Math.round(x / step) * step
+
+  const argMaxAbs3 = (a: number, b: number, c: number) => {
+    const aa = Math.abs(a)
+    const bb = Math.abs(b)
+    const cc = Math.abs(c)
+    if (aa >= bb && aa >= cc) return 0
+    if (bb >= aa && bb >= cc) return 1
+    return 2
+  }
+
+  const normalizeShares3 = (shares: [number, number, number]) => {
+    const safe: [number, number, number] = [
+      Math.max(1e-6, shares[0]),
+      Math.max(1e-6, shares[1]),
+      Math.max(1e-6, shares[2]),
+    ]
+    const sum = safe[0] + safe[1] + safe[2]
+    return [safe[0] / sum, safe[1] / sum, safe[2] / sum] as [number, number, number]
+  }
+
+  const capLeaderContributionRatio = (
+    sharesIn: [number, number, number],
+    maxRatio = LEADER_CONTRIB_MAX_RATIO
+  ) => {
+    let shares = normalizeShares3(sharesIn)
+    for (let iter = 0; iter < 12; iter++) {
+      let changed = false
+      for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+          if (i === j) continue
+          const cap = shares[j] * maxRatio
+          if (shares[i] > cap + 1e-10) {
+            shares[i] = cap
+            changed = true
+          }
+        }
+      }
+      shares = normalizeShares3(shares)
+      if (!changed) break
+    }
+    return shares
+  }
+
+  const sharesFromBetas = (beta: [number, number, number]) => {
+    const absV = Math.abs(beta[0])
+    const absP = Math.abs(beta[1])
+    const absR = Math.abs(beta[2])
+    const sum = absV + absP + absR
+    if (sum < 1e-9) return [1 / 3, 1 / 3, 1 / 3] as [number, number, number]
+    return [absV / sum, absP / sum, absR / sum] as [number, number, number]
+  }
+
+  const strategyFactors = (
+    strategy: EnsembleStrategy,
+    dominantIndex: 0 | 1 | 2
+  ): [number, number, number] => {
+    if (strategy === 'volume_bias') return [1.25, 1.0, 1.0]
+    if (strategy === 'intensity_bias') return [1.0, 1.25, 1.0]
+    if (strategy === 'recovery_bias') return [1.0, 1.0, 1.25]
+    if (strategy === 'dominant_capped') {
+      const out: [number, number, number] = [1.0, 1.0, 1.0]
+      out[dominantIndex] = 1.25
+      return out
+    }
+    return [1.0, 1.0, 1.0]
+  }
+
+  const buildContributionShares = (
+    strategy: EnsembleStrategy,
+    beta: [number, number, number]
+  ) => {
+    const dominantIndex = argMaxAbs3(beta[0], beta[1], beta[2]) as 0 | 1 | 2
+    const betaShares = sharesFromBetas(beta)
+    const factors = strategyFactors(strategy, dominantIndex)
+    const mixed: [number, number, number] = [
+      (0.5 + betaShares[0]) * factors[0],
+      (0.5 + betaShares[1]) * factors[1],
+      (0.5 + betaShares[2]) * factors[2],
+    ]
+    return capLeaderContributionRatio(normalizeShares3(mixed))
+  }
+
+  const getBaseRDeltaTarget = (modelName: string) => {
+    if (modelName.includes('Объём')) return -0.05
+    if (modelName.includes('Интенсив')) return 0.1
+    if (modelName.includes('Восстанов')) return 0.18
+    return 0.22 // taper
+  }
+
+  const ensureAllDeltasAreNonZero = (
+    deltas: [number, number, number],
+    signs: [number, number, number]
+  ) => {
+    const out: [number, number, number] = [...deltas] as [number, number, number]
+    for (let i = 0; i < 3; i++) {
+      if (Math.abs(out[i]) < DELTA_MIN_NON_ZERO) {
+        out[i] = DELTA_MIN_NON_ZERO * (signs[i] || 1)
+      }
+      out[i] = clamp(quantizeStep(out[i], DELTA_STEP), -DELTA_MAX_ABS, DELTA_MAX_ABS)
+      if (out[i] === 0) {
+        out[i] = DELTA_MIN_NON_ZERO * (signs[i] || 1)
+      }
+    }
+    return out
+  }
+
+  const enforceContributionCapOnDeltas = (
+    deltasIn: [number, number, number],
+    beta: [number, number, number],
+    signs: [number, number, number]
+  ) => {
+    const deltas: [number, number, number] = [...deltasIn] as [number, number, number]
+    for (let iter = 0; iter < 24; iter++) {
+      const contrib = [
+        Math.abs(beta[0] * deltas[0]),
+        Math.abs(beta[1] * deltas[1]),
+        Math.abs(beta[2] * deltas[2]),
+      ] as [number, number, number]
+      const cmin = Math.max(1e-9, Math.min(contrib[0], contrib[1], contrib[2]))
+      const cap = cmin * LEADER_CONTRIB_MAX_RATIO
+      let changed = false
+      for (let i = 0; i < 3; i++) {
+        if (contrib[i] <= cap + 1e-9) continue
+        const betaAbs = Math.max(Math.abs(beta[i]), 1e-6)
+        const maxDeltaAbs = cap / betaAbs
+        const clipped = clamp(maxDeltaAbs, DELTA_MIN_NON_ZERO, DELTA_MAX_ABS)
+        const next = quantizeStep(clipped, DELTA_STEP) * (signs[i] || 1)
+        deltas[i] = clamp(next, -DELTA_MAX_ABS, DELTA_MAX_ABS)
+        changed = true
+      }
+      if (!changed) break
+    }
+    return ensureAllDeltasAreNonZero(deltas, signs)
+  }
 
   const baselineFor = (athlete: Athlete) => {
     const all = Object.values(athlete.rows).filter(isFilled)
@@ -393,6 +549,11 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     const coeffs = composite
       ? null
       : fitCoeffsFor(athlete, settings.control)
+    const strategy = VARIANT_STRATEGY[variantId]
+    const betaVector: [number, number, number] = composite
+      ? (composite.ridge.beta as [number, number, number])
+      : [coeffs!.b1, coeffs!.b2, coeffs!.b3]
+    const contributionShares = buildContributionShares(strategy, betaVector)
 
     const clampR = (x: number) => {
       const a = Math.min(settings.rMin, settings.rMax)
@@ -404,8 +565,9 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     for (let i = 0; i < total; i++) {
       const modelName = pickModel(i, total)
       const athleteTargets = getAthleteDeltaTargets(athlete, modelName)
-      let weekDV = (1 + athleteTargets.dV) * settings.V - 1
-      let weekDP = (1 + athleteTargets.dP) * settings.P - 1
+      const weekDV = (1 + athleteTargets.dV) * settings.V - 1
+      const weekDP = (1 + athleteTargets.dP) * settings.P - 1
+      const weekDR = getBaseRDeltaTarget(modelName)
 
       const sessions: PlannedSession[] = []
       for (let s = 1; s <= athlete.period.sessionsPerWeek; s++) {
@@ -420,40 +582,78 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
             : 0
         const withinWeekWave = Math.sin(withinWeekPhase * Math.PI * 2)
         const acrossWeeksWave = Math.sin((i + 1) * 0.9)
-        const dVSession = clamp(
+        const dVBase = clamp(
           weekDV + 0.06 * settings.wave * withinWeekWave + 0.03 * acrossWeeksWave,
-          -0.65,
-          0.65
+          -DELTA_MAX_ABS,
+          DELTA_MAX_ABS
         )
-        const dPSession = clamp(
+        const dPBase = clamp(
           weekDP - 0.05 * settings.wave * withinWeekWave - 0.02 * acrossWeeksWave,
-          -0.65,
-          0.65
+          -DELTA_MAX_ABS,
+          DELTA_MAX_ABS
         )
-        const V = Math.max(0, Math.round(base.V * (1 + dVSession)))
-        const P = Math.max(10, Math.round(base.P * (1 + dPSession)))
-
-        const dV = mkDelta(V, base.V)
-        const dP = mkDelta(P, base.P)
+        const dRBase = clamp(
+          weekDR + 0.04 * settings.wave * withinWeekWave + 0.02 * acrossWeeksWave,
+          -DELTA_MAX_ABS,
+          DELTA_MAX_ABS
+        )
 
         const phase = (i + 1) * 0.7 + withinWeekPhase * 1.4
+        const targetShift =
+          settings.targetShiftLn + settings.targetWaveLn * Math.sin(phase)
+        const baseEffect =
+          betaVector[0] * dVBase +
+          betaVector[1] * dPBase +
+          betaVector[2] * dRBase
+        const targetEffect = baseEffect + targetShift
+        const targetMagnitude = Math.max(Math.abs(targetEffect), DELTA_STEP * 3)
 
-        let dR: number
-        if (composite) {
-          // Ridge + PCA composite: z_target = shift + wave*sin(phase)
-          const zTarget =
-            settings.targetShiftLn +
-            settings.targetWaveLn * Math.sin(phase)
-          const { beta } = composite.ridge
-          dR = (zTarget - beta[0] * dV - beta[1] * dP) / beta[2]
-        } else {
-          // OLS fallback
-          const lnTarget =
-            coeffs!.b0 +
-            settings.targetShiftLn +
-            settings.targetWaveLn * Math.sin(phase)
-          dR = (lnTarget - coeffs!.b0 - coeffs!.b1 * dV - coeffs!.b2 * dP) / coeffs!.b3
+        const signs: [number, number, number] = [
+          Math.sign(dVBase) || Math.sign(targetEffect * (betaVector[0] || 1)) || 1,
+          Math.sign(dPBase) || Math.sign(targetEffect * (betaVector[1] || 1)) || 1,
+          Math.sign(dRBase) || Math.sign(targetEffect * (betaVector[2] || 1)) || 1,
+        ]
+
+        const betaAbsSafe: [number, number, number] = [
+          Math.max(Math.abs(betaVector[0]), 1e-3),
+          Math.max(Math.abs(betaVector[1]), 1e-3),
+          Math.max(Math.abs(betaVector[2]), 1e-3),
+        ]
+
+        let deltas: [number, number, number] = [
+          (signs[0] * contributionShares[0] * targetMagnitude) / betaAbsSafe[0],
+          (signs[1] * contributionShares[1] * targetMagnitude) / betaAbsSafe[1],
+          (signs[2] * contributionShares[2] * targetMagnitude) / betaAbsSafe[2],
+        ]
+
+        const producedEffect =
+          betaVector[0] * deltas[0] +
+          betaVector[1] * deltas[1] +
+          betaVector[2] * deltas[2]
+        if (Math.abs(producedEffect) > 1e-9) {
+          const scale = targetEffect / producedEffect
+          if (Number.isFinite(scale) && scale !== 0) {
+            deltas = [
+              deltas[0] * scale,
+              deltas[1] * scale,
+              deltas[2] * scale,
+            ]
+          }
         }
+
+        deltas = [
+          clamp(deltas[0], -DELTA_MAX_ABS, DELTA_MAX_ABS),
+          clamp(deltas[1], -DELTA_MAX_ABS, DELTA_MAX_ABS),
+          clamp(deltas[2], -DELTA_MAX_ABS, DELTA_MAX_ABS),
+        ]
+        deltas = ensureAllDeltasAreNonZero(deltas, signs)
+        deltas = enforceContributionCapOnDeltas(deltas, betaVector, signs)
+
+        const dV = deltas[0]
+        const dP = deltas[1]
+        const dR = deltas[2]
+        const V = Math.max(0, Math.round(base.V * (1 + dV)))
+        const P = Math.max(10, Math.round(base.P * (1 + dP)))
         const Rraw = applyDelta(base.R, dR)
         const Rclamped = clampR(Rraw)
         const R = Math.round(Rclamped * 10) / 10

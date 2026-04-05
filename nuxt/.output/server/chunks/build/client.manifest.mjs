@@ -1,4 +1,4 @@
-globalThis.__timing__.logStart('Load chunks/build/client.manifest');const client_manifest = {
+const client_manifest = {
   "@vite/client": {
     "prefetch": true,
     "isEntry": true,
@@ -17,5 +17,5 @@ globalThis.__timing__.logStart('Load chunks/build/client.manifest');const client
   }
 };
 
-export { client_manifest as default };;globalThis.__timing__.logEnd('Load chunks/build/client.manifest');
+export { client_manifest as default };
 //# sourceMappingURL=client.manifest.mjs.map
