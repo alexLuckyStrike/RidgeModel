@@ -4,6 +4,11 @@ import { olsFit } from '~/utils/ols'
 import { ridgeFit, loocvLambda } from '~/utils/ridge'
 import { pcaFromSamples, compositeScores } from '~/utils/pca'
 import { isFilled, uid } from '~/utils/plannerHelpers'
+import {
+  MARKER_CORRIDORS,
+  H_up_min,
+  headroomDownInPC1,
+} from '~/utils/markerCorridors'
 import type {
   Coeffs,
   CompositeModel,
@@ -13,6 +18,7 @@ import type {
   PlannedSession,
   VariantSettings,
   PlanVariantId,
+  CorridorCheck,
 } from '~/utils/plannerTypes'
 import type { Athlete, RestBaseline, Row } from '~/stores/athletes'
 
@@ -31,78 +37,59 @@ export interface PlannerProcessingDeps {
   drawCharts: () => void
 }
 
-const VARIANT_DEFAULTS: Record<PlanVariantId, VariantSettings> = {
+export const VARIANT_DEFAULTS: Record<PlanVariantId, VariantSettings> = {
   balanced: {
-    V: 1.0,
-    P: 1.0,
-    wave: 1.0,
+    alphaWeek: 0.025,
+    accentShares: [0.4, 0.35, 0.25],
+    sessionDistribution: 'even',
     control: 'protein',
-    targetShiftLn: 0.0,
-    targetWaveLn: 0.02,
     rMin: 1,
     rMax: 12,
   },
   volume: {
-    V: 1.08,
-    P: 1.04,
-    wave: 1.15,
+    alphaWeek: 0.035,
+    accentShares: [0.65, 0.22, 0.13],
+    sessionDistribution: 'front',
     control: 'myoglobin',
-    targetShiftLn: 0.0,
-    targetWaveLn: 0.03,
     rMin: 1,
     rMax: 12,
   },
   intensity: {
-    V: 0.96,
-    P: 0.88,
-    wave: 1.25,
+    alphaWeek: 0.03,
+    accentShares: [0.25, 0.45, 0.3],
+    sessionDistribution: 'front',
     control: 'creatinine',
-    targetShiftLn: -0.02,
-    targetWaveLn: 0.03,
     rMin: 1,
     rMax: 12,
   },
   recovery: {
-    V: 0.88,
-    P: 1.06,
-    wave: 0.85,
+    alphaWeek: 0.015,
+    accentShares: [0.2, 0.25, 0.55],
+    sessionDistribution: 'plateau-deload',
     control: 'protein',
-    targetShiftLn: -0.03,
-    targetWaveLn: 0.015,
     rMin: 1,
     rMax: 14,
   },
   performance: {
-    V: 0.98,
-    P: 0.84,
-    wave: 1.05,
+    alphaWeek: 0.02,
+    accentShares: [0.3, 0.5, 0.2],
+    sessionDistribution: 'back',
     control: 'myoglobin',
-    targetShiftLn: -0.02,
-    targetWaveLn: 0.02,
     rMin: 1,
     rMax: 14,
   },
 }
 
-type EnsembleStrategy =
-  | 'dominant_capped'
-  | 'balanced'
-  | 'volume_bias'
-  | 'intensity_bias'
-  | 'recovery_bias'
-
-const VARIANT_STRATEGY: Record<PlanVariantId, EnsembleStrategy> = {
-  balanced: 'balanced',
-  volume: 'volume_bias',
-  intensity: 'intensity_bias',
-  recovery: 'recovery_bias',
-  performance: 'dominant_capped',
-}
-
-const DELTA_STEP = 0.01 // 1%
-const DELTA_MIN_NON_ZERO = 0.01 // 1%
+const DELTA_STEP = 0.005 // 0.5% — мельче шаг, чтобы различия между вариантами
+                          // не стирались округлением.
+const DELTA_MIN_NON_ZERO = 0.005 // 0.5%
 const DELTA_MAX_ABS = 0.65
-const LEADER_CONTRIB_MAX_RATIO = 1.25
+
+const MARKERS: MarkerKey[] = ['creatinine', 'protein', 'myoglobin', 'ketones']
+
+type MarkerValues = Record<MarkerKey, number>
+
+type SessionDistribution = VariantSettings['sessionDistribution']
 
 export function usePlannerProcessing(deps: PlannerProcessingDeps) {
   // ─── Computed ───
@@ -155,14 +142,20 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
   const quantizeStep = (x: number, step = DELTA_STEP) =>
     Math.round(x / step) * step
 
-  const argMaxAbs3 = (a: number, b: number, c: number) => {
-    const aa = Math.abs(a)
-    const bb = Math.abs(b)
-    const cc = Math.abs(c)
-    if (aa >= bb && aa >= cc) return 0
-    if (bb >= aa && bb >= cc) return 1
-    return 2
-  }
+  const dot3 = (
+    a: [number, number, number],
+    b: [number, number, number]
+  ) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
+
+  const clamp3 = (
+    values: [number, number, number],
+    min: number,
+    max: number
+  ): [number, number, number] => [
+    clamp(values[0], min, max),
+    clamp(values[1], min, max),
+    clamp(values[2], min, max),
+  ]
 
   const normalizeShares3 = (shares: [number, number, number]) => {
     const safe: [number, number, number] = [
@@ -174,120 +167,63 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     return [safe[0] / sum, safe[1] / sum, safe[2] / sum] as [number, number, number]
   }
 
-  const capLeaderContributionRatio = (
-    sharesIn: [number, number, number],
-    maxRatio = LEADER_CONTRIB_MAX_RATIO
-  ) => {
-    let shares = normalizeShares3(sharesIn)
-    for (let iter = 0; iter < 12; iter++) {
-      let changed = false
-      for (let i = 0; i < 3; i++) {
-        for (let j = 0; j < 3; j++) {
-          if (i === j) continue
-          const cap = shares[j] * maxRatio
-          if (shares[i] > cap + 1e-10) {
-            shares[i] = cap
-            changed = true
-          }
-        }
-      }
-      shares = normalizeShares3(shares)
-      if (!changed) break
-    }
-    return shares
-  }
-
-  const sharesFromBetas = (beta: [number, number, number]) => {
-    const absV = Math.abs(beta[0])
-    const absP = Math.abs(beta[1])
-    const absR = Math.abs(beta[2])
-    const sum = absV + absP + absR
-    if (sum < 1e-9) return [1 / 3, 1 / 3, 1 / 3] as [number, number, number]
-    return [absV / sum, absP / sum, absR / sum] as [number, number, number]
-  }
-
-  const strategyFactors = (
-    strategy: EnsembleStrategy,
-    dominantIndex: 0 | 1 | 2
-  ): [number, number, number] => {
-    if (strategy === 'volume_bias') return [1.25, 1.0, 1.0]
-    if (strategy === 'intensity_bias') return [1.0, 1.25, 1.0]
-    if (strategy === 'recovery_bias') return [1.0, 1.0, 1.25]
-    if (strategy === 'dominant_capped') {
-      const out: [number, number, number] = [1.0, 1.0, 1.0]
-      out[dominantIndex] = 1.25
-      return out
-    }
-    return [1.0, 1.0, 1.0]
-  }
-
-  const buildContributionShares = (
-    strategy: EnsembleStrategy,
-    beta: [number, number, number]
-  ) => {
-    const dominantIndex = argMaxAbs3(beta[0], beta[1], beta[2]) as 0 | 1 | 2
-    const betaShares = sharesFromBetas(beta)
-    const factors = strategyFactors(strategy, dominantIndex)
-    const mixed: [number, number, number] = [
-      (0.5 + betaShares[0]) * factors[0],
-      (0.5 + betaShares[1]) * factors[1],
-      (0.5 + betaShares[2]) * factors[2],
-    ]
-    return capLeaderContributionRatio(normalizeShares3(mixed))
-  }
-
-  const getBaseRDeltaTarget = (modelName: string) => {
-    if (modelName.includes('Объём')) return -0.05
-    if (modelName.includes('Интенсив')) return 0.1
-    if (modelName.includes('Восстанов')) return 0.18
-    return 0.22 // taper
-  }
-
   const ensureAllDeltasAreNonZero = (
     deltas: [number, number, number],
     signs: [number, number, number]
   ) => {
-    const out: [number, number, number] = [...deltas] as [number, number, number]
-    for (let i = 0; i < 3; i++) {
-      if (Math.abs(out[i]) < DELTA_MIN_NON_ZERO) {
-        out[i] = DELTA_MIN_NON_ZERO * (signs[i] || 1)
+    // Только квантуем и ограничиваем диапазон — не форсируем минимум на КАЖДУЮ
+    // компоненту: это стирало accentShares между вариантами.
+    const out: [number, number, number] = [
+      clamp(quantizeStep(deltas[0], DELTA_STEP), -DELTA_MAX_ABS, DELTA_MAX_ABS),
+      clamp(quantizeStep(deltas[1], DELTA_STEP), -DELTA_MAX_ABS, DELTA_MAX_ABS),
+      clamp(quantizeStep(deltas[2], DELTA_STEP), -DELTA_MAX_ABS, DELTA_MAX_ABS),
+    ]
+    // Если все три после квантования занулились — поднимаем компоненту-лидера
+    // (с наибольшей исходной |delta|) до минимального шага, чтобы план не был пустым.
+    if (out[0] === 0 && out[1] === 0 && out[2] === 0) {
+      let leader = 0
+      let maxAbs = Math.abs(deltas[0])
+      for (let i = 1; i < 3; i++) {
+        if (Math.abs(deltas[i]) > maxAbs) {
+          maxAbs = Math.abs(deltas[i])
+          leader = i
+        }
       }
-      out[i] = clamp(quantizeStep(out[i], DELTA_STEP), -DELTA_MAX_ABS, DELTA_MAX_ABS)
-      if (out[i] === 0) {
-        out[i] = DELTA_MIN_NON_ZERO * (signs[i] || 1)
-      }
+      out[leader] = DELTA_MIN_NON_ZERO * (signs[leader] || 1)
     }
     return out
   }
 
-  const enforceContributionCapOnDeltas = (
+  const rescaleDeltasToTarget = (
     deltasIn: [number, number, number],
     beta: [number, number, number],
-    signs: [number, number, number]
+    target: number
   ) => {
-    const deltas: [number, number, number] = [...deltasIn] as [number, number, number]
-    for (let iter = 0; iter < 24; iter++) {
-      const contrib = [
-        Math.abs(beta[0] * deltas[0]),
-        Math.abs(beta[1] * deltas[1]),
-        Math.abs(beta[2] * deltas[2]),
-      ] as [number, number, number]
-      const cmin = Math.max(1e-9, Math.min(contrib[0], contrib[1], contrib[2]))
-      const cap = cmin * LEADER_CONTRIB_MAX_RATIO
-      let changed = false
-      for (let i = 0; i < 3; i++) {
-        if (contrib[i] <= cap + 1e-9) continue
-        const betaAbs = Math.max(Math.abs(beta[i]), 1e-6)
-        const maxDeltaAbs = cap / betaAbs
-        const clipped = clamp(maxDeltaAbs, DELTA_MIN_NON_ZERO, DELTA_MAX_ABS)
-        const next = quantizeStep(clipped, DELTA_STEP) * (signs[i] || 1)
-        deltas[i] = clamp(next, -DELTA_MAX_ABS, DELTA_MAX_ABS)
-        changed = true
-      }
-      if (!changed) break
-    }
-    return ensureAllDeltasAreNonZero(deltas, signs)
+    const produced = dot3(beta, deltasIn)
+    if (Math.abs(produced) < 1e-9) return deltasIn
+    const scale = target / produced
+    if (!Number.isFinite(scale) || scale === 0) return deltasIn
+    return [
+      deltasIn[0] * scale,
+      deltasIn[1] * scale,
+      deltasIn[2] * scale,
+    ] as [number, number, number]
   }
+
+  const signsByModel = (modelName: string): [number, number, number] => {
+    if (modelName.includes('Объём')) return [1, 1, -1]
+    if (modelName.includes('Интенсив')) return [1, -1, 1]
+    return [-1, -1, 1]
+  }
+
+  const signsOf = (
+    deltas: [number, number, number],
+    fallback: [number, number, number]
+  ): [number, number, number] => [
+    Math.sign(deltas[0]) || fallback[0] || 1,
+    Math.sign(deltas[1]) || fallback[1] || 1,
+    Math.sign(deltas[2]) || fallback[2] || 1,
+  ]
 
   const baselineFor = (athlete: Athlete) => {
     const all = Object.values(athlete.rows).filter(isFilled)
@@ -307,49 +243,6 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
       myoglobin: avg('myoglobin') ?? 20.0,
       ketones: avg('ketones') ?? 0.5,
     }
-  }
-
-  const quantile = (values: number[], q: number) => {
-    if (!values.length) return 0
-    const sorted = values.slice().sort((a, b) => a - b)
-    const idx = clamp(Math.floor((sorted.length - 1) * q), 0, sorted.length - 1)
-    return sorted[idx]
-  }
-
-  const getDefaultDeltaTargets = (modelName: string) => {
-    if (modelName.includes('Объём')) return { dV: 0.12, dP: 0.08 }
-    if (modelName.includes('Интенсив')) return { dV: -0.05, dP: -0.15 }
-    if (modelName.includes('Восстанов')) return { dV: -0.25, dP: 0.15 }
-    return { dV: -0.35, dP: -0.2 } // taper
-  }
-
-  const getAthleteDeltaTargets = (athlete: Athlete, modelName: string) => {
-    const b = baselineFor(athlete)
-    const rows = Object.values(athlete.rows).filter(isFilled)
-    if (rows.length < 6) return getDefaultDeltaTargets(modelName)
-
-    const dVs = rows.map((r) => mkDelta(r.V as number, b.V))
-    const dPs = rows.map((r) => mkDelta(r.P as number, b.P))
-
-    const vLow = quantile(dVs, 0.2)
-    const vMid = quantile(dVs, 0.5)
-    const vHigh = quantile(dVs, 0.8)
-    const pLow = quantile(dPs, 0.2)
-    const pMid = quantile(dPs, 0.5)
-    const pHigh = quantile(dPs, 0.8)
-    const vSpread = Math.max(0, vHigh - vLow)
-    const pSpread = Math.max(0, pHigh - pLow)
-
-    if (modelName.includes('Объём')) {
-      return { dV: vHigh, dP: pMid + 0.5 * (pHigh - pMid) }
-    }
-    if (modelName.includes('Интенсив')) {
-      return { dV: vMid, dP: pLow }
-    }
-    if (modelName.includes('Восстанов')) {
-      return { dV: vLow, dP: pHigh }
-    }
-    return { dV: vLow - 0.5 * vSpread, dP: pLow - 0.25 * pSpread } // taper
   }
 
   const getRestY0 = (m: MarkerKey): number => {
@@ -450,13 +343,11 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     }
   }
 
-  const MARKERS: MarkerKey[] = ['creatinine', 'protein', 'myoglobin', 'ketones']
-
   const fitCompositeFor = (athlete: Athlete): CompositeModel | null => {
     const b = baselineFor(athlete)
     const allRows = Object.values(athlete.rows).filter(isFilled)
 
-    // Need all 3 markers positive in every sample
+    // Need all 4 markers positive in every sample
     const samples = allRows.filter((r) =>
       MARKERS.every(
         (m) =>
@@ -468,7 +359,6 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     if (samples.length < 6) return null
 
     try {
-      // ln-ratios: [ln(cr/cr0), ln(prot/prot0), ln(myo/myo0)]
       const lnRatios = samples.map((r) =>
         MARKERS.map((m) => {
           const y0 = getRestY0For(athlete, m)
@@ -476,22 +366,18 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
         })
       )
 
-      // PCA on ln-ratios -> PC1 composite
       const pca = pcaFromSamples(lnRatios)
       const z = compositeScores(lnRatios, pca)
 
-      // Design matrix (no intercept): [dV, dP, dR]
       const X = samples.map((r) => [
         mkDelta(r.V as number, b.V),
         mkDelta(r.P as number, b.P),
         mkDelta(r.R as number, b.R),
       ])
 
-      // Ridge regression: z = beta1*dV + beta2*dP + beta3*dR
       const lambda = loocvLambda(X, z)
       const ridge = ridgeFit(X, z, lambda)
 
-      // Validate: beta3 (rest coefficient) must be meaningful
       if (!Number.isFinite(ridge.beta[2]) || Math.abs(ridge.beta[2]) < 0.02)
         return null
 
@@ -540,20 +426,227 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     ].join('\n')
   }
 
+  const distributionWeights = (
+    n: number,
+    distribution: SessionDistribution
+  ): number[] => {
+    if (n <= 1) return [1]
+    if (distribution === 'even') return Array.from({ length: n }, () => 1 / n)
+
+    const normalize = (weights: number[]) => {
+      const safe = weights.map((w) => Math.max(0, w))
+      const sum = safe.reduce((a, b) => a + b, 0)
+      if (sum <= 0) return Array.from({ length: n }, () => 1 / n)
+      return safe.map((w) => w / sum)
+    }
+
+    if (distribution === 'front') {
+      if (n === 4) return [0.35, 0.3, 0.25, 0.1]
+      const weights = Array.from({ length: n }, (_, i) => n - i)
+      return normalize(weights)
+    }
+
+    if (distribution === 'back') {
+      if (n === 4) return [0.1, 0.25, 0.3, 0.35]
+      const weights = Array.from({ length: n }, (_, i) => i + 1)
+      return normalize(weights)
+    }
+
+    if (n === 4) return [0.3, 0.3, 0.3, 0.1]
+    if (n === 3) return [0.35, 0.35, 0.3]
+    if (n === 2) return [0.6, 0.4]
+
+    const weights = Array.from({ length: n }, (_, i) => (i === n - 1 ? 0.1 : 0.9 / (n - 1)))
+    return normalize(weights)
+  }
+
+  const distributePC1ToSessions = (
+    weekTarget: number,
+    nSessions: number,
+    distribution: SessionDistribution
+  ) => {
+    const weights = distributionWeights(nSessions, distribution)
+    return weights.map((w) => weekTarget * w)
+  }
+
+  const sessionDeltasFromTarget = (
+    targetEffect: number,
+    accentShares: [number, number, number],
+    beta: [number, number, number],
+    modelName: string
+  ) => {
+    const targetMagnitude = Math.abs(targetEffect)
+    const shares = normalizeShares3(accentShares)
+    const baseSigns = signsByModel(modelName)
+    const betaAbsSafe: [number, number, number] = [
+      Math.max(Math.abs(beta[0]), 1e-3),
+      Math.max(Math.abs(beta[1]), 1e-3),
+      Math.max(Math.abs(beta[2]), 1e-3),
+    ]
+
+    let deltas: [number, number, number] = [
+      (baseSigns[0] * shares[0] * targetMagnitude) / betaAbsSafe[0],
+      (baseSigns[1] * shares[1] * targetMagnitude) / betaAbsSafe[1],
+      (baseSigns[2] * shares[2] * targetMagnitude) / betaAbsSafe[2],
+    ]
+
+    deltas = rescaleDeltasToTarget(deltas, beta, targetEffect)
+
+    return { deltas, baseSigns }
+  }
+
+  const markerValuesFromBaseline = (
+    baseState: ReturnType<typeof baselineFor>
+  ): MarkerValues => ({
+    creatinine: Math.max(1e-9, baseState.creatinine),
+    protein: Math.max(1e-9, baseState.protein),
+    myoglobin: Math.max(1e-9, baseState.myoglobin),
+    ketones: Math.max(1e-9, baseState.ketones),
+  })
+
+  const markerRestValuesForAthlete = (athlete: Athlete): MarkerValues => ({
+    creatinine: Math.max(1e-9, getRestY0For(athlete, 'creatinine')),
+    protein: Math.max(1e-9, getRestY0For(athlete, 'protein')),
+    myoglobin: Math.max(1e-9, getRestY0For(athlete, 'myoglobin')),
+    ketones: Math.max(1e-9, getRestY0For(athlete, 'ketones')),
+  })
+
+  const weeklyPC1Target = (
+    settings: VariantSettings,
+    modelName: string,
+    composite: CompositeModel,
+    currentMarkers: MarkerValues,
+    restMarkers: MarkerValues
+  ) => {
+    const isRecoveryDirection =
+      modelName.includes('Восстанов') || modelName.includes('Пиковый')
+
+    const up = H_up_min(currentMarkers, restMarkers, composite.pca, MARKER_CORRIDORS)
+    const down = headroomDownInPC1(
+      currentMarkers,
+      restMarkers,
+      composite.pca,
+      MARKER_CORRIDORS
+    )
+
+    const corridorHeadroom = isRecoveryDirection ? down : up.value
+    if (!Number.isFinite(corridorHeadroom) || corridorHeadroom <= 0) return 0
+
+    const sign = isRecoveryDirection ? -1 : 1
+    // Честный α_week · H без нижнего клампа — иначе все варианты получают
+    // один и тот же target и различия между планами (alphaWeek) стираются.
+    return sign * settings.alphaWeek * corridorHeadroom
+  }
+
+  const weeklyControlTarget = (
+    settings: VariantSettings,
+    modelName: string,
+    coeffs: Coeffs,
+    restControl: number,
+    control: MarkerKey
+  ) => {
+    const corridor = MARKER_CORRIDORS[control]
+    const lnCurrent = coeffs.b0
+
+    const low = Math.max(1e-6, corridor.low)
+    const high = Math.max(low + 1e-6, corridor.high)
+
+    const lnLow = Math.log(low / Math.max(1e-9, restControl))
+    const lnHigh = Math.log(high / Math.max(1e-9, restControl))
+
+    const isRecoveryDirection =
+      modelName.includes('Восстанов') || modelName.includes('Пиковый')
+
+    const headroom = isRecoveryDirection
+      ? Math.max(0, lnCurrent - lnLow)
+      : Math.max(0, lnHigh - lnCurrent)
+
+    if (headroom <= 0) return 0
+
+    const sign = isRecoveryDirection ? -1 : 1
+    return sign * settings.alphaWeek * headroom
+  }
+
+  const predictMarkers = (
+    deltas: [number, number, number],
+    restMarkers: MarkerValues,
+    composite: CompositeModel,
+    beta: [number, number, number]
+  ) => {
+    const pc1 = dot3(beta, deltas)
+    const predicted: Record<MarkerKey, number> = {
+      creatinine: 0,
+      protein: 0,
+      myoglobin: 0,
+      ketones: 0,
+    }
+
+    MARKERS.forEach((marker, idx) => {
+      const x = composite.pca.means[idx] + composite.pca.weights[idx] * pc1
+      predicted[marker] = Math.exp(x) * restMarkers[marker]
+    })
+
+    return { pc1, predicted }
+  }
+
+  const checkCorridor = (
+    predicted: Partial<Record<MarkerKey, number>>
+  ): CorridorCheck => {
+    const violations: CorridorCheck['violations'] = []
+
+    for (const marker of MARKERS) {
+      const value = predicted[marker]
+      if (value === undefined) continue
+      const corridor = MARKER_CORRIDORS[marker]
+      if (!Number.isFinite(value) || value < corridor.low || value > corridor.high) {
+        violations.push({
+          marker,
+          predicted: Number.isFinite(value) ? value : Number.NaN,
+          low: corridor.low,
+          high: corridor.high,
+        })
+      }
+    }
+
+    return {
+      ok: violations.length === 0,
+      violations,
+    }
+  }
+
+  const predictControlMarker = (
+    deltas: [number, number, number],
+    coeffs: Coeffs,
+    restControl: number,
+    control: MarkerKey,
+    beta: [number, number, number]
+  ) => {
+    const effect = dot3(beta, deltas)
+    const lnPred = coeffs.b0 + effect
+    const predictedValue = Math.exp(lnPred) * Math.max(1e-9, restControl)
+    return {
+      effect,
+      predicted: {
+        [control]: predictedValue,
+      } as Partial<Record<MarkerKey, number>>,
+    }
+  }
+
   const buildPlan = (athlete: Athlete, variantId: PlanVariantId): Plan | null => {
     const base = baselineFor(athlete)
+    const restMarkers = markerRestValuesForAthlete(athlete)
+    const currentMarkers = markerValuesFromBaseline(base)
     const total = deps.getPlanWeeksFor(athlete)
     if (total <= 0) return null
+
     const settings = VARIANT_DEFAULTS[variantId]
+    const accentShares = normalizeShares3(settings.accentShares)
     const composite = fitCompositeFor(athlete)
-    const coeffs = composite
-      ? null
-      : fitCoeffsFor(athlete, settings.control)
-    const strategy = VARIANT_STRATEGY[variantId]
+    const coeffs = composite ? null : fitCoeffsFor(athlete, settings.control)
+
     const betaVector: [number, number, number] = composite
       ? (composite.ridge.beta as [number, number, number])
       : [coeffs!.b1, coeffs!.b2, coeffs!.b3]
-    const contributionShares = buildContributionShares(strategy, betaVector)
 
     const clampR = (x: number) => {
       const a = Math.min(settings.rMin, settings.rMax)
@@ -564,106 +657,91 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     const out: PlannedWeek[] = []
     for (let i = 0; i < total; i++) {
       const modelName = pickModel(i, total)
-      const athleteTargets = getAthleteDeltaTargets(athlete, modelName)
-      const weekDV = (1 + athleteTargets.dV) * settings.V - 1
-      const weekDP = (1 + athleteTargets.dP) * settings.P - 1
-      const weekDR = getBaseRDeltaTarget(modelName)
+      const focus = modelName.includes('Восстанов')
+        ? 'Техника'
+        : modelName.includes('Объём')
+        ? 'Объём'
+        : 'Сила'
+
+      const weekTarget = composite
+        ? weeklyPC1Target(settings, modelName, composite, currentMarkers, restMarkers)
+        : weeklyControlTarget(
+            settings,
+            modelName,
+            coeffs!,
+            Math.max(1e-9, getRestY0For(athlete, settings.control)),
+            settings.control
+          )
+
+      const sessionTargets = distributePC1ToSessions(
+        weekTarget,
+        athlete.period.sessionsPerWeek,
+        settings.sessionDistribution
+      )
 
       const sessions: PlannedSession[] = []
-      for (let s = 1; s <= athlete.period.sessionsPerWeek; s++) {
-        const focus = modelName.includes('Восстанов')
-          ? 'Техника'
-          : modelName.includes('Объём')
-          ? 'Объём'
-          : 'Сила'
-        const withinWeekPhase =
-          athlete.period.sessionsPerWeek > 1
-            ? (s - 1) / (athlete.period.sessionsPerWeek - 1)
-            : 0
-        const withinWeekWave = Math.sin(withinWeekPhase * Math.PI * 2)
-        const acrossWeeksWave = Math.sin((i + 1) * 0.9)
-        const dVBase = clamp(
-          weekDV + 0.06 * settings.wave * withinWeekWave + 0.03 * acrossWeeksWave,
-          -DELTA_MAX_ABS,
-          DELTA_MAX_ABS
-        )
-        const dPBase = clamp(
-          weekDP - 0.05 * settings.wave * withinWeekWave - 0.02 * acrossWeeksWave,
-          -DELTA_MAX_ABS,
-          DELTA_MAX_ABS
-        )
-        const dRBase = clamp(
-          weekDR + 0.04 * settings.wave * withinWeekWave + 0.02 * acrossWeeksWave,
-          -DELTA_MAX_ABS,
-          DELTA_MAX_ABS
-        )
+      for (let s = 0; s < athlete.period.sessionsPerWeek; s++) {
+        const target = sessionTargets[s] ?? 0
 
-        const phase = (i + 1) * 0.7 + withinWeekPhase * 1.4
-        const targetShift =
-          settings.targetShiftLn + settings.targetWaveLn * Math.sin(phase)
-        const baseEffect =
-          betaVector[0] * dVBase +
-          betaVector[1] * dPBase +
-          betaVector[2] * dRBase
-        const targetEffect = baseEffect + targetShift
-        const targetMagnitude = Math.max(Math.abs(targetEffect), DELTA_STEP * 3)
+        let deltas: [number, number, number] = [0, 0, 0]
+        if (Math.abs(target) > 1e-9) {
+          const seeded = sessionDeltasFromTarget(
+            target,
+            accentShares,
+            betaVector,
+            modelName
+          )
+          deltas = seeded.deltas
+          const signs = signsOf(deltas, seeded.baseSigns)
 
-        const signs: [number, number, number] = [
-          Math.sign(dVBase) || Math.sign(targetEffect * (betaVector[0] || 1)) || 1,
-          Math.sign(dPBase) || Math.sign(targetEffect * (betaVector[1] || 1)) || 1,
-          Math.sign(dRBase) || Math.sign(targetEffect * (betaVector[2] || 1)) || 1,
-        ]
-
-        const betaAbsSafe: [number, number, number] = [
-          Math.max(Math.abs(betaVector[0]), 1e-3),
-          Math.max(Math.abs(betaVector[1]), 1e-3),
-          Math.max(Math.abs(betaVector[2]), 1e-3),
-        ]
-
-        let deltas: [number, number, number] = [
-          (signs[0] * contributionShares[0] * targetMagnitude) / betaAbsSafe[0],
-          (signs[1] * contributionShares[1] * targetMagnitude) / betaAbsSafe[1],
-          (signs[2] * contributionShares[2] * targetMagnitude) / betaAbsSafe[2],
-        ]
-
-        const producedEffect =
-          betaVector[0] * deltas[0] +
-          betaVector[1] * deltas[1] +
-          betaVector[2] * deltas[2]
-        if (Math.abs(producedEffect) > 1e-9) {
-          const scale = targetEffect / producedEffect
-          if (Number.isFinite(scale) && scale !== 0) {
-            deltas = [
-              deltas[0] * scale,
-              deltas[1] * scale,
-              deltas[2] * scale,
-            ]
-          }
+          deltas = clamp3(deltas, -DELTA_MAX_ABS, DELTA_MAX_ABS)
+          deltas = ensureAllDeltasAreNonZero(deltas, signs)
+          deltas = rescaleDeltasToTarget(deltas, betaVector, target)
+          deltas = [
+            clamp(quantizeStep(deltas[0], DELTA_STEP), -DELTA_MAX_ABS, DELTA_MAX_ABS),
+            clamp(quantizeStep(deltas[1], DELTA_STEP), -DELTA_MAX_ABS, DELTA_MAX_ABS),
+            clamp(quantizeStep(deltas[2], DELTA_STEP), -DELTA_MAX_ABS, DELTA_MAX_ABS),
+          ]
         }
 
-        deltas = [
-          clamp(deltas[0], -DELTA_MAX_ABS, DELTA_MAX_ABS),
-          clamp(deltas[1], -DELTA_MAX_ABS, DELTA_MAX_ABS),
-          clamp(deltas[2], -DELTA_MAX_ABS, DELTA_MAX_ABS),
-        ]
-        deltas = ensureAllDeltasAreNonZero(deltas, signs)
-        deltas = enforceContributionCapOnDeltas(deltas, betaVector, signs)
-
-        const dV = deltas[0]
-        const dP = deltas[1]
-        const dR = deltas[2]
+        const [dV, dP, dR] = deltas
         const V = Math.max(0, Math.round(base.V * (1 + dV)))
         const P = Math.max(10, Math.round(base.P * (1 + dP)))
+
         const Rraw = applyDelta(base.R, dR)
         const Rclamped = clampR(Rraw)
         const R = Math.round(Rclamped * 10) / 10
+        const rWarn = !Number.isFinite(Rraw) || Rclamped !== Rraw
 
-        const warn = !Number.isFinite(Rraw) || Rclamped !== Rraw
+        let pc1Predicted = dot3(betaVector, deltas)
+        let markersPredicted: Partial<Record<MarkerKey, number>> = {}
+        let corridor: CorridorCheck = { ok: true, violations: [] }
+
+        if (composite) {
+          const predicted = predictMarkers(deltas, restMarkers, composite, betaVector)
+          pc1Predicted = predicted.pc1
+          markersPredicted = predicted.predicted
+          corridor = checkCorridor(predicted.predicted)
+        } else {
+          const restControl = Math.max(1e-9, getRestY0For(athlete, settings.control))
+          const predicted = predictControlMarker(
+            deltas,
+            coeffs!,
+            restControl,
+            settings.control,
+            betaVector
+          )
+          pc1Predicted = predicted.effect
+          markersPredicted = predicted.predicted
+          corridor = checkCorridor(predicted.predicted)
+        }
+
+        const warn = rWarn || !corridor.ok
 
         sessions.push({
           id: uid(),
           week: i + 1,
-          session: s,
+          session: s + 1,
           focus,
           model: modelName,
           V,
@@ -671,6 +749,9 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
           R,
           workout: buildWorkout(focus, V, P),
           flag: warn ? 'Внимание' : 'OK',
+          pc1Predicted,
+          markersPredicted,
+          corridor,
         })
       }
 

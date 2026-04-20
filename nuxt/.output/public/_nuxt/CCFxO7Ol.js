@@ -1,1 +1,0 @@
-import{C as e}from"./C0yOmNn8.js";import{j as o,m as t,o as s}from"./Buz9ctvt.js";const p=o({__name:"models",setup(a){return(n,r)=>(s(),t(e,{slug:"models",title:"Модели микроциклов"}))}});export{p as default};

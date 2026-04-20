@@ -9,6 +9,9 @@ export type PlannedSession = {
   R: number;
   workout: string;
   flag: "OK" | "Внимание";
+  pc1Predicted?: number;
+  markersPredicted?: Partial<Record<MarkerKey, number>>;
+  corridor?: CorridorCheck;
 };
 
 export type PlannedWeek = {
@@ -27,21 +30,27 @@ export type MarkerKey = "creatinine" | "protein" | "myoglobin" | "ketones";
 export type Coeffs = { b0: number; b1: number; b2: number; b3: number };
 
 export type VariantSettings = {
-  /** global scaling for V */
-  V: number;
-  /** global scaling for P */
-  P: number;
-  /** wave amplitude multiplier */
-  wave: number;
-  /** which marker is used as control target when solving ΔR */
+  /** доля доступного коридора, «съедаемая» за неделю */
+  alphaWeek: number;
+  /** стратегический акцент недели по рычагам [V, P, R] */
+  accentShares: [number, number, number];
+  /** как распределять недельную цель по тренировкам */
+  sessionDistribution: "even" | "front" | "back" | "plateau-deload";
+  /** control-маркер для fallback / отчетности */
   control: MarkerKey;
-  /** shift of target in ln-space */
-  targetShiftLn: number;
-  /** amplitude of target wave in ln-space */
-  targetWaveLn: number;
   /** clamp range for R (minutes) */
   rMin: number;
   rMax: number;
+};
+
+export type SessionTarget = {
+  pc1Target: number;
+  accentShares: [number, number, number];
+};
+
+export type CorridorCheck = {
+  ok: boolean;
+  violations: Array<{ marker: MarkerKey; predicted: number; low: number; high: number }>;
 };
 
 export type PlanVariantId =

@@ -1,18 +1,4 @@
-import type { PlanVariant } from '~/utils/plannerTypes'
-
-export const postulateIds = {
-  p1: 'postulate-1',
-  p2: 'postulate-2',
-  p3: 'postulate-3',
-  p4: 'postulate-4',
-} as const
-
-export const planVariants: PlanVariant[] = [
-  {
-    id: 'balanced',
-    title: 'План A — Сбалансированный',
-    subtitle: 'Ровный набор нагрузки без резких акцентов',
-    explanationHtml: `
+import{j as n,c as e,J as l,a as s,t as a,B as b,o as i}from"./E6v3ej5V.js";const p={class:"rounded-2xl border bg-white shadow-soft"},u={key:0,class:"px-5 pt-5"},c={class:"text-base font-semibold"},r={key:0,class:"text-sm text-slate-600 mt-1"},d={class:"p-5"},x=n({__name:"UiCard",props:{title:{},subtitle:{}},setup(t){return(o,h)=>(i(),e("div",p,[t.title?(i(),e("div",u,[s("div",c,a(t.title),1),t.subtitle?(i(),e("div",r,a(t.subtitle),1)):l("",!0)])):l("",!0),s("div",d,[b(o.$slots,"default")])]))}}),k={p1:"postulate-1",p2:"postulate-2",p3:"postulate-3",p4:"postulate-4"},_=[{id:"balanced",title:"План A — Сбалансированный",subtitle:"Ровный набор нагрузки без резких акцентов",explanationHtml:`
 <h3>Логика варианта</h3>
 <p>
 План строится по цепочке: <b>цель недели по PC1 → распределение по тренировкам → инверсия в ΔV/ΔP/ΔR → прогноз маркеров → проверка коридора</b>.
@@ -25,13 +11,7 @@ export const planVariants: PlanVariant[] = [
 <p>
 Это базовый вариант без перекоса, удобный для устойчивого прогресса и контроля рисков.
 </p>
-`,
-  },
-  {
-    id: 'volume',
-    title: 'План B — Объёмный',
-    subtitle: 'Приоритет тоннажа при контроле маркеров',
-    explanationHtml: `
+`},{id:"volume",title:"План B — Объёмный",subtitle:"Приоритет тоннажа при контроле маркеров",explanationHtml:`
 <h3>Логика варианта</h3>
 <p>
 Основной драйвер — объём V. Но финальные значения всегда проходят через прогноз маркеров и проверку коридоров,
@@ -42,13 +22,7 @@ export const planVariants: PlanVariant[] = [
   <li><b>accentShares:</b> [0.65, 0.22, 0.13] (доминирует V)</li>
   <li><b>sessionDistribution:</b> front (большая доля в начале недели)</li>
 </ul>
-`,
-  },
-  {
-    id: 'intensity',
-    title: 'План C — Интенсивностный',
-    subtitle: 'Акцент на интенсивность и восстановление',
-    explanationHtml: `
+`},{id:"intensity",title:"План C — Интенсивностный",subtitle:"Акцент на интенсивность и восстановление",explanationHtml:`
 <h3>Логика варианта</h3>
 <p>
 В этом варианте основной акцент переносится на P и частично R. Нагрузка распределяется так,
@@ -59,13 +33,7 @@ export const planVariants: PlanVariant[] = [
   <li><b>accentShares:</b> [0.25, 0.45, 0.30]</li>
   <li><b>sessionDistribution:</b> front</li>
 </ul>
-`,
-  },
-  {
-    id: 'recovery',
-    title: 'План D — Восстановительный',
-    subtitle: 'Бережный режим и возврат в безопасную зону',
-    explanationHtml: `
+`},{id:"recovery",title:"План D — Восстановительный",subtitle:"Бережный режим и возврат в безопасную зону",explanationHtml:`
 <h3>Логика варианта</h3>
 <p>
 Цель недели направлена в сторону восстановления (отрицательный сдвиг PC1). При этом вклад R повышен,
@@ -76,13 +44,7 @@ export const planVariants: PlanVariant[] = [
   <li><b>accentShares:</b> [0.20, 0.25, 0.55] (ведущий рычаг — R)</li>
   <li><b>sessionDistribution:</b> plateau-deload</li>
 </ul>
-`,
-  },
-  {
-    id: 'performance',
-    title: 'План E — Соревновательный',
-    subtitle: 'Подводка к старту с акцентом на результат',
-    explanationHtml: `
+`},{id:"performance",title:"План E — Соревновательный",subtitle:"Подводка к старту с акцентом на результат",explanationHtml:`
 <h3>Логика варианта</h3>
 <p>
 Вариант ориентирован на подводку к старту: акцент на интенсивности, умеренный объём,
@@ -96,6 +58,4 @@ export const planVariants: PlanVariant[] = [
 <p>
 Смысл всех вариантов одинаков: различаются темп изменения состояния и вектор акцента, а не «волны».
 </p>
-`,
-  },
-]
+`}];export{x as _,_ as a,k as p};

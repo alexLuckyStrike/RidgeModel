@@ -1,14 +1,27 @@
 <template>
-  <div class="mt-3">
+  <div class="flex items-center justify-between gap-3">
+    <div class="text-sm text-slate-600">
+      Нажмите, чтобы скрыть или раскрыть блок периода.
+    </div>
     <button
       type="button"
-      class="h-10 px-3 rounded-xl border text-sm font-medium hover:bg-slate-50"
-      @click="athleteCountModel.value = athleteCountModel.value + 1"
+      class="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
+      @click="togglePeriodCollapsed"
     >
-      Добавить спортсмена
+      {{ periodCollapsed ? "Развернуть" : "Свернуть" }}
     </button>
   </div>
-  <div class="mt-4 space-y-4">
+  <div v-show="!periodCollapsed" class="mt-4 space-y-4">
+    <div class="mt-3">
+      <button
+        type="button"
+        class="h-10 px-3 rounded-xl border text-sm font-medium hover:bg-slate-50"
+        @click="athleteCountModel.value = athleteCountModel.value + 1"
+      >
+        Добавить спортсмена
+      </button>
+    </div>
+
     <div
       v-for="(athlete, athleteIndex) in athletes"
       :key="athlete.id"
@@ -87,9 +100,15 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import type { Ref } from 'vue'
 
 type Athlete = any
+
+const periodCollapsed = ref(true)
+const togglePeriodCollapsed = () => {
+  periodCollapsed.value = !periodCollapsed.value
+}
 
 defineProps<{
   athletes: Athlete[]

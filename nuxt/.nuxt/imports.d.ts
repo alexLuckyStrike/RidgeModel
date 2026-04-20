@@ -32,11 +32,12 @@ export { useAlgorithmAuth, PendingRoute } from '../composables/useAlgorithmAuth'
 export { usePlannerData, PlannerDataDeps } from '../composables/usePlannerData';
 export { usePlannerDisplay, PlannerDisplayDeps } from '../composables/usePlannerDisplay';
 export { MVP_LOAD5_MAX_SETS, usePlannerMvp, MvpKey } from '../composables/usePlannerMvp';
-export { usePlannerProcessing, PlannerProcessingDeps } from '../composables/usePlannerProcessing';
+export { VARIANT_DEFAULTS, usePlannerProcessing, PlannerProcessingDeps } from '../composables/usePlannerProcessing';
+export { MARKER_REFERENCE_SCALES, MARKER_CORRIDORS, headroomUpInPC1, headroomDownInPC1, H_up_min, PCA_MARKER_ORDER, predictAllMarkers, checkCorridor, MarkerCorridor, MarkerReferenceScale } from '../utils/markerCorridors';
 export { olsFit, solveLinearSystem, OlsResult } from '../utils/ols';
 export { columnMeans, covMatrix, pc1Extract, compositeScores, pcaFromSamples, PcaResult } from '../utils/pca';
 export { isFilled, keyOf, uid } from '../utils/plannerHelpers';
-export { PlannedSession, PlannedWeek, Plan, MarkerKey, Coeffs, VariantSettings, PlanVariantId, PlanVariant, RidgeCoeffs, PcaWeights, CompositeModel } from '../utils/plannerTypes';
+export { PlannedSession, PlannedWeek, Plan, MarkerKey, Coeffs, VariantSettings, SessionTarget, CorridorCheck, PlanVariantId, PlanVariant, RidgeCoeffs, PcaWeights, CompositeModel } from '../utils/plannerTypes';
 export { postulateIds, planVariants } from '../utils/plannerVariants';
 export { ridgeFit, loocvLambda, RidgeResult } from '../utils/ridge';
 export { useAthletesStore, Row, RestBaseline, Athlete } from '../stores/athletes';
