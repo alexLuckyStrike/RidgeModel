@@ -6,10 +6,8 @@
           Моделирование микроциклов
         </h1>
         <p class="text-slate-700 mt-2">
-          Вводите параметры нагрузки (V/P/R) и маркеры, затем нажимайте
-          <b>«Получить модель тренировочного плана»</b>. Приложение построит
-          недельные микроциклы, покажет план, график динамики и позволит
-          экспортировать результат в PDF.
+          Вводите параметры нагрузки (V/P/R) и маркеры. Текущий модуль
+          расчёта временно отключён и очищен для полной переработки.
         </p>
       </div>
 
@@ -133,205 +131,12 @@
 
       <div class="space-y-6 w-full">
         <UiCard
-          title="Как построены микроциклы"
-          subtitle="Краткое пояснение логики формирования плана"
+          title="Расчёт"
+          subtitle="Модуль расчёта очищен для полной переработки"
         >
-          <div class="flex items-center justify-between gap-3">
-            <div class="text-sm text-slate-600">
-              Нажмите, чтобы скрыть или раскрыть блок пояснения.
-            </div>
-            <button
-              type="button"
-              class="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
-              @click="toggleMicrocyclesInfo"
-            >
-              <span>{{ microcyclesInfoCollapsed ? "Показать" : "Скрыть" }}</span>
-              <svg
-                class="h-4 w-4 transition-transform"
-                :class="microcyclesInfoCollapsed ? '' : 'rotate-180'"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.5"
-                  d="M6 9l6 6 6-6"
-                />
-              </svg>
-            </button>
-          </div>
-
-          <div v-if="!microcyclesInfoCollapsed && !activePlan" class="text-slate-600 text-sm mt-4">
-            Сначала получите варианты тренировочного плана.
-          </div>
-          <div v-else-if="!microcyclesInfoCollapsed" class="space-y-4 text-sm text-slate-700 mt-4">
-            <div>
-              <div class="text-xs uppercase tracking-wide text-slate-500 mb-1">
-                Уравнение микроцикла
-              </div>
-              <div
-                class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 font-mono text-[13px] text-slate-800"
-              >
-                ΔPC1 = β<sub>V</sub>·ΔV + β<sub>P</sub>·ΔP + β<sub>R</sub>·ΔR
-              </div>
-              <p class="mt-1 text-xs text-slate-500">
-                ΔV, ΔP, ΔR — относительные отклонения V / P / R от базы спортсмена;
-                ΔPC1 — композитный отклик биомаркеров.
-              </p>
-            </div>
-
-            <div>
-              <div class="text-xs uppercase tracking-wide text-slate-500 mb-1">
-                Коэффициенты β (ridge-регрессия, индивидуальные)
-              </div>
-              <table class="w-full text-left text-sm">
-                <thead class="text-xs text-slate-500">
-                  <tr>
-                    <th class="py-1 pr-2 font-medium">β<sub>V</sub> (объём)</th>
-                    <th class="py-1 pr-2 font-medium">β<sub>P</sub> (КПШ)</th>
-                    <th class="py-1 pr-2 font-medium">β<sub>R</sub> (паузы)</th>
-                    <th class="py-1 font-medium">R²</th>
-                  </tr>
-                </thead>
-                <tbody class="font-mono">
-                  <tr>
-                    <td class="py-1 pr-2">{{ fmt(compositeModel?.ridge.beta[0], 4) }}</td>
-                    <td class="py-1 pr-2">{{ fmt(compositeModel?.ridge.beta[1], 4) }}</td>
-                    <td class="py-1 pr-2">{{ fmt(compositeModel?.ridge.beta[2], 4) }}</td>
-                    <td class="py-1">{{ fmt(compositeModel?.ridge.r2, 3) }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div>
-              <div class="text-xs uppercase tracking-wide text-slate-500 mb-1">
-                Базовые значения (средние по периоду наблюдения)
-              </div>
-              <div class="grid grid-cols-3 gap-2">
-                <div class="rounded-lg border border-slate-200 bg-white px-3 py-2">
-                  <div class="text-[11px] uppercase text-slate-500">Объём</div>
-                  <div class="text-slate-900 font-semibold">
-                    {{ fmt(baseline.V, 0) }} <span class="text-xs font-normal text-slate-500">кг</span>
-                  </div>
-                </div>
-                <div class="rounded-lg border border-slate-200 bg-white px-3 py-2">
-                  <div class="text-[11px] uppercase text-slate-500">КПШ</div>
-                  <div class="text-slate-900 font-semibold">
-                    {{ fmt(baseline.P, 0) }} <span class="text-xs font-normal text-slate-500">подъёмов</span>
-                  </div>
-                </div>
-                <div class="rounded-lg border border-slate-200 bg-white px-3 py-2">
-                  <div class="text-[11px] uppercase text-slate-500">Паузы</div>
-                  <div class="text-slate-900 font-semibold">
-                    {{ fmt(baseline.R, 1) }} <span class="text-xs font-normal text-slate-500">мин</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <p class="text-xs text-slate-500">
-              Значения подставляются в уравнение: для каждой сессии решается инверсия
-              ΔPC1 → (ΔV, ΔP, ΔR) согласно акцентам выбранного варианта плана,
-              после чего прогноз биомаркеров сверяется с референсным коридором.
-            </p>
-
-            <!-- 5 микроциклов для активного спортсмена (реальные данные) -->
-            <div class="pt-2">
-              <div class="text-xs uppercase tracking-wide text-slate-500 mb-2">
-                5 моделей микроцикла для этого спортсмена
-              </div>
-              <div
-                v-if="!microcycleCards.length"
-                class="text-xs text-slate-500"
-              >
-                Сначала нажмите «Получить варианты плана» — тогда здесь
-                появятся 5 микроциклов, посчитанных из ваших наблюдений.
-              </div>
-              <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div
-                  v-for="mc in microcycleCards"
-                  :key="mc.id"
-                  class="relative rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden"
-                >
-                  <div
-                    class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r"
-                    :class="accentBar[mc.accent]"
-                  />
-                  <div class="p-3 pt-4">
-                    <div class="flex items-baseline justify-between gap-2">
-                      <div class="font-semibold text-slate-900">{{ mc.title }}</div>
-                      <div class="text-[11px] text-slate-500">микроцикл · 4 сессии</div>
-                    </div>
-                    <div class="mt-1 text-[11px] font-mono text-slate-600">
-                      {{ mc.params }}
-                    </div>
-                    <div class="mt-1 text-xs text-slate-700">
-                      <span class="text-slate-500">Лидер:</span> {{ mc.leader }}
-                    </div>
-
-                    <div class="mt-2 overflow-x-auto">
-                      <table class="w-full text-[12px]">
-                        <thead class="text-[11px] text-slate-500">
-                          <tr class="border-b border-slate-200">
-                            <th class="py-1 pr-2 text-left font-medium">#</th>
-                            <th class="py-1 pr-2 text-right font-medium">V, кг</th>
-                            <th class="py-1 pr-2 text-right font-medium">P, с</th>
-                            <th class="py-1 pr-2 text-right font-medium">R, с</th>
-                            <th class="py-1 pr-2 text-right font-medium">crea</th>
-                            <th class="py-1 pr-2 text-right font-medium">prot</th>
-                            <th class="py-1 pr-2 text-right font-medium">myo</th>
-                            <th class="py-1 pr-2 text-right font-medium">ket</th>
-                            <th class="py-1 pr-2 text-left font-medium">Зоны</th>
-                            <th class="py-1 text-left font-medium">Флаг</th>
-                          </tr>
-                        </thead>
-                        <tbody class="font-mono">
-                          <tr
-                            v-for="s in mc.sessions"
-                            :key="s.i"
-                            class="border-b border-slate-100 last:border-0"
-                          >
-                            <td class="py-1 pr-2">{{ s.i }}</td>
-                            <td class="py-1 pr-2 text-right">{{ s.V }}</td>
-                            <td class="py-1 pr-2 text-right">{{ s.P }}</td>
-                            <td class="py-1 pr-2 text-right">{{ s.R }}</td>
-                            <td class="py-1 pr-2 text-right">{{ s.crea }}</td>
-                            <td class="py-1 pr-2 text-right">{{ s.prot }}</td>
-                            <td class="py-1 pr-2 text-right">{{ s.myo }}</td>
-                            <td class="py-1 pr-2 text-right">{{ s.ket }}</td>
-                            <td class="py-1 pr-2">{{ s.zones }}</td>
-                            <td class="py-1">
-                              <span
-                                class="inline-flex items-center rounded-full px-2 py-[1px] text-[10px] font-medium"
-                                :class="s.flag === 'OK'
-                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                  : 'bg-amber-50 text-amber-700 border border-amber-200'"
-                              >
-                                {{ s.flag }}
-                              </span>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-
-                    <p class="mt-2 text-[11px] text-slate-500 leading-snug">
-                      {{ mc.note }}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <p v-if="microcycleCards.length" class="mt-2 text-[11px] text-slate-500">
-                V/P/R и прогноз маркеров — из реально построенного плана
-                (<code>athletePlans[{{ activeAthleteId }}][variantId].weeks[0]</code>).
-                Зоны Z1–Zn берутся из шкал <code>MARKER_REFERENCE_SCALES</code>
-                (URI-2 Мак + Уриполиан-5А). H_up / H_down пересчитаны через
-                индивидуальную PCA-модель спортсмена.
-              </p>
-            </div>
+          <div class="text-sm text-slate-600">
+            Текущая вычислительная логика временно отключена. После утверждения новой
+            схемы здесь подключим переработанный расчёт.
           </div>
         </UiCard>
 
@@ -384,15 +189,10 @@ import PlannerCharts from '~/components/planner/PlannerCharts.vue'
 import PlanWeekCard from '~/components/planner/PlanWeekCard.vue'
 import ObservationWeek from '~/components/planner/ObservationWeek.vue'
 import { usePlannerData } from '~/composables/usePlannerData'
-import { usePlannerProcessing, VARIANT_DEFAULTS } from '~/composables/usePlannerProcessing'
+import { usePlannerProcessing } from '~/composables/usePlannerProcessing'
 import { usePlannerDisplay } from '~/composables/usePlannerDisplay'
 import { keyOf } from '~/utils/plannerHelpers'
-import type { MarkerKey, PlanVariantId, Plan } from '~/utils/plannerTypes'
-import {
-  MARKER_REFERENCE_SCALES,
-  H_up_min,
-  headroomDownInPC1,
-} from '~/utils/markerCorridors'
+import type { PlanVariantId, Plan } from '~/utils/plannerTypes'
 
 // ─── Shared state (owned by orchestrator) ───
 const athletePlans = ref<
@@ -404,11 +204,6 @@ const chartsRef = ref<InstanceType<typeof PlannerCharts> | null>(null)
 const mvpCollapsed = ref(true)
 const toggleMvpBlock = () => {
   mvpCollapsed.value = !mvpCollapsed.value
-}
-
-const microcyclesInfoCollapsed = ref(true)
-const toggleMicrocyclesInfo = () => {
-  microcyclesInfoCollapsed.value = !microcyclesInfoCollapsed.value
 }
 
 const weeksInputCollapsed = ref(true)
@@ -495,167 +290,7 @@ const {
   hasFilledData,
   flatPlan,
   model,
-  planWeeks,
-  baseline,
-  fitCompositeFor,
 } = processing
-
-const compositeModel = computed(() => {
-  const athlete = activeAthlete.value
-  if (!athlete) return null
-  return fitCompositeFor(athlete)
-})
-
-const fmt = (x: number | null | undefined, digits = 3) =>
-  typeof x === 'number' && Number.isFinite(x) ? x.toFixed(digits) : '—'
-
-// ─── Микроциклы из реальных данных активного спортсмена ───
-
-type MicrocycleSession = {
-  i: number
-  V: number
-  P: number
-  R: number
-  crea: number | null
-  prot: number | null
-  myo: number | null
-  ket: number | null
-  zones: string
-  flag: 'OK' | 'Внимание'
-}
-type MicrocycleCard = {
-  id: string
-  accent: string
-  title: string
-  params: string
-  leader: string
-  sessions: MicrocycleSession[]
-  note: string
-}
-
-const VARIANT_META: Record<
-  PlanVariantId,
-  { title: string; accent: string; leader: string; direction: 'up' | 'down' }
-> = {
-  balanced:   { title: 'A — Balanced',   accent: 'sky',     leader: 'Равный вклад V/P/R', direction: 'up' },
-  volume:     { title: 'B — Volume',     accent: 'emerald', leader: 'V↑ (объём — основной рычаг)', direction: 'up' },
-  intensity:  { title: 'C — Intensity',  accent: 'rose',    leader: 'P↓ (короче пауза — средний вес ↑)', direction: 'up' },
-  recovery:   { title: 'D — Recovery',   accent: 'amber',   leader: 'R↑ (паузы растут — движение вниз по PC1)', direction: 'down' },
-  performance:{ title: 'E — Performance',accent: 'violet',  leader: 'P↓, back-loaded (пик к концу недели)', direction: 'up' },
-}
-
-/** По значению маркера возвращает метку зоны Z1..Zn по шкале референсов. */
-function markerZone(m: MarkerKey, v: number | null | undefined): string {
-  if (v == null || !Number.isFinite(v)) return '—'
-  const scale = MARKER_REFERENCE_SCALES[m].values
-  for (let i = 0; i < scale.length - 1; i++) {
-    if (v <= scale[i + 1]) return `Z${i + 1}`
-  }
-  return `Z${scale.length - 1}+`
-}
-
-function zoneString(markers: Partial<Record<MarkerKey, number>> | undefined): string {
-  if (!markers) return '—'
-  return (
-    markerZone('creatinine', markers.creatinine) + '/' +
-    markerZone('protein', markers.protein) + '/' +
-    markerZone('myoglobin', markers.myoglobin) + '/' +
-    markerZone('ketones', markers.ketones)
-  )
-}
-
-const round = (x: number | undefined | null, digits = 0) =>
-  typeof x === 'number' && Number.isFinite(x)
-    ? Number(x.toFixed(digits))
-    : null
-
-const microcycleCards = computed<MicrocycleCard[]>(() => {
-  const athleteId = activeAthleteId.value
-  if (!athleteId) return []
-  const plans = athletePlans.value[athleteId]
-  if (!plans) return []
-
-  const athlete = activeAthlete.value
-  const composite = athlete ? fitCompositeFor(athlete) : null
-  const b = baseline.value
-  const rest: Record<MarkerKey, number> = {
-    creatinine: b.creatinine,
-    protein: b.protein,
-    myoglobin: b.myoglobin,
-    ketones: b.ketones,
-  }
-  const current: Record<MarkerKey, number> = { ...rest }
-
-  const ids: PlanVariantId[] = ['balanced', 'volume', 'intensity', 'recovery', 'performance']
-  const out: MicrocycleCard[] = []
-
-  for (const id of ids) {
-    const plan = plans[id]
-    const meta = VARIANT_META[id]
-    const settings = VARIANT_DEFAULTS[id]
-    if (!plan || !plan.weeks.length) continue
-
-    const week = plan.weeks[0]
-    const sessions: MicrocycleSession[] = week.sessions.map((s, idx) => ({
-      i: idx + 1,
-      V: Math.round(s.V),
-      P: Math.round(s.P),
-      R: Number(s.R.toFixed(1)),
-      crea: round(s.markersPredicted?.creatinine, 2),
-      prot: round(s.markersPredicted?.protein, 2),
-      myo:  round(s.markersPredicted?.myoglobin, 1),
-      ket:  round(s.markersPredicted?.ketones, 2),
-      zones: zoneString(s.markersPredicted),
-      flag: s.flag,
-    }))
-
-    // Headroom/ΔPC1_week — только если есть индивидуальная PCA-модель
-    let headroomStr = 'н/д'
-    if (composite) {
-      const h = meta.direction === 'up'
-        ? H_up_min(current, rest, composite.pca).value
-        : headroomDownInPC1(current, rest, composite.pca)
-      const dpc1 = (meta.direction === 'up' ? 1 : -1) * settings.alphaWeek * h
-      headroomStr = `H_${meta.direction} = ${h.toFixed(2)} · ΔPC1_week = ${dpc1.toFixed(2)}`
-    }
-
-    const accents = settings.accentShares
-      .map((x) => x.toFixed(2))
-      .join(', ')
-    const params =
-      `α_week = ${settings.alphaWeek} · ${settings.sessionDistribution} · ` +
-      `accentShares [${accents}] · ${headroomStr}`
-
-    const hasWarn = sessions.some((s) => s.flag === 'Внимание')
-    const peak = sessions.reduce(
-      (acc, s) => (s.V > acc.V ? s : acc),
-      sessions[0],
-    )
-    const note = hasWarn
-      ? `Одна из сессий вышла за коридор — см. флаг «Внимание». Пик объёма — S${peak?.i} (V=${peak?.V} кг).`
-      : `Все сессии в коридоре. Пик объёма — S${peak?.i} (V=${peak?.V} кг).`
-
-    out.push({
-      id,
-      accent: meta.accent,
-      title: meta.title,
-      params,
-      leader: meta.leader,
-      sessions,
-      note,
-    })
-  }
-
-  return out
-})
-
-const accentBar: Record<string, string> = {
-  sky: 'from-sky-500 to-sky-300',
-  emerald: 'from-emerald-500 to-emerald-300',
-  rose: 'from-rose-500 to-rose-300',
-  amber: 'from-amber-500 to-amber-300',
-  violet: 'from-violet-500 to-violet-300',
-}
 
 const {
   activeVariant,

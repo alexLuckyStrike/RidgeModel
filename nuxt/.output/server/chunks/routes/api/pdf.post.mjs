@@ -1,4 +1,4 @@
-globalThis.__timing__.logStart('Load chunks/routes/api/pdf.post');import { d as defineEventHandler, a as readBody, u as useRuntimeConfig, s as setResponseHeader } from '../../nitro/nitro.mjs';
+import { d as defineEventHandler, a as readBody, u as useRuntimeConfig, s as setResponseHeader } from '../../nitro/nitro.mjs';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -26,5 +26,5 @@ const pdf_post = defineEventHandler(async (event) => {
   return Buffer.from(res._data);
 });
 
-export { pdf_post as default };;globalThis.__timing__.logEnd('Load chunks/routes/api/pdf.post');
+export { pdf_post as default };
 //# sourceMappingURL=pdf.post.mjs.map

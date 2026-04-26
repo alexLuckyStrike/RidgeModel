@@ -1,0 +1,1 @@
+import{C as t}from"./BggVpGEM.js";import{j as e,C as o,o as a}from"./BpdeAn-n.js";const p=e({__name:"algorithm",setup(r){return(n,s)=>(a(),o(t,{slug:"algorithm",title:"Алгоритм размышлений"}))}});export{p as default};

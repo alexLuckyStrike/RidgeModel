@@ -5,7 +5,7 @@
       class="h-10 px-3 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed"
       @click="model"
     >
-      Получить 5 вариантов тренировочного плана
+      Получить 5 вариантов тренировочного плана (отключено)
     </button>
     <button
       :disabled="!activePlan"
@@ -17,12 +17,8 @@
   </div>
 
   <div v-if="!canModel" class="mt-3 text-xs text-slate-600 space-y-1">
-    <div v-if="!competitionDate">
-      Укажите <b>дату соревнований</b>, чтобы активировать расчёт.
-    </div>
-    <div v-else-if="!hasFilledData">
-      <b>Заполните данные по неделям</b> (хотя бы одну тренировку: V, P, R) в
-      разделе "Ввод данных по неделям" ниже.
+    <div>
+      Расчёт временно отключён. Текущий модуль очищен перед полной переработкой.
     </div>
   </div>
 
