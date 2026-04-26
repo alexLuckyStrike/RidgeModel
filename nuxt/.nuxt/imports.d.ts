@@ -43,4 +43,5 @@ export { ridgeFit, loocvLambda, RidgeResult } from '../utils/ridge';
 export { useAthletesStore, Row, RestBaseline, Athlete } from '../stores/athletes';
 export { useMvpStore, MvpPreview, MvpLoad5Set, MedicalTestResult, OcrItem, MvpAnalysisResult } from '../stores/mvp';
 export { defineStore, acceptHMRUpdate, usePinia, storeToRefs } from '../node_modules/@pinia/nuxt/dist/runtime/composables';
+export { useNuxtDevTools } from '../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools';
 export { definePageMeta } from '../node_modules/nuxt/dist/pages/runtime/composables';

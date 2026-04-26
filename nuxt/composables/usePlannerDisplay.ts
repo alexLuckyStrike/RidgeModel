@@ -6,7 +6,7 @@ import type { Plan, PlannedSession, PlanVariantId } from '~/utils/plannerTypes'
 import type { Athlete, Row, RestBaseline } from '~/stores/athletes'
 
 import PlannerPeriodCard from '~/components/planner/cards/PlannerPeriodCard.vue'
-import PlannerDataCard from '~/components/planner/cards/PlannerDataCard.vue'
+import PlannerDataCard from '~/components/planner/cards/PlannerDataCard/PlannerDataCard.vue'
 import PlannerBaselineCard from '~/components/planner/cards/PlannerBaselineCard.vue'
 import PlannerModelingCard from '~/components/planner/cards/PlannerModelingCard.vue'
 
@@ -18,7 +18,7 @@ export interface PlannerDisplayDeps {
   setActiveAthlete: (id: string) => void
   deleteAthlete: (id: string) => void
   getRow: (athlete: Athlete, w: number, s: number) => Row
-  fillDemo: () => void
+  applyLoadedAthletes: (athletes: Athlete[]) => void
   resetAll: () => void
   activeRestBaseline: ComputedRef<RestBaseline>
   getPlanWeeksFor: (athlete: Athlete) => number
@@ -65,7 +65,7 @@ export function usePlannerDisplay(deps: PlannerDisplayDeps) {
       subtitle: 'База для моделирования',
       component: PlannerDataCard,
       componentProps: {
-        fillDemo: deps.fillDemo,
+        applyLoadedAthletes: deps.applyLoadedAthletes,
         resetAll: deps.resetAll,
       },
     },

@@ -250,7 +250,7 @@ const display = usePlannerDisplay({
   setActiveAthlete: data.setActiveAthlete,
   deleteAthlete: data.deleteAthlete,
   getRow: data.getRow,
-  fillDemo: data.fillDemo,
+  applyLoadedAthletes: data.applyLoadedAthletes,
   resetAll: data.resetAll,
   activeRestBaseline: data.activeRestBaseline,
   getPlanWeeksFor: data.getPlanWeeksFor,

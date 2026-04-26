@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
 
 export type Row = {
   V: number | null;
@@ -63,57 +62,58 @@ const createAthlete = (index: number): Athlete => ({
 const normalizeCount = (count: number) =>
   Math.max(1, Math.min(50, Math.floor(Number(count) || 1)));
 
-export const useAthletesStore = defineStore("athletes", () => {
-  const athletes = ref<Athlete[]>([createAthlete(1)]);
-
-  const setAthleteCount = (count: number) => {
-    const target = normalizeCount(count);
-    if (athletes.value.length > target) {
-      athletes.value.splice(target);
-    } else {
-      for (let i = athletes.value.length; i < target; i += 1) {
-        athletes.value.push(createAthlete(i + 1));
+export const useAthletesStore = defineStore("athletes", {
+  state: () => ({
+    athletes: [createAthlete(1)] as Athlete[],
+  }),
+  actions: {
+    setAthleteCount(count: number) {
+      const target = normalizeCount(count);
+      if (this.athletes.length > target) {
+        this.athletes.splice(target);
+      } else {
+        for (let i = this.athletes.length; i < target; i += 1) {
+          this.athletes.push(createAthlete(i + 1));
+        }
       }
-    }
-    athletes.value.forEach((athlete, idx) => {
-      athlete.name = `Спортсмен ${idx + 1}`;
-    });
-  };
+      this.athletes.forEach((athlete, idx) => {
+        athlete.name = `Спортсмен ${idx + 1}`;
+      });
+    },
 
-  const setAthletes = (payload: Athlete[]) => {
-    if (!Array.isArray(payload) || payload.length === 0) {
-      athletes.value = [createAthlete(1)];
-      return;
-    }
-    athletes.value = payload.map((item, idx) => ({
-      id: item.id || createId(),
-      name: item.name || `Спортсмен ${idx + 1}`,
-      period: item.period || {
-        observationWeeks: 4,
-        sessionsPerWeek: 3,
-        startDate: new Date().toISOString().slice(0, 10),
-        competitionDate: "",
-      },
-      rows: item.rows || {},
-      restBaseline: item.restBaseline || {
-        creatinine: null,
-        protein: null,
-        myoglobin: null,
-        ketones: null,
-      },
-    }));
-    setAthleteCount(athletes.value.length);
-  };
+    setAthletes(payload: Athlete[]) {
+      if (!Array.isArray(payload) || payload.length === 0) {
+        this.athletes = [createAthlete(1)];
+        return;
+      }
+      this.athletes = payload.map((item, idx) => ({
+        id: item.id || createId(),
+        name: item.name || `Спортсмен ${idx + 1}`,
+        period: item.period || {
+          observationWeeks: 4,
+          sessionsPerWeek: 3,
+          startDate: new Date().toISOString().slice(0, 10),
+          competitionDate: "",
+        },
+        rows: item.rows || {},
+        restBaseline: item.restBaseline || {
+          creatinine: null,
+          protein: null,
+          myoglobin: null,
+          ketones: null,
+        },
+      }));
+      this.setAthleteCount(this.athletes.length);
+    },
 
-  const removeAthlete = (id: string) => {
-    if (athletes.value.length <= 1) return;
-    const idx = athletes.value.findIndex((a) => a.id === id);
-    if (idx === -1) return;
-    athletes.value.splice(idx, 1);
-    athletes.value.forEach((a, i) => {
-      a.name = `Спортсмен ${i + 1}`;
-    });
-  };
-
-  return { athletes, setAthleteCount, setAthletes, removeAthlete };
+    removeAthlete(id: string) {
+      if (this.athletes.length <= 1) return;
+      const idx = this.athletes.findIndex((a) => a.id === id);
+      if (idx === -1) return;
+      this.athletes.splice(idx, 1);
+      this.athletes.forEach((a, i) => {
+        a.name = `Спортсмен ${i + 1}`;
+      });
+    },
+  },
 });
