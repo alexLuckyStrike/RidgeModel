@@ -1,6 +1,5 @@
 import { computed, nextTick } from 'vue'
 import type { Ref, ComputedRef } from 'vue'
-import { olsFit } from '~/utils/ols'
 import { ridgeFit, loocvLambda } from '~/utils/ridge'
 import { pcaFromSamples, compositeScores } from '~/utils/pca'
 import { isFilled, uid } from '~/utils/plannerHelpers'
@@ -10,7 +9,6 @@ import {
   headroomDownInPC1,
 } from '~/utils/markerCorridors'
 import type {
-  Coeffs,
   CompositeModel,
   MarkerKey,
   Plan,
@@ -39,7 +37,7 @@ export interface PlannerProcessingDeps {
 
 export const VARIANT_DEFAULTS: Record<PlanVariantId, VariantSettings> = {
   balanced: {
-    alphaWeek: 0.025,
+    alphaWeek: 0.25,
     accentShares: [0.4, 0.35, 0.25],
     sessionDistribution: 'even',
     control: 'protein',
@@ -47,7 +45,7 @@ export const VARIANT_DEFAULTS: Record<PlanVariantId, VariantSettings> = {
     rMax: 12,
   },
   volume: {
-    alphaWeek: 0.035,
+    alphaWeek: 0.35,
     accentShares: [0.65, 0.22, 0.13],
     sessionDistribution: 'front',
     control: 'myoglobin',
@@ -55,7 +53,7 @@ export const VARIANT_DEFAULTS: Record<PlanVariantId, VariantSettings> = {
     rMax: 12,
   },
   intensity: {
-    alphaWeek: 0.03,
+    alphaWeek: 0.30,
     accentShares: [0.25, 0.45, 0.3],
     sessionDistribution: 'front',
     control: 'creatinine',
@@ -63,7 +61,7 @@ export const VARIANT_DEFAULTS: Record<PlanVariantId, VariantSettings> = {
     rMax: 12,
   },
   recovery: {
-    alphaWeek: 0.015,
+    alphaWeek: 0.15,
     accentShares: [0.2, 0.25, 0.55],
     sessionDistribution: 'plateau-deload',
     control: 'protein',
@@ -71,7 +69,7 @@ export const VARIANT_DEFAULTS: Record<PlanVariantId, VariantSettings> = {
     rMax: 14,
   },
   performance: {
-    alphaWeek: 0.02,
+    alphaWeek: 0.20,
     accentShares: [0.3, 0.5, 0.2],
     sessionDistribution: 'back',
     control: 'myoglobin',
@@ -80,10 +78,11 @@ export const VARIANT_DEFAULTS: Record<PlanVariantId, VariantSettings> = {
   },
 }
 
-const DELTA_STEP = 0.005 // 0.5% — мельче шаг, чтобы различия между вариантами
-                          // не стирались округлением.
-const DELTA_MIN_NON_ZERO = 0.005 // 0.5%
+const DELTA_STEP = 0.01 // 1%
+const DELTA_MIN_NON_ZERO = 0.01 // 1%
 const DELTA_MAX_ABS = 0.65
+const MIN_TARGET_MAG = DELTA_STEP * 10 // увеличен для демо: 0.10 вместо 0.03,
+// чтобы недельная ΔPC1 давала видимые колебания V/P/R на графиках.
 
 const MARKERS: MarkerKey[] = ['creatinine', 'protein', 'myoglobin', 'ketones']
 
@@ -171,25 +170,15 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     deltas: [number, number, number],
     signs: [number, number, number]
   ) => {
-    // Только квантуем и ограничиваем диапазон — не форсируем минимум на КАЖДУЮ
-    // компоненту: это стирало accentShares между вариантами.
-    const out: [number, number, number] = [
-      clamp(quantizeStep(deltas[0], DELTA_STEP), -DELTA_MAX_ABS, DELTA_MAX_ABS),
-      clamp(quantizeStep(deltas[1], DELTA_STEP), -DELTA_MAX_ABS, DELTA_MAX_ABS),
-      clamp(quantizeStep(deltas[2], DELTA_STEP), -DELTA_MAX_ABS, DELTA_MAX_ABS),
-    ]
-    // Если все три после квантования занулились — поднимаем компоненту-лидера
-    // (с наибольшей исходной |delta|) до минимального шага, чтобы план не был пустым.
-    if (out[0] === 0 && out[1] === 0 && out[2] === 0) {
-      let leader = 0
-      let maxAbs = Math.abs(deltas[0])
-      for (let i = 1; i < 3; i++) {
-        if (Math.abs(deltas[i]) > maxAbs) {
-          maxAbs = Math.abs(deltas[i])
-          leader = i
-        }
+    const out: [number, number, number] = [...deltas] as [number, number, number]
+    for (let i = 0; i < 3; i++) {
+      if (Math.abs(out[i]) < DELTA_MIN_NON_ZERO) {
+        out[i] = DELTA_MIN_NON_ZERO * (signs[i] || 1)
       }
-      out[leader] = DELTA_MIN_NON_ZERO * (signs[leader] || 1)
+      out[i] = clamp(quantizeStep(out[i], DELTA_STEP), -DELTA_MAX_ABS, DELTA_MAX_ABS)
+      if (out[i] === 0) {
+        out[i] = DELTA_MIN_NON_ZERO * (signs[i] || 1)
+      }
     }
     return out
   }
@@ -218,11 +207,11 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
 
   const signsOf = (
     deltas: [number, number, number],
-    fallback: [number, number, number]
+    defaultSigns: [number, number, number]
   ): [number, number, number] => [
-    Math.sign(deltas[0]) || fallback[0] || 1,
-    Math.sign(deltas[1]) || fallback[1] || 1,
-    Math.sign(deltas[2]) || fallback[2] || 1,
+    Math.sign(deltas[0]) || defaultSigns[0] || 1,
+    Math.sign(deltas[1]) || defaultSigns[1] || 1,
+    Math.sign(deltas[2]) || defaultSigns[2] || 1,
   ]
 
   const baselineFor = (athlete: Athlete) => {
@@ -245,102 +234,11 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     }
   }
 
-  const getRestY0 = (m: MarkerKey): number => {
-    const r = deps.activeRestBaseline.value[m]
-    if (typeof r === 'number' && Number.isFinite(r) && r > 0) return r
-    const b = baseline.value[m]
-    return typeof b === 'number' && Number.isFinite(b) && b > 0 ? b : 1
-  }
-
   const getRestY0For = (athlete: Athlete, m: MarkerKey): number => {
     const r = athlete.restBaseline[m]
     if (typeof r === 'number' && Number.isFinite(r) && r > 0) return r
     const b = baselineFor(athlete)[m]
     return typeof b === 'number' && Number.isFinite(b) && b > 0 ? b : 1
-  }
-
-  const defaultCoeffs = (m: MarkerKey): Coeffs => {
-    const b = baseline.value
-    const yTrain0 = b[m]
-    const yRest0 = getRestY0(m)
-    const b0 = Math.log(Math.max(1e-9, yTrain0) / Math.max(1e-9, yRest0))
-    if (m === 'myoglobin') return { b0, b1: 0.85, b2: 0.25, b3: -0.55 }
-    if (m === 'protein') return { b0, b1: 0.45, b2: 0.35, b3: -0.4 }
-    if (m === 'ketones') return { b0, b1: 0.7, b2: 0.3, b3: -0.5 }
-    return { b0, b1: 0.3, b2: 0.55, b3: -0.35 }
-  }
-
-  const defaultCoeffsFor = (athlete: Athlete, m: MarkerKey): Coeffs => {
-    const b = baselineFor(athlete)
-    const yTrain0 = b[m]
-    const yRest0 = getRestY0For(athlete, m)
-    const b0 = Math.log(Math.max(1e-9, yTrain0) / Math.max(1e-9, yRest0))
-    if (m === 'myoglobin') return { b0, b1: 0.85, b2: 0.25, b3: -0.55 }
-    if (m === 'protein') return { b0, b1: 0.45, b2: 0.35, b3: -0.4 }
-    if (m === 'ketones') return { b0, b1: 0.7, b2: 0.3, b3: -0.5 }
-    return { b0, b1: 0.3, b2: 0.55, b3: -0.35 }
-  }
-
-  const fitCoeffs = (m: MarkerKey): Coeffs => {
-    const b = baseline.value
-    const yRest0 = getRestY0(m)
-    const samples = Object.values(deps.activeRows.value).filter(
-      (r) =>
-        isFilled(r) &&
-        typeof r[m] === 'number' &&
-        Number.isFinite(r[m] as number) &&
-        (r[m] as number) > 0
-    )
-    if (samples.length < 6) return defaultCoeffs(m)
-
-    try {
-      const X = samples.map((r) => {
-        const dV = mkDelta(r.V as number, b.V)
-        const dP = mkDelta(r.P as number, b.P)
-        const dR = mkDelta(r.R as number, b.R)
-        return [1, dV, dP, dR]
-      })
-      const y = samples.map((r) => Math.log((r[m] as number) / yRest0))
-      const fit = olsFit(X, y)
-      const beta = fit.beta as [number, number, number, number]
-      const out: Coeffs = { b0: beta[0], b1: beta[1], b2: beta[2], b3: beta[3] }
-      if (!Number.isFinite(out.b3) || Math.abs(out.b3) < 0.02)
-        return defaultCoeffs(m)
-      return out
-    } catch {
-      return defaultCoeffs(m)
-    }
-  }
-
-  const fitCoeffsFor = (athlete: Athlete, m: MarkerKey): Coeffs => {
-    const b = baselineFor(athlete)
-    const yRest0 = getRestY0For(athlete, m)
-    const samples = Object.values(athlete.rows).filter(
-      (r) =>
-        isFilled(r) &&
-        typeof r[m] === 'number' &&
-        Number.isFinite(r[m] as number) &&
-        (r[m] as number) > 0
-    )
-    if (samples.length < 6) return defaultCoeffsFor(athlete, m)
-
-    try {
-      const X = samples.map((r) => {
-        const dV = mkDelta(r.V as number, b.V)
-        const dP = mkDelta(r.P as number, b.P)
-        const dR = mkDelta(r.R as number, b.R)
-        return [1, dV, dP, dR]
-      })
-      const y = samples.map((r) => Math.log((r[m] as number) / yRest0))
-      const fit = olsFit(X, y)
-      const beta = fit.beta as [number, number, number, number]
-      const out: Coeffs = { b0: beta[0], b1: beta[1], b2: beta[2], b3: beta[3] }
-      if (!Number.isFinite(out.b3) || Math.abs(out.b3) < 0.02)
-        return defaultCoeffsFor(athlete, m)
-      return out
-    } catch {
-      return defaultCoeffsFor(athlete, m)
-    }
   }
 
   const fitCompositeFor = (athlete: Athlete): CompositeModel | null => {
@@ -475,7 +373,7 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     beta: [number, number, number],
     modelName: string
   ) => {
-    const targetMagnitude = Math.abs(targetEffect)
+    const targetMagnitude = Math.max(Math.abs(targetEffect), MIN_TARGET_MAG)
     const shares = normalizeShares3(accentShares)
     const baseSigns = signsByModel(modelName)
     const betaAbsSafe: [number, number, number] = [
@@ -533,38 +431,10 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     if (!Number.isFinite(corridorHeadroom) || corridorHeadroom <= 0) return 0
 
     const sign = isRecoveryDirection ? -1 : 1
-    // Честный α_week · H без нижнего клампа — иначе все варианты получают
-    // один и тот же target и различия между планами (alphaWeek) стираются.
-    return sign * settings.alphaWeek * corridorHeadroom
-  }
-
-  const weeklyControlTarget = (
-    settings: VariantSettings,
-    modelName: string,
-    coeffs: Coeffs,
-    restControl: number,
-    control: MarkerKey
-  ) => {
-    const corridor = MARKER_CORRIDORS[control]
-    const lnCurrent = coeffs.b0
-
-    const low = Math.max(1e-6, corridor.low)
-    const high = Math.max(low + 1e-6, corridor.high)
-
-    const lnLow = Math.log(low / Math.max(1e-9, restControl))
-    const lnHigh = Math.log(high / Math.max(1e-9, restControl))
-
-    const isRecoveryDirection =
-      modelName.includes('Восстанов') || modelName.includes('Пиковый')
-
-    const headroom = isRecoveryDirection
-      ? Math.max(0, lnCurrent - lnLow)
-      : Math.max(0, lnHigh - lnCurrent)
-
-    if (headroom <= 0) return 0
-
-    const sign = isRecoveryDirection ? -1 : 1
-    return sign * settings.alphaWeek * headroom
+    const raw = sign * settings.alphaWeek * corridorHeadroom
+    const minMag = Math.min(MIN_TARGET_MAG, corridorHeadroom)
+    if (Math.abs(raw) < minMag) return sign * minMag
+    return raw
   }
 
   const predictMarkers = (
@@ -614,24 +484,6 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     }
   }
 
-  const predictControlMarker = (
-    deltas: [number, number, number],
-    coeffs: Coeffs,
-    restControl: number,
-    control: MarkerKey,
-    beta: [number, number, number]
-  ) => {
-    const effect = dot3(beta, deltas)
-    const lnPred = coeffs.b0 + effect
-    const predictedValue = Math.exp(lnPred) * Math.max(1e-9, restControl)
-    return {
-      effect,
-      predicted: {
-        [control]: predictedValue,
-      } as Partial<Record<MarkerKey, number>>,
-    }
-  }
-
   const buildPlan = (athlete: Athlete, variantId: PlanVariantId): Plan | null => {
     const base = baselineFor(athlete)
     const restMarkers = markerRestValuesForAthlete(athlete)
@@ -642,11 +494,9 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     const settings = VARIANT_DEFAULTS[variantId]
     const accentShares = normalizeShares3(settings.accentShares)
     const composite = fitCompositeFor(athlete)
-    const coeffs = composite ? null : fitCoeffsFor(athlete, settings.control)
-
-    const betaVector: [number, number, number] = composite
-      ? (composite.ridge.beta as [number, number, number])
-      : [coeffs!.b1, coeffs!.b2, coeffs!.b3]
+    if (!composite) return null
+    const betaVector: [number, number, number] =
+      composite.ridge.beta as [number, number, number]
 
     const clampR = (x: number) => {
       const a = Math.min(settings.rMin, settings.rMax)
@@ -663,15 +513,13 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
         ? 'Объём'
         : 'Сила'
 
-      const weekTarget = composite
-        ? weeklyPC1Target(settings, modelName, composite, currentMarkers, restMarkers)
-        : weeklyControlTarget(
-            settings,
-            modelName,
-            coeffs!,
-            Math.max(1e-9, getRestY0For(athlete, settings.control)),
-            settings.control
-          )
+      const weekTarget = weeklyPC1Target(
+        settings,
+        modelName,
+        composite,
+        currentMarkers,
+        restMarkers
+      )
 
       const sessionTargets = distributePC1ToSessions(
         weekTarget,
@@ -717,24 +565,10 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
         let markersPredicted: Partial<Record<MarkerKey, number>> = {}
         let corridor: CorridorCheck = { ok: true, violations: [] }
 
-        if (composite) {
-          const predicted = predictMarkers(deltas, restMarkers, composite, betaVector)
-          pc1Predicted = predicted.pc1
-          markersPredicted = predicted.predicted
-          corridor = checkCorridor(predicted.predicted)
-        } else {
-          const restControl = Math.max(1e-9, getRestY0For(athlete, settings.control))
-          const predicted = predictControlMarker(
-            deltas,
-            coeffs!,
-            restControl,
-            settings.control,
-            betaVector
-          )
-          pc1Predicted = predicted.effect
-          markersPredicted = predicted.predicted
-          corridor = checkCorridor(predicted.predicted)
-        }
+        const predicted = predictMarkers(deltas, restMarkers, composite, betaVector)
+        pc1Predicted = predicted.pc1
+        markersPredicted = predicted.predicted
+        corridor = checkCorridor(predicted.predicted)
 
         const warn = rWarn || !corridor.ok
 
@@ -800,12 +634,7 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     baselineFor,
     mkDelta,
     applyDelta,
-    getRestY0,
     getRestY0For,
-    defaultCoeffs,
-    defaultCoeffsFor,
-    fitCoeffs,
-    fitCoeffsFor,
     fitCompositeFor,
     buildPlan,
     pickModel,

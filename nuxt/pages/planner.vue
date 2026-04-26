@@ -136,10 +136,37 @@
           title="Как построены микроциклы"
           subtitle="Краткое пояснение логики формирования плана"
         >
-          <div v-if="!activePlan" class="text-slate-600 text-sm">
+          <div class="flex items-center justify-between gap-3">
+            <div class="text-sm text-slate-600">
+              Нажмите, чтобы скрыть или раскрыть блок пояснения.
+            </div>
+            <button
+              type="button"
+              class="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
+              @click="toggleMicrocyclesInfo"
+            >
+              <span>{{ microcyclesInfoCollapsed ? "Показать" : "Скрыть" }}</span>
+              <svg
+                class="h-4 w-4 transition-transform"
+                :class="microcyclesInfoCollapsed ? '' : 'rotate-180'"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M6 9l6 6 6-6"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <div v-if="!microcyclesInfoCollapsed && !activePlan" class="text-slate-600 text-sm mt-4">
             Сначала получите варианты тренировочного плана.
           </div>
-          <div v-else class="space-y-4 text-sm text-slate-700">
+          <div v-else-if="!microcyclesInfoCollapsed" class="space-y-4 text-sm text-slate-700 mt-4">
             <div>
               <div class="text-xs uppercase tracking-wide text-slate-500 mb-1">
                 Уравнение микроцикла
@@ -377,6 +404,11 @@ const chartsRef = ref<InstanceType<typeof PlannerCharts> | null>(null)
 const mvpCollapsed = ref(true)
 const toggleMvpBlock = () => {
   mvpCollapsed.value = !mvpCollapsed.value
+}
+
+const microcyclesInfoCollapsed = ref(true)
+const toggleMicrocyclesInfo = () => {
+  microcyclesInfoCollapsed.value = !microcyclesInfoCollapsed.value
 }
 
 const weeksInputCollapsed = ref(true)
