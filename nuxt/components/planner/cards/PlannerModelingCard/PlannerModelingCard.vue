@@ -1,9 +1,10 @@
 <template>
+  <div>
   <div class="flex flex-col gap-2">
     <button
       :disabled="!canModel"
       class="h-10 px-3 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed"
-      @click="model"
+      @click="onModel"
     >
       Получить 5 вариантов тренировочного плана (отключено)
     </button>
@@ -40,23 +41,42 @@
       </button>
     </div>
   </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-type AnyPlan = any
+import type { Athlete } from '../../../../stores/athletes'
+import type { Plan, PlanVariantId } from '../../../../utils/plannerTypes'
+import { runModel } from './runModel'
+
 type AnyVariant = any
 
-defineProps<{
+const props = defineProps<{
   canModel: boolean
-  model: () => void
   exportPdf: () => void
-  activePlan: AnyPlan | null
+  activePlan: Plan | null
   competitionDate: string | null
   hasFilledData: boolean
   activeVariant: AnyVariant | null
   flatPlan: any[]
   planVariants: AnyVariant[]
-  activePlanId: string | null
+  activePlanId: PlanVariantId | null
   selectPlan: (id: string) => void
+  athletes: Athlete[]
+  athletePlans: Record<string, Partial<Record<PlanVariantId, Plan>>>
+  ensureRowsForAllAthletes: () => void
+  applyModel: (plans: Record<string, Partial<Record<PlanVariantId, Plan>>>, planId: PlanVariantId) => void
+  drawCharts: () => void
 }>()
+
+const onModel = async () => {
+  await runModel({
+    athletes: props.athletes,
+    athletePlans: props.athletePlans,
+    activePlanId: props.activePlanId ?? 'balanced',
+    ensureRowsForAllAthletes: props.ensureRowsForAllAthletes,
+    applyModel: props.applyModel,
+    drawCharts: props.drawCharts,
+  })
+}
 </script>

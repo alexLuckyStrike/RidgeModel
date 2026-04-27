@@ -233,13 +233,8 @@ const processing = usePlannerProcessing({
   activeAthlete: data.activeAthlete,
   competitionDate: data.competitionDate,
   startDate: data.startDate,
-  athletes: data.athletes,
-  ensureRowsForAllAthletes: data.ensureRowsForAllAthletes,
   getPlanWeeksFor: data.getPlanWeeksFor,
-  athletePlans,
-  activePlanId,
   activePlan,
-  drawCharts,
 })
 
 // ─── Group 3: Data Display ───
@@ -257,7 +252,7 @@ const display = usePlannerDisplay({
   canModel: processing.canModel,
   hasFilledData: processing.hasFilledData,
   flatPlan: processing.flatPlan,
-  model: processing.model,
+  ensureRowsForAllAthletes: data.ensureRowsForAllAthletes,
   athletePlans,
   activePlanId,
   activePlan,
@@ -289,7 +284,6 @@ const {
   canModel,
   hasFilledData,
   flatPlan,
-  model,
 } = processing
 
 const {

@@ -8,7 +8,7 @@ import type { Athlete, Row, RestBaseline } from '~/stores/athletes'
 import PlannerPeriodCard from '~/components/planner/cards/PlannerPeriodCard.vue'
 import PlannerDataCard from '~/components/planner/cards/PlannerDataCard/PlannerDataCard.vue'
 import PlannerBaselineCard from '~/components/planner/cards/PlannerBaselineCard.vue'
-import PlannerModelingCard from '~/components/planner/cards/PlannerModelingCard.vue'
+import PlannerModelingCard from '~/components/planner/cards/PlannerModelingCard/PlannerModelingCard.vue'
 
 export interface PlannerDisplayDeps {
   // From Group 1
@@ -26,7 +26,7 @@ export interface PlannerDisplayDeps {
   canModel: ComputedRef<boolean>
   hasFilledData: ComputedRef<boolean>
   flatPlan: ComputedRef<PlannedSession[]>
-  model: () => Promise<void>
+  ensureRowsForAllAthletes: () => void
   // Shared state
   athletePlans: Ref<Record<string, Partial<Record<PlanVariantId, Plan>>>>
   activePlanId: Ref<PlanVariantId>
@@ -43,6 +43,14 @@ export function usePlannerDisplay(deps: PlannerDisplayDeps) {
   const activeVariant = computed(
     () => planVariants.find((v) => v.id === deps.activePlanId.value) ?? null
   )
+
+  const applyModel = (
+    plans: Record<string, Partial<Record<PlanVariantId, Plan>>>,
+    planId: PlanVariantId,
+  ) => {
+    deps.athletePlans.value = plans
+    deps.activePlanId.value = planId
+  }
 
   const uiFormCards = computed(() => [
     {
@@ -85,7 +93,6 @@ export function usePlannerDisplay(deps: PlannerDisplayDeps) {
       component: PlannerModelingCard,
       componentProps: {
         canModel: deps.canModel.value,
-        model: deps.model,
         exportPdf,
         activePlan: deps.activePlan.value,
         competitionDate: deps.competitionDate.value,
@@ -95,6 +102,11 @@ export function usePlannerDisplay(deps: PlannerDisplayDeps) {
         planVariants,
         activePlanId: deps.activePlanId.value,
         selectPlan,
+        athletes: deps.athletes.value,
+        athletePlans: deps.athletePlans.value,
+        ensureRowsForAllAthletes: deps.ensureRowsForAllAthletes,
+        applyModel,
+        drawCharts: deps.drawCharts,
       },
     },
   ])

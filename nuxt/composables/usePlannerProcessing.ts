@@ -1,5 +1,5 @@
-import { computed, nextTick } from 'vue'
-import type { Ref, ComputedRef } from 'vue'
+import { computed } from 'vue'
+import type { ComputedRef } from 'vue'
 import { isFilled } from '~/utils/plannerHelpers'
 import type {
   CompositeModel,
@@ -16,13 +16,8 @@ export interface PlannerProcessingDeps {
   activeAthlete: ComputedRef<Athlete | null>
   competitionDate: ComputedRef<string>
   startDate: ComputedRef<string>
-  athletes: Ref<Athlete[]>
-  ensureRowsForAllAthletes: () => void
   getPlanWeeksFor: (athlete: Athlete) => number
-  athletePlans: Ref<Record<string, Partial<Record<PlanVariantId, Plan>>>>
-  activePlanId: Ref<PlanVariantId>
   activePlan: ComputedRef<Plan | null>
-  drawCharts: () => void
 }
 
 export const VARIANT_DEFAULTS: Record<PlanVariantId, VariantSettings> = {
@@ -187,24 +182,6 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     return null
   }
 
-  const model = async () => {
-    deps.ensureRowsForAllAthletes()
-
-    const next: Record<string, Partial<Record<PlanVariantId, Plan>>> = {
-      ...deps.athletePlans.value,
-    }
-
-    deps.athletes.value.forEach((athlete) => {
-      next[athlete.id] = {}
-    })
-
-    deps.athletePlans.value = next
-    deps.activePlanId.value = deps.activePlanId.value || 'balanced'
-
-    await nextTick()
-    deps.drawCharts()
-  }
-
   return {
     hasFilledData,
     canModel,
@@ -220,6 +197,5 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     buildPlan,
     pickModel,
     buildWorkout,
-    model,
   }
 }

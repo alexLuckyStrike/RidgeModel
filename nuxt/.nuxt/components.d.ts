@@ -28,7 +28,8 @@ interface _GlobalComponents {
     'PlannerCardsPlannerBaselineCard': typeof import("../components/planner/cards/PlannerBaselineCard.vue")['default']
     'PlannerCardsPlannerDataCard': typeof import("../components/planner/cards/PlannerDataCard/PlannerDataCard.vue")['default']
     'PlannerCardsPlannerDataCardFillDemo': typeof import("../components/planner/cards/PlannerDataCard/fillDemo")['default']
-    'PlannerCardsPlannerModelingCard': typeof import("../components/planner/cards/PlannerModelingCard.vue")['default']
+    'PlannerCardsPlannerModelingCard': typeof import("../components/planner/cards/PlannerModelingCard/PlannerModelingCard.vue")['default']
+    'PlannerCardsPlannerModelingCardRunModel': typeof import("../components/planner/cards/PlannerModelingCard/runModel")['default']
     'PlannerCardsPlannerPeriodCard': typeof import("../components/planner/cards/PlannerPeriodCard.vue")['default']
     'PlannerMvpAfterLoadCard': typeof import("../components/planner/mvp/PlannerMvpAfterLoadCard.vue")['default']
     'PlannerMvpLoadCard': typeof import("../components/planner/mvp/PlannerMvpLoadCard.vue")['default']
@@ -74,7 +75,8 @@ interface _GlobalComponents {
     'LazyPlannerCardsPlannerBaselineCard': LazyComponent<typeof import("../components/planner/cards/PlannerBaselineCard.vue")['default']>
     'LazyPlannerCardsPlannerDataCard': LazyComponent<typeof import("../components/planner/cards/PlannerDataCard/PlannerDataCard.vue")['default']>
     'LazyPlannerCardsPlannerDataCardFillDemo': LazyComponent<typeof import("../components/planner/cards/PlannerDataCard/fillDemo")['default']>
-    'LazyPlannerCardsPlannerModelingCard': LazyComponent<typeof import("../components/planner/cards/PlannerModelingCard.vue")['default']>
+    'LazyPlannerCardsPlannerModelingCard': LazyComponent<typeof import("../components/planner/cards/PlannerModelingCard/PlannerModelingCard.vue")['default']>
+    'LazyPlannerCardsPlannerModelingCardRunModel': LazyComponent<typeof import("../components/planner/cards/PlannerModelingCard/runModel")['default']>
     'LazyPlannerCardsPlannerPeriodCard': LazyComponent<typeof import("../components/planner/cards/PlannerPeriodCard.vue")['default']>
     'LazyPlannerMvpAfterLoadCard': LazyComponent<typeof import("../components/planner/mvp/PlannerMvpAfterLoadCard.vue")['default']>
     'LazyPlannerMvpLoadCard': LazyComponent<typeof import("../components/planner/mvp/PlannerMvpLoadCard.vue")['default']>
@@ -126,7 +128,8 @@ export const PlannerSessionTableHeader: typeof import("../components/planner/Ses
 export const PlannerCardsPlannerBaselineCard: typeof import("../components/planner/cards/PlannerBaselineCard.vue")['default']
 export const PlannerCardsPlannerDataCard: typeof import("../components/planner/cards/PlannerDataCard/PlannerDataCard.vue")['default']
 export const PlannerCardsPlannerDataCardFillDemo: typeof import("../components/planner/cards/PlannerDataCard/fillDemo")['default']
-export const PlannerCardsPlannerModelingCard: typeof import("../components/planner/cards/PlannerModelingCard.vue")['default']
+export const PlannerCardsPlannerModelingCard: typeof import("../components/planner/cards/PlannerModelingCard/PlannerModelingCard.vue")['default']
+export const PlannerCardsPlannerModelingCardRunModel: typeof import("../components/planner/cards/PlannerModelingCard/runModel")['default']
 export const PlannerCardsPlannerPeriodCard: typeof import("../components/planner/cards/PlannerPeriodCard.vue")['default']
 export const PlannerMvpAfterLoadCard: typeof import("../components/planner/mvp/PlannerMvpAfterLoadCard.vue")['default']
 export const PlannerMvpLoadCard: typeof import("../components/planner/mvp/PlannerMvpLoadCard.vue")['default']
@@ -172,7 +175,8 @@ export const LazyPlannerSessionTableHeader: LazyComponent<typeof import("../comp
 export const LazyPlannerCardsPlannerBaselineCard: LazyComponent<typeof import("../components/planner/cards/PlannerBaselineCard.vue")['default']>
 export const LazyPlannerCardsPlannerDataCard: LazyComponent<typeof import("../components/planner/cards/PlannerDataCard/PlannerDataCard.vue")['default']>
 export const LazyPlannerCardsPlannerDataCardFillDemo: LazyComponent<typeof import("../components/planner/cards/PlannerDataCard/fillDemo")['default']>
-export const LazyPlannerCardsPlannerModelingCard: LazyComponent<typeof import("../components/planner/cards/PlannerModelingCard.vue")['default']>
+export const LazyPlannerCardsPlannerModelingCard: LazyComponent<typeof import("../components/planner/cards/PlannerModelingCard/PlannerModelingCard.vue")['default']>
+export const LazyPlannerCardsPlannerModelingCardRunModel: LazyComponent<typeof import("../components/planner/cards/PlannerModelingCard/runModel")['default']>
 export const LazyPlannerCardsPlannerPeriodCard: LazyComponent<typeof import("../components/planner/cards/PlannerPeriodCard.vue")['default']>
 export const LazyPlannerMvpAfterLoadCard: LazyComponent<typeof import("../components/planner/mvp/PlannerMvpAfterLoadCard.vue")['default']>
 export const LazyPlannerMvpLoadCard: LazyComponent<typeof import("../components/planner/mvp/PlannerMvpLoadCard.vue")['default']>
