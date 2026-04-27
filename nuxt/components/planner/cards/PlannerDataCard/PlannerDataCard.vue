@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { useRuntimeConfig } from 'nuxt/app'
 import type { Athlete } from '../../../../stores/athletes'
-import { fillDemo } from './fillDemo'
+import { fillDemo } from './PlannerDataCard.helpers'
 
 
 const props = defineProps<{
