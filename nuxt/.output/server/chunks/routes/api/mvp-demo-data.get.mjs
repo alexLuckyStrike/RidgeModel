@@ -1,4 +1,4 @@
-import { d as defineEventHandler } from '../../nitro/nitro.mjs';
+globalThis.__timing__.logStart('Load chunks/routes/api/mvp-demo-data.get');import { d as defineEventHandler } from '../../nitro/nitro.mjs';
 import fs from 'fs/promises';
 import path from 'path';
 import 'node:http';
@@ -112,5 +112,5 @@ const mvpDemoData_get = defineEventHandler(async () => {
   };
 });
 
-export { mvpDemoData_get as default };
+export { mvpDemoData_get as default };;globalThis.__timing__.logEnd('Load chunks/routes/api/mvp-demo-data.get');
 //# sourceMappingURL=mvp-demo-data.get.mjs.map
