@@ -6,7 +6,6 @@ declare global {
   const MARKER_REFERENCE_SCALES: typeof import('../../utils/markerCorridors').MARKER_REFERENCE_SCALES
   const MVP_LOAD5_MAX_SETS: typeof import('../../composables/usePlannerMvp').MVP_LOAD5_MAX_SETS
   const PCA_MARKER_ORDER: typeof import('../../utils/markerCorridors').PCA_MARKER_ORDER
-  const VARIANT_DEFAULTS: typeof import('../../composables/usePlannerProcessing').VARIANT_DEFAULTS
   const abortNavigation: typeof import('../../node_modules/nuxt/dist/app/composables/router').abortNavigation
   const acceptHMRUpdate: typeof import('../../node_modules/@pinia/nuxt/dist/runtime/composables').acceptHMRUpdate
   const addRouteMiddleware: typeof import('../../node_modules/nuxt/dist/app/composables/router').addRouteMiddleware
@@ -259,7 +258,6 @@ declare module 'vue' {
     readonly MARKER_REFERENCE_SCALES: UnwrapRef<typeof import('../../utils/markerCorridors')['MARKER_REFERENCE_SCALES']>
     readonly MVP_LOAD5_MAX_SETS: UnwrapRef<typeof import('../../composables/usePlannerMvp')['MVP_LOAD5_MAX_SETS']>
     readonly PCA_MARKER_ORDER: UnwrapRef<typeof import('../../utils/markerCorridors')['PCA_MARKER_ORDER']>
-    readonly VARIANT_DEFAULTS: UnwrapRef<typeof import('../../composables/usePlannerProcessing')['VARIANT_DEFAULTS']>
     readonly abortNavigation: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/router')['abortNavigation']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('../../node_modules/@pinia/nuxt/dist/runtime/composables')['acceptHMRUpdate']>
     readonly addRouteMiddleware: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/router')['addRouteMiddleware']>
