@@ -2,6 +2,8 @@ import { computed } from 'vue'
 import type { ComputedRef } from 'vue'
 import type { Athlete, RestBaseline, Row } from '~/stores/athletes'
 import type { Plan } from '~/utils/plannerTypes'
+import { storeToRefs } from 'pinia'
+import { useDataPreperationPCAStore } from '~/stores/DataPreperationPCA'
 
 export interface PlannerProcessingDeps {
   activeRows: ComputedRef<Record<string, Row>>
@@ -13,7 +15,8 @@ export interface PlannerProcessingDeps {
   activePlan: ComputedRef<Plan | null>
 }
 
-export function usePlannerProcessing(deps: PlannerProcessingDeps) {
+export const usePlannerProcessing = (deps: PlannerProcessingDeps) => {
+  console.log('hello')
   // Заглушка до полноценной переработки вычислительной модели.
   const hasFilledData = computed(() => false)
   const canModel = computed(() => false)
@@ -21,8 +24,17 @@ export function usePlannerProcessing(deps: PlannerProcessingDeps) {
     deps.activePlan.value ? deps.activePlan.value.weeks.flatMap((week) => week.sessions) : []
   )
 
+  const dataPreperationPCAStore = useDataPreperationPCAStore()
 
-  
+  const { athletesFromDb, isLoadingAthletes, athletesLoadError } =
+    storeToRefs(dataPreperationPCAStore)
+
+  const loadAthletes = async () => {
+    await dataPreperationPCAStore.fetchAllAthletesFromDb()
+  }
+
+  // console.log('loadAthletes:', loadAthletes)
+
   return {
     hasFilledData,
     canModel,

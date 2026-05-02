@@ -1,4 +1,4 @@
-import { d as defineEventHandler, u as useRuntimeConfig, r as readMultipartFormData, c as createError } from '../../nitro/nitro.mjs';
+globalThis.__timing__.logStart('Load chunks/routes/api/cv-analyze.post');import { d as defineEventHandler, u as useRuntimeConfig, r as readMultipartFormData, c as createError } from '../../nitro/nitro.mjs';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -115,5 +115,5 @@ const cvAnalyze_post = defineEventHandler(async (event) => {
   }
 });
 
-export { cvAnalyze_post as default };
+export { cvAnalyze_post as default };;globalThis.__timing__.logEnd('Load chunks/routes/api/cv-analyze.post');
 //# sourceMappingURL=cv-analyze.post.mjs.map
