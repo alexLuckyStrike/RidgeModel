@@ -26,6 +26,8 @@ import {
   type ModelArtifacts,
   type AthleteBaseline,
   type ProposedSession,
+  type LoadRanges,
+  calculateLoadRanges,
 } from './PlannerModelingCard.helpers'
 
 export async function runModel(params: {
@@ -339,6 +341,13 @@ export async function runModel(params: {
       danger: 1.575,
     },
     cvRMSE: 0.7436,
+    loadStds: { dV: 0.14, dP: 0.138, dR: 0.263 },
+    loadRanges: {
+      // ← добавили
+      dV: { min: -0.256, max: 0.284 },
+      dP: { min: -0.3, max: 0.161 },
+      dR: { min: -0.583, max: 0.336 },
+    },
   }
 
   // Индивидуальный профиль спортсмена
@@ -357,6 +366,10 @@ export async function runModel(params: {
 
   // Прогноз
   const forecast = forecastSession(athleteBaseline, proposedSession, modelArtifacts)
+  // решение прямой задачи: прогноз PC₁ для данной тренировки
+
+  // Когда мы решим обратную задачу и предложим тренеру варианты нагрузки,
+  // нужно проверить: попадают ли эти варианты в диапазон обучения?
 
   // Вывод
   console.log('=== ПРОГНОЗ ТРЕНИРОВКИ ===')
@@ -392,7 +405,29 @@ export async function runModel(params: {
 
   //// Тестируем сценарии
 
-  ///// Неясно для чего эта функция
+  // Используется для проверки реалистичности рекомендаций
+
+  // Считаем диапазоны реалистичности
+  const loadRanges = calculateLoadRanges(normalized)
+
+  // Печатаем
+  console.log('=== Диапазоны обучающих нагрузок ===')
+  console.log()
+  console.log('В долях от индивидуальной нормы:')
+  console.log(`  dV: [${loadRanges.dV.min.toFixed(3)}, ${loadRanges.dV.max.toFixed(3)}]`)
+  console.log(`  dP: [${loadRanges.dP.min.toFixed(3)}, ${loadRanges.dP.max.toFixed(3)}]`)
+  console.log(`  dR: [${loadRanges.dR.min.toFixed(3)}, ${loadRanges.dR.max.toFixed(3)}]`)
+  console.log()
+  console.log('В процентах:')
+  console.log(
+    `  Объём:           ${(loadRanges.dV.min * 100).toFixed(1)}% ... ${(loadRanges.dV.max * 100).toFixed(1)}%`
+  )
+  console.log(
+    `  Интенсивность:   ${(loadRanges.dP.min * 100).toFixed(1)}% ... ${(loadRanges.dP.max * 100).toFixed(1)}%`
+  )
+  console.log(
+    `  Восстановление:  ${(loadRanges.dR.min * 100).toFixed(1)}% ... ${(loadRanges.dR.max * 100).toFixed(1)}%`
+  )
 
   params.ensureRowsForAllAthletes()
 

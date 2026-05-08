@@ -1546,6 +1546,13 @@ export type ModelArtifacts = {
 
   /** Метрика качества модели для расчёта доверительного интервала */
   cvRMSE: number
+  loadStds: { dV: number; dP: number; dR: number }
+  loadRanges: {
+    // ← добавили
+    dV: { min: number; max: number }
+    dP: { min: number; max: number }
+    dR: { min: number; max: number }
+  }
 }
 
 export type SessionForecast = {
@@ -1640,4 +1647,58 @@ function buildRecommendation(
 
   // zone.code === 4
   return `Критический отклик. Рекомендуется снизить нагрузку. Главный фактор перегрузки — ${factorNames[dominant]}. Целесообразно использовать только в ударных тренировках под медицинским контролем.`
+}
+
+export type LoadRanges = {
+  dV: { min: number; max: number }
+  dP: { min: number; max: number }
+  dR: { min: number; max: number }
+}
+
+/**
+ * Вычисляет диапазоны (min/max) нормализованных нагрузок
+ * по всей обучающей выборке.
+ *
+ * Используется для проверки реалистичности рекомендаций
+ * в обратной задаче — чтобы определить, не выходит ли
+ * предложенная нагрузка за пределы диапазона, на котором
+ * обучалась модель.
+ *
+ * @param rows массив строк с нормализованными нагрузками
+ *             (после normalizeLoads)
+ */
+export function calculateLoadRanges(rows: FlatRowWithLoads[]): LoadRanges {
+  if (!Array.isArray(rows) || rows.length === 0) {
+    throw new Error('calculateLoadRanges requires non-empty array')
+  }
+
+  // Инициализация — первое значение становится начальным min и max
+  let minDV = rows[0].dV
+  let maxDV = rows[0].dV
+  let minDP = rows[0].dP
+  let maxDP = rows[0].dP
+  let minDR = rows[0].dR
+  let maxDR = rows[0].dR
+
+  // Один проход по всем строкам
+  for (const row of rows) {
+    if (!Number.isFinite(row.dV) || !Number.isFinite(row.dP) || !Number.isFinite(row.dR)) {
+      throw new Error(`Invalid dV/dP/dR for athlete ${row.athleteId}, session ${row.sessionId}`)
+    }
+
+    if (row.dV < minDV) minDV = row.dV
+    if (row.dV > maxDV) maxDV = row.dV
+
+    if (row.dP < minDP) minDP = row.dP
+    if (row.dP > maxDP) maxDP = row.dP
+
+    if (row.dR < minDR) minDR = row.dR
+    if (row.dR > maxDR) maxDR = row.dR
+  }
+
+  return {
+    dV: { min: minDV, max: maxDV },
+    dP: { min: minDP, max: maxDP },
+    dR: { min: minDR, max: maxDR },
+  }
 }
