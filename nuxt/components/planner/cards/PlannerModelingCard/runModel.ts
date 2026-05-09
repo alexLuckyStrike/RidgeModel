@@ -23,6 +23,19 @@ import {
   calculateFourZoneSystem,
   distributeByZones,
   forecastSession,
+  strategyVolumeOnly,
+  strategyPaceOnly,
+  strategyRecoveryOnly,
+  strategyBalanced,
+  BASIC_STRATEGIES,
+  STRATEGY_NAMES,
+  checkRealism,
+  strategyVariative,
+  exploreStrategy,
+  type LoadStds,
+  type LoadDeltas,
+  type Beta,
+  type BasicStrategyId,
   type ModelArtifacts,
   type AthleteBaseline,
   type ProposedSession,
@@ -112,8 +125,8 @@ export async function runModel(params: {
 
   const normalized = normalizeLoads(projected)
 
-  console.log('Первые 5 строк:')
-  console.table(normalized.slice(0, 5))
+  // console.log('Первые 5 строк:')
+  // console.table(normalized.slice(0, 5))
 
   const { rows: standardizedLoads, standardization } = standardizeColumns(normalized, [
     'dV',
@@ -148,30 +161,30 @@ export async function runModel(params: {
     standardization.stds // тот объект, что вернула standardizeColumns
   )
 
-  console.log('=== Финальная модель ===')
-  console.log()
-  console.log('В стандартизованных единицах (z-масштаб):')
-  featureNames.forEach((name) => {
-    console.log(`  β_${name}_z = ${descaled.betaInZScale[name].toFixed(4)}`)
-  })
+  // console.log('=== Финальная модель ===')
+  // console.log()
+  // console.log('В стандартизованных единицах (z-масштаб):')
+  // featureNames.forEach((name) => {
+  //   console.log(`  β_${name}_z = ${descaled.betaInZScale[name].toFixed(4)}`)
+  // })
 
-  console.log()
-  console.log('В исходных единицах (относительные отклонения):')
-  featureNames.forEach((name) => {
-    console.log(
-      `  β_${name} = ${descaled.betaInOriginalScale[name].toFixed(4)}  ` +
-        `(σ = ${descaled.stdsUsed[name].toFixed(4)})`
-    )
-  })
+  // console.log()
+  // console.log('В исходных единицах (относительные отклонения):')
+  // featureNames.forEach((name) => {
+  //   console.log(
+  //     `  β_${name} = ${descaled.betaInOriginalScale[name].toFixed(4)}  ` +
+  //       `(σ = ${descaled.stdsUsed[name].toFixed(4)})`
+  //   )
+  // })
 
-  console.log()
-  console.log('Интерпретация:')
-  console.log('  Изменение dV на +0.10 (+10% от индивидуальной нормы):')
-  console.log(`    → ΔPC₁ ≈ ${(descaled.betaInOriginalScale.dV * 0.1).toFixed(3)}`)
-  console.log('  Изменение dP на +0.10 (+10% от индивидуальной нормы):')
-  console.log(`    → ΔPC₁ ≈ ${(descaled.betaInOriginalScale.dP * 0.1).toFixed(3)}`)
-  console.log('  Изменение dR на +0.10 (+10% от индивидуальной нормы):')
-  console.log(`    → ΔPC₁ ≈ ${(descaled.betaInOriginalScale.dR * 0.1).toFixed(3)}`)
+  // console.log()
+  // console.log('Интерпретация:')
+  // console.log('  Изменение dV на +0.10 (+10% от индивидуальной нормы):')
+  // console.log(`    → ΔPC₁ ≈ ${(descaled.betaInOriginalScale.dV * 0.1).toFixed(3)}`)
+  // console.log('  Изменение dP на +0.10 (+10% от индивидуальной нормы):')
+  // console.log(`    → ΔPC₁ ≈ ${(descaled.betaInOriginalScale.dP * 0.1).toFixed(3)}`)
+  // console.log('  Изменение dR на +0.10 (+10% от индивидуальной нормы):')
+  // console.log(`    → ΔPC₁ ≈ ${(descaled.betaInOriginalScale.dR * 0.1).toFixed(3)}`)
 
   // console.log('Коэффициенты:')
   // result.featureNames.forEach((name, i) => {
@@ -372,62 +385,193 @@ export async function runModel(params: {
   // нужно проверить: попадают ли эти варианты в диапазон обучения?
 
   // Вывод
-  console.log('=== ПРОГНОЗ ТРЕНИРОВКИ ===')
-  console.log()
-  console.log('Относительные отклонения:')
-  console.log(`  Объём:           ${(forecast.deltas.dV * 100).toFixed(1)}%`)
-  console.log(`  Интенсивность:   ${(forecast.deltas.dP * 100).toFixed(1)}%`)
-  console.log(`  Восстановление:  ${(forecast.deltas.dR * 100).toFixed(1)}%`)
-  console.log()
-  console.log(`Прогноз PC₁: ${forecast.predictedPC1.toFixed(2)}`)
-  console.log(
-    `Доверительный интервал: [${forecast.confidenceInterval.lower.toFixed(2)}, ${forecast.confidenceInterval.upper.toFixed(2)}]`
-  )
-  console.log()
-  console.log(`Зона ${forecast.zone.code}: ${forecast.zone.name} (${forecast.zone.color})`)
-  console.log(`  ${forecast.zone.description}`)
-  console.log()
-  console.log('Раскладка прогноза по факторам:')
-  console.log(
-    `  Объём:           ${forecast.contributions.volume.value.toFixed(2)} (${forecast.contributions.volume.percent}%)`
-  )
-  console.log(
-    `  Интенсивность:   ${forecast.contributions.pace.value.toFixed(2)} (${forecast.contributions.pace.percent}%)`
-  )
-  console.log(
-    `  Восстановление:  ${forecast.contributions.recovery.value.toFixed(2)} (${forecast.contributions.recovery.percent}%)`
-  )
-  console.log()
-  console.log(`Главный фактор: ${forecast.dominantFactor}`)
-  console.log()
-  console.log('Рекомендация:')
-  console.log(`  ${forecast.recommendation}`)
+  // console.log('=== ПРОГНОЗ ТРЕНИРОВКИ ===')
+  // console.log()
+  // console.log('Относительные отклонения:')
+  // console.log(`  Объём:           ${(forecast.deltas.dV * 100).toFixed(1)}%`)
+  // console.log(`  Интенсивность:   ${(forecast.deltas.dP * 100).toFixed(1)}%`)
+  // console.log(`  Восстановление:  ${(forecast.deltas.dR * 100).toFixed(1)}%`)
+  // console.log()
+  // console.log(`Прогноз PC₁: ${forecast.predictedPC1.toFixed(2)}`)
+  // console.log(
+  //   `Доверительный интервал: [${forecast.confidenceInterval.lower.toFixed(2)}, ${forecast.confidenceInterval.upper.toFixed(2)}]`
+  // )
+  // console.log()
+  // console.log(`Зона ${forecast.zone.code}: ${forecast.zone.name} (${forecast.zone.color})`)
+  // console.log(`  ${forecast.zone.description}`)
+  // console.log()
+  // console.log('Раскладка прогноза по факторам:')
+  // console.log(
+  //   `  Объём:           ${forecast.contributions.volume.value.toFixed(2)} (${forecast.contributions.volume.percent}%)`
+  // )
+  // console.log(
+  //   `  Интенсивность:   ${forecast.contributions.pace.value.toFixed(2)} (${forecast.contributions.pace.percent}%)`
+  // )
+  // console.log(
+  //   `  Восстановление:  ${forecast.contributions.recovery.value.toFixed(2)} (${forecast.contributions.recovery.percent}%)`
+  // )
+  // console.log()
+  // console.log(`Главный фактор: ${forecast.dominantFactor}`)
+  // console.log()
+  // console.log('Рекомендация:')
+  // console.log(`  ${forecast.recommendation}`)
 
   //// Тестируем сценарии
 
   // Используется для проверки реалистичности рекомендаций
 
   // Считаем диапазоны реалистичности
-  const loadRanges = calculateLoadRanges(normalized)
+  const loadRangesData = calculateLoadRanges(normalized)
 
   // Печатаем
-  console.log('=== Диапазоны обучающих нагрузок ===')
+  // console.log('=== Диапазоны обучающих нагрузок ===')
+  // console.log()
+  // console.log('В долях от индивидуальной нормы:')
+  // console.log(`  dV: [${loadRanges.dV.min.toFixed(3)}, ${loadRanges.dV.max.toFixed(3)}]`)
+  // console.log(`  dP: [${loadRanges.dP.min.toFixed(3)}, ${loadRanges.dP.max.toFixed(3)}]`)
+  // console.log(`  dR: [${loadRanges.dR.min.toFixed(3)}, ${loadRanges.dR.max.toFixed(3)}]`)
+  // console.log()
+  // console.log('В процентах:')
+  // console.log(
+  //   `  Объём:           ${(loadRanges.dV.min * 100).toFixed(1)}% ... ${(loadRanges.dV.max * 100).toFixed(1)}%`
+  // )
+  // console.log(
+  //   `  Интенсивность:   ${(loadRanges.dP.min * 100).toFixed(1)}% ... ${(loadRanges.dP.max * 100).toFixed(1)}%`
+  // )
+  // console.log(
+  //   `  Восстановление:  ${(loadRanges.dR.min * 100).toFixed(1)}% ... ${(loadRanges.dR.max * 100).toFixed(1)}%`
+  // )
+  ///
+
+  /// 4 стратгии для каждой из 4 зон кроме вариативной, которая будет подбирать нагрузку с учётом реалистичности
+
+  // const beta: Beta = { V: 7.4787, P: 7.7872, R: -2.5402 }
+  // const loadStds: LoadStds = { dV: 0.14, dP: 0.138, dR: 0.263 }
+  // const loadRanges: LoadRanges = {
+  //   dV: { min: -0.256, max: 0.284 },
+  //   dP: { min: -0.3, max: 0.161 },
+  //   dR: { min: -0.583, max: 0.336 },
+  // }
+  // // Центры всех четырёх зон
+  // const zones = [
+  //   { num: 1, name: 'Норма', targetDelta: -2.5 },
+  //   { num: 2, name: 'Умеренный отклик', targetDelta: -0.66 },
+  //   { num: 3, name: 'Выраженный отклик', targetDelta: 1.04 },
+  //   { num: 4, name: 'Критический отклик', targetDelta: 1.7 },
+  // ]
+
+  // const allStrategies: Array<{
+  //   name: string
+  //   fn: (t: number, b: Beta) => LoadDeltas
+  // }> = [
+  //   { name: 'Только объём', fn: strategyVolumeOnly },
+  //   { name: 'Только интенсивность', fn: strategyPaceOnly },
+  //   { name: 'Только восстановление', fn: strategyRecoveryOnly },
+  //   { name: 'Сбалансированная', fn: strategyBalanced },
+  // ]
+
+  // for (const zone of zones) {
+  //   console.log(`=== Зона ${zone.num}: ${zone.name} (target = ${zone.targetDelta}) ===`)
+
+  //   for (const s of allStrategies) {
+  //     const deltas = s.fn(zone.targetDelta, beta)
+  //     const realism = checkRealism(deltas, loadStds, loadRanges)
+
+  //     console.log(`  ${s.name}:`)
+  //     console.log(
+  //       `    dV: ${(deltas.dV * 100).toFixed(2)}%, dP: ${(deltas.dP * 100).toFixed(2)}%, dR: ${(deltas.dR * 100).toFixed(2)}%`
+  //     )
+  //     console.log(`    Статус: ${realism.status.toUpperCase()}`)
+  //     console.log(`    Причина: ${realism.reason}`)
+  //   }
+  //   console.log()
+  // }
+
+  //// -- Вариативная стратегия, которая подбирает нагрузку с учётом реалистичности
+
+  // const beta: Beta = { V: 7.4787, P: 7.7872, R: -2.5402 }
+  // const loadStds: LoadStds = { dV: 0.14, dP: 0.138, dR: 0.263 }
+  // const loadRanges: LoadRanges = {
+  //   dV: { min: -0.256, max: 0.284 },
+  //   dP: { min: -0.3, max: 0.161 },
+  //   dR: { min: -0.583, max: 0.336 },
+  // }
+
+  // const zones = [
+  //   { num: 1, name: 'Норма', targetDelta: -2.5 },
+  //   { num: 2, name: 'Умеренный отклик', targetDelta: -0.66 },
+  //   { num: 3, name: 'Выраженный отклик', targetDelta: 1.04 },
+  //   { num: 4, name: 'Критический отклик', targetDelta: 1.7 },
+  // ]
+
+  // console.log('=== Вариативная стратегия для всех зон ===')
+  // console.log()
+
+  // for (const zone of zones) {
+  //   const deltas = strategyVariative(zone.targetDelta, beta, loadStds)
+  //   const realism = checkRealism(deltas, loadStds, loadRanges)
+
+  //   // Проверка математики
+  //   const checkPC1 = beta.V * deltas.dV + beta.P * deltas.dP + beta.R * deltas.dR
+
+  //   console.log(`Зона ${zone.num} (${zone.name}, target = ${zone.targetDelta}):`)
+  //   console.log(
+  //     `  dV: ${(deltas.dV * 100).toFixed(2)}%, dP: ${(deltas.dP * 100).toFixed(2)}%, dR: ${(deltas.dR * 100).toFixed(2)}%`
+  //   )
+  //   console.log(`  Проверка PC1: ${checkPC1.toFixed(4)} (должно быть ${zone.targetDelta})`)
+  //   console.log(`  Статус: ${realism.status.toUpperCase()}`)
+  //   console.log(`  Причина: ${realism.reason}`)
+  //   console.log()
+  // }
+
+  const resultus = exploreStrategy({
+    baseline: { V: 8000, P: 75, R: 210 },
+    artifacts: {
+      beta: { V: 7.4787, P: 7.7872, R: -2.5402 },
+      thresholds: {
+        attention: -1.826,
+        exceeding: 0.497,
+        danger: 1.575,
+      },
+      cvRMSE: 0.7436,
+      loadStds: { dV: 0.14, dP: 0.138, dR: 0.263 },
+      loadRanges: {
+        dV: { min: -0.256, max: 0.284 },
+        dP: { min: -0.3, max: 0.161 },
+        dR: { min: -0.583, max: 0.336 },
+      },
+    },
+  })
+
+  // Вывод результата
+  console.log('=== ОБРАТНАЯ ЗАДАЧА ===')
   console.log()
-  console.log('В долях от индивидуальной нормы:')
-  console.log(`  dV: [${loadRanges.dV.min.toFixed(3)}, ${loadRanges.dV.max.toFixed(3)}]`)
-  console.log(`  dP: [${loadRanges.dP.min.toFixed(3)}, ${loadRanges.dP.max.toFixed(3)}]`)
-  console.log(`  dR: [${loadRanges.dR.min.toFixed(3)}, ${loadRanges.dR.max.toFixed(3)}]`)
+  console.log(
+    `Baseline: V=${resultus.baseline.V}кг, P=${resultus.baseline.P}%, R=${resultus.baseline.R}мин`
+  )
+  console.log(`Опорная точка PC₁: ${resultus.fromPC1}`)
   console.log()
-  console.log('В процентах:')
-  console.log(
-    `  Объём:           ${(loadRanges.dV.min * 100).toFixed(1)}% ... ${(loadRanges.dV.max * 100).toFixed(1)}%`
-  )
-  console.log(
-    `  Интенсивность:   ${(loadRanges.dP.min * 100).toFixed(1)}% ... ${(loadRanges.dP.max * 100).toFixed(1)}%`
-  )
-  console.log(
-    `  Восстановление:  ${(loadRanges.dR.min * 100).toFixed(1)}% ... ${(loadRanges.dR.max * 100).toFixed(1)}%`
-  )
+
+  for (const strategy of resultus.strategies) {
+    console.log(`━━━ ${strategy.name.toUpperCase()} ━━━`)
+    console.log(`${strategy.description}`)
+    console.log()
+
+    for (const variant of strategy.variants) {
+      console.log(`Зона ${variant.targetZone}: ${variant.zoneName}`)
+      console.log(
+        `  Тренировка: V=${variant.session.V.toFixed(0)}кг, P=${variant.session.P.toFixed(1)}%, R=${variant.session.R.toFixed(0)}мин`
+      )
+      console.log(`  Изменение: ${variant.description}`)
+      console.log(
+        `  Прогноз PC₁: ${variant.predictedPC1.toFixed(2)} (целевое ${variant.targetPC1})`
+      )
+      console.log(`  Определяющий маркер зоны: ${variant.drivingMarker}`)
+      console.log(`  Статус: ${variant.realism.status.toUpperCase()}`)
+      console.log(`  Причина: ${variant.realism.reason}`)
+      console.log()
+    }
+  }
 
   params.ensureRowsForAllAthletes()
 
