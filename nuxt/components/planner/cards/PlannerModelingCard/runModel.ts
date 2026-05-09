@@ -3,26 +3,6 @@ import type { Athlete } from '../../../../stores/athletes'
 import { useDataPreperationPCAStore } from '../../../../stores/DataPreperationPCA'
 import type { Plan, PlanVariantId } from '../../../../utils/plannerTypes'
 import {
-  logRelativeToBaseLine,
-  standardizeMarkers,
-  computeCovarianceMatrix,
-  jacobiEigenDecomposition,
-  projectOnPC1,
-  stabilizeSign,
-  normalizeLoads,
-  standardizeColumns,
-  transposeMatrix,
-  multiplyMatrices,
-  solveLinearSystem,
-  ridgeRegression,
-  evaluateModel,
-  groupKFoldCV,
-  selectBestLambda,
-  descaleCoefficients,
-  calculatePC1Thresholds,
-  calculateFourZoneSystem,
-  distributeByZones,
-  forecastSession,
   strategyVolumeOnly,
   strategyPaceOnly,
   strategyRecoveryOnly,
@@ -31,7 +11,6 @@ import {
   STRATEGY_NAMES,
   checkRealism,
   strategyVariative,
-  exploreStrategy,
   type LoadStds,
   type LoadDeltas,
   type Beta,
@@ -40,8 +19,51 @@ import {
   type AthleteBaseline,
   type ProposedSession,
   type LoadRanges,
-  calculateLoadRanges,
 } from './PlannerModelingCard.helpers'
+
+import {
+  type FlatRowWithLoads,
+  type Standardization,
+  type StandardizedResult,
+  stabilizeSign,
+  normalizeLoads,
+  standardizeColumns,
+  transposeMatrix,
+  multiplyMatrices,
+} from './loads_and_matrix'
+
+import {
+  logRelativeToBaseLine,
+  standardizeMarkers,
+  computeCovarianceMatrix,
+  jacobiEigenDecomposition,
+  projectOnPC1,
+  type FlatRowWithPC1,
+  type EigenPair,
+  type FlatRow,
+  type StandardizedRow,
+  type MarkerStats,
+  type StandardizedFlat,
+} from './PCA_pipeline_functions'
+
+import {
+  solveLinearSystem,
+  ridgeRegression,
+  evaluateModel,
+  groupKFoldCV,
+  selectBestLambda,
+  type RidgeResult,
+} from './Ridge_regression_functions'
+
+import {
+  descaleCoefficients,
+  calculatePC1Thresholds,
+  calculateFourZoneSystem,
+  distributeByZones,
+  forecastSession,
+} from './Model_application_functions'
+
+import { calculateLoadRanges, exploreStrategy } from './Inverse_task_function'
 
 export async function runModel(params: {
   athletes: Athlete[]
@@ -57,16 +79,19 @@ export async function runModel(params: {
   const dataPreperationPCAStore = useDataPreperationPCAStore()
   const athletesDataAll = await dataPreperationPCAStore.fetchAllAthletesFromDb()
 
-  // console.log('athletesDataAll:', athletesDataAll)
+  //console.log('athletesDataAll:', athletesDataAll)
 
+  //  Здесь мы преобразуем сырые значения биохимических маркеров мочи в
+  // логарифмические отклонения от индивидуального baseline для каждого спортсмена.
   const relativeMarkersFromBaselineByAthletes = athletesDataAll.map((athlete) => ({
     athleteId: athlete.id,
     name: athlete.name,
     rows: logRelativeToBaseLine(athlete.rows, athlete.restBaseline),
   }))
 
-  // console.log('relativeMarkersFromBaselineByAthletes:', relativeMarkersFromBaselineByAthletes)
+  console.log('relativeMarkersFromBaselineByAthletes:', relativeMarkersFromBaselineByAthletes)
 
+  // Это операция выравнивания (flattening) — преобразование иерархической структуры (спортсмены → их сессии) в плоскую таблицу всех наблюдений.После этой операции мы получаем 576 строк в виде единого массива, готового для дальнейшей статистической обработки.
   const flatRows = relativeMarkersFromBaselineByAthletes.flatMap((athlete) =>
     athlete.rows.map((row) => ({
       athleteId: athlete.athleteId,
@@ -81,52 +106,41 @@ export async function runModel(params: {
     }))
   )
 
+  // console.log('flatRows:', flatRows)
+  // Это z-стандартизация четырёх логарифмических маркеров: преобразование, после которого каждый маркер имеет среднее = 0 и стандартное отклонение = 1.
+  // Это обязательный шаг перед PCA.
+  //   PCA ищет направления максимальной дисперсии в данных. Если маркеры имеют разные масштабы, PCA "увидит", что один маркер сильно варьируется, а другой — слабо, и сделает выводы:
+
+  // "Миоглобин варьируется больше всех (σ = 1.20) — значит, он самый информативный. PC1 будет в основном про миоглобин."
+
+  // Но это ложный вывод. Миоглобин не более информативен — у него просто больше числовая дисперсия из-за биохимических особенностей. PCA не должна "доминировать" один маркер только из-за его разброса.
   const standardized = standardizeMarkers(flatRows)
 
-  //console.log('standardized:', standardized)
-
-  ////
-
+  // Это построение ковариационной матрицы 4×4 для четырёх стандартизованных маркеров. Эта матрица — фундамент для PCA: именно её мы будем диагонализировать на следующем шаге, чтобы найти главные компоненты.Поскольку маркеры уже стандартизованы (среднее = 0, σ = 1), ковариационная матрица фактически становится корреляционной — каждый элемент показывает корреляцию между парой маркеров.
   const covMatrix = computeCovarianceMatrix(standardized.rows, ['zC', 'zP', 'zM', 'zK'])
 
   // console.log('Ковариационная матрица:')
-  console.table(covMatrix)
+  // console.table(covMatrix)
 
   // метод Якоби
-
+  // Это диагонализация ковариационной матрицы — нахождение её собственных значений и собственных векторов методом Якоби.После этой операции мы получаем главные компоненты (PC1, PC2, PC3, PC4) — направления, в которых данные имеют максимальную дисперсию.Это сердце PCA.
   const eigenPairs = jacobiEigenDecomposition(covMatrix)
-
-  // console.log('Собственные значения:')
-  // eigenPairs.forEach((pair, i) => {
-  //   console.log(`PC${i + 1}: λ = ${pair.value.toFixed(4)}`)
-  // })
-
-  // console.log('\nСобственные векторы:')
-  // eigenPairs.forEach((pair, i) => {
-  //   console.log(`PC${i + 1}: [${pair.vector.map((v) => v.toFixed(4)).join(', ')}]`)
-  // })
+  // console.log('eigenPairs:', eigenPairs)
 
   ///  применение того, что нашёл PCA, к реальным наблюдениям.
 
+  // Это стабилизация знака собственного вектора PC1. Маленькая, но критически важная операция, без которой модель могла бы давать противоположные результаты при разных запусках.
   const pc1Vector = stabilizeSign(eigenPairs[0].vector)
 
+  // console.log('pc1Vector:', pc1Vector)
+  // Это проекция четырёхмерных данных (4 стандартизованных маркера) на ось PC1 — превращение четырёх чисел в одно для каждого наблюдения.После этой операции у нас есть PC1 для каждой из 576 сессий — интегральный индекс биохимического отклика.
   const projected = projectOnPC1(standardized.rows, pc1Vector)
+  // // console.log('projected:', projected)
 
-  // console.log('Первые 5 наблюдений:')
-  // console.table(projected.slice(0, 5))
-
-  // console.log('\nДиапазон PC₁:')
-  //  const pc1Values = projected.map((r) => r.PC1)
-  // console.log('  min:', Math.min(...pc1Values).toFixed(3))
-  // console.log('  max:', Math.max(...pc1Values).toFixed(3))
-  // console.log('  mean:', (pc1Values.reduce((s, v) => s + v, 0) / pc1Values.length).toFixed(3))
-
-  //// нормализуем нагрузку!!!
+  // Это нормализация параметров нагрузки — преобразование абсолютных значений V, P, R в относительные отклонения от индивидуальной нормы каждого спортсмена.После этой операции мы получаем dV, dP, dR — безразмерные величины, готовые для регрессии.Это первый шаг обработки нагрузок (по аналогии с тем, как logRelativeToBaseLine был первым шагом для маркеров).
 
   const normalized = normalizeLoads(projected)
-
-  // console.log('Первые 5 строк:')
-  // console.table(normalized.slice(0, 5))
+  // // console.log('normalized:', normalized)
 
   const { rows: standardizedLoads, standardization } = standardizeColumns(normalized, [
     'dV',
@@ -134,79 +148,36 @@ export async function runModel(params: {
     'dR',
   ])
 
-  // console.log('Средние:', standardization.means)
-  // console.log('Std:', standardization.stds)
-  // console.log('Первая строка:', standardizedLoads[0])
-
   // 4 блок
 
+  //Это z-стандартизация выбранных колонок в таблице. Универсальная функция, которая работает с любыми числовыми полями.
   // Из стандартизации:
   const standardizedData = standardizeColumns(normalized, ['dV', 'dP', 'dR'])
   // каждая строка содержит z_dV, z_dP, z_dR
 
   // Извлекаем матрицу X и вектор y
+  //Это подготовка данных в матричный формат и запуск ridge-регрессии. После этого блока мы получаем коэффициенты β, ////связывающие нагрузки с PC1.Здесь происходит переход от "таблицы с разными колонками" (удобной для чтения) к "матрице X и вектору y" (нужной для линейной алгебры).
   const X = standardizedData.rows.map((r) => [r.z_dV, r.z_dP, r.z_dR])
   const y = standardizedData.rows.map((r) => r.PC1)
 
   // Применяем ridge Получили ridge при оптимальном λ
   const result = ridgeRegression(X, y, 1.0, ['z_dV', 'z_dP', 'z_dR'])
-
+  // console.log('result ridgeRegression', result)
   // Имена в z-масштабе и в исходном масштабе
   const featureNames = ['dV', 'dP', 'dR']
 
   // Применяем обратное преобразование
+  // Это обратное преобразование коэффициентов ridge-регрессии — перевод их из z-масштаба (в котором обучалась модель) в исходный масштаб относительных отклонений нагрузки.После этой операции коэффициенты становятся интерпретируемыми: тренер сразу видит, насколько изменится PC1 при изменении нагрузки на 10%, 20% и т.д.
   const descaled = descaleCoefficients(
     result.beta,
     featureNames,
     standardization.stds // тот объект, что вернула standardizeColumns
   )
+  // console.log('descaled:', descaled)
 
-  // console.log('=== Финальная модель ===')
-  // console.log()
-  // console.log('В стандартизованных единицах (z-масштаб):')
-  // featureNames.forEach((name) => {
-  //   console.log(`  β_${name}_z = ${descaled.betaInZScale[name].toFixed(4)}`)
-  // })
-
-  // console.log()
-  // console.log('В исходных единицах (относительные отклонения):')
-  // featureNames.forEach((name) => {
-  //   console.log(
-  //     `  β_${name} = ${descaled.betaInOriginalScale[name].toFixed(4)}  ` +
-  //       `(σ = ${descaled.stdsUsed[name].toFixed(4)})`
-  //   )
-  // })
-
-  // console.log()
-  // console.log('Интерпретация:')
-  // console.log('  Изменение dV на +0.10 (+10% от индивидуальной нормы):')
-  // console.log(`    → ΔPC₁ ≈ ${(descaled.betaInOriginalScale.dV * 0.1).toFixed(3)}`)
-  // console.log('  Изменение dP на +0.10 (+10% от индивидуальной нормы):')
-  // console.log(`    → ΔPC₁ ≈ ${(descaled.betaInOriginalScale.dP * 0.1).toFixed(3)}`)
-  // console.log('  Изменение dR на +0.10 (+10% от индивидуальной нормы):')
-  // console.log(`    → ΔPC₁ ≈ ${(descaled.betaInOriginalScale.dR * 0.1).toFixed(3)}`)
-
-  // console.log('Коэффициенты:')
-  // result.featureNames.forEach((name, i) => {
-  //   console.log(`  ${name}: ${result.beta[i].toFixed(4)}`)
-  // })
-  // console.log(`(λ = ${result.lambda})`)
-
-  // const lambdas = [0, 0.1, 1, 10, 100]
-  // console.log('λ        β_V        β_P        β_R')
-  // for (const lam of lambdas) {
-  //   const r = ridgeRegression(X, y, lam, ['z_dV', 'z_dP', 'z_dR'])
-  //   console.log(
-  //     `${lam.toFixed(2).padStart(6)}  ${r.beta[0].toFixed(4)}  ${r.beta[1].toFixed(4)}  ${r.beta[2].toFixed(4)}`
-  //   )
-  // }
   // Проверка качества
   const metrics = evaluateModel(X, y, result.beta)
-
-  // console.log('Метрики качества модели:')
-  // console.log(`  R²:    ${metrics.r2.toFixed(4)}  (${(metrics.r2 * 100).toFixed(2)}%)`)
-  // console.log(`  RMSE:  ${metrics.rmse.toFixed(4)}`)
-  // console.log(`  N:     ${metrics.n}`)
+  //console.log('metrics:', metrics)
 
   /// Кросс-валидация
 
@@ -218,52 +189,15 @@ export async function runModel(params: {
     z_dP: r.z_dP,
     z_dR: r.z_dR,
   }))
-
+  //console.log('data:', data)
   // Запускаем CV с k=5 и lambda=1
-  //const cv = groupKFoldCV(data, 1, 5)
-
-  // console.log('=== Group 5-Fold Cross-Validation ===')
-  // console.log(`λ = ${cv.lambda}, k = ${cv.k}`)
-  // console.log()
-
-  // console.log('Результаты по фолдам:')
-  // cv.folds.forEach((f) => {
-  //   console.log(
-  //     `Фолд ${f.foldIndex}: тест на ${f.testAthleteIds.length} спортсменах ` +
-  //       `(${f.testSize} строк) | train R² = ${f.trainR2.toFixed(3)}, ` +
-  //       `test R² = ${f.testR2.toFixed(3)}, RMSE = ${f.testRMSE.toFixed(3)}`
-  //   )
-  // })
-
-  // console.log()
-  // console.log('=== Итоговые метрики ===')
-  // console.log(`Средний training R²: ${cv.meanTrainR2.toFixed(4)}`)
-  // console.log(`Средний CV-R²:       ${cv.meanCVR2.toFixed(4)} ± ${cv.stdCVR2.toFixed(4)}`)
-  // console.log(`Средняя CV-RMSE:     ${cv.meanCVRMSE.toFixed(4)}`)
 
   // Выбираем лучший лямбда
-
+  // откуда эти цифры? 0.001, 0.01, 0.1, 1, 10, 100?
   const lambdas = [0, 0.001, 0.01, 0.1, 1, 5, 10, 50, 100]
 
   const selection = selectBestLambda(data, lambdas, 5)
-
-  // console.log('=== Подбор оптимального λ через 5-fold CV ===')
-  // console.log()
-  // console.log('λ         CV-R²              CV-RMSE')
-  // console.log('─'.repeat(45))
-  // selection.results.forEach((r) => {
-  //   const marker = r.lambda === selection.bestLambda ? '  ← лучшее' : ''
-  //   console.log(
-  //     `${r.lambda.toString().padStart(8)}  ` +
-  //       `${r.meanCVR2.toFixed(4)} ± ${r.stdCVR2.toFixed(4)}  ` +
-  //       `${r.meanCVRMSE.toFixed(4)}${marker}`
-  //   )
-  // })
-  // console.log('─'.repeat(45))
-  // console.log()
-  // console.log(`Оптимальное λ = ${selection.bestLambda}`)
-  // console.log(`CV-R²         = ${selection.bestCVR2.toFixed(4)}`)
-  // console.log(`CV-RMSE       = ${selection.bestCVRMSE.toFixed(4)}`)
+  //console.log('selection:', selection)
 
   const thresholds = calculatePC1Thresholds({
     clinicalThresholds: {
@@ -277,7 +211,7 @@ export async function runModel(params: {
     markerStds: standardized.stds,
     pc1Vector: [0.5319, 0.4752, 0.4854, 0.5056], // ваш [0.5319, 0.4752, 0.4854, 0.5056]
   })
-
+  //  console.log('thresholds:', thresholds)
   // 1. Запускаем расчёт зон
   const zoneSystem = calculateFourZoneSystem({
     clinicalThresholds: {
@@ -294,54 +228,11 @@ export async function runModel(params: {
 
   // 2. Берём массив всех 576 значений PC₁
   const pc1Values = projected.map((r) => r.PC1)
-
+  console.log('pc1Values:', pc1Values)
   // 3. Распределяем по зонам
   const distribution = distributeByZones(pc1Values, zoneSystem.thresholds)
-
+  console.log('distribution:', distribution)
   // 4. Печатаем результат
-  // console.log('=== ЧЕТЫРЁХЗОННАЯ СИСТЕМА ===')
-  // console.log()
-  // console.log('Типичные baseline (медианы по выборке):')
-  // Object.entries(zoneSystem.typicalBaseline).forEach(([k, v]) => {
-  //   console.log(`  ${k}: ${v}`)
-  // })
-  // console.log()
-
-  // console.log('PC₁ по уровням и маркерам:')
-  // console.log('                attention   exceeding   danger')
-  // Object.entries(zoneSystem.pc1ByMarkerByLevel).forEach(([marker, levels]) => {
-  //   console.log(
-  //     `  ${marker.padEnd(11)} ${levels.attention.toFixed(3).padStart(8)}   ` +
-  //       `${levels.exceeding.toFixed(3).padStart(8)}   ${levels.danger.toFixed(3).padStart(8)}`
-  //   )
-  // })
-  // console.log()
-
-  // console.log('Финальные пороги PC₁:')
-  // console.log(
-  //   `  attention (норма → умеренный):       ${zoneSystem.thresholds.attention.toFixed(3)} (driver: ${zoneSystem.drivingMarkers.attention})`
-  // )
-  // console.log(
-  //   `  exceeding (умеренный → выраженный):  ${zoneSystem.thresholds.exceeding.toFixed(3)} (driver: ${zoneSystem.drivingMarkers.exceeding})`
-  // )
-  // console.log(
-  //   `  danger (выраженный → критический):    ${zoneSystem.thresholds.danger.toFixed(3)} (driver: ${zoneSystem.drivingMarkers.danger})`
-  // )
-  // console.log()
-
-  // console.log('Распределение 576 наблюдений по зонам:')
-  // console.log(
-  //   `  Зона 1 (Норма):              ${distribution.zone1_norm} (${distribution.percentByZone.zone1.toFixed(1)}%)`
-  // )
-  // console.log(
-  //   `  Зона 2 (Умеренный отклик):   ${distribution.zone2_moderate} (${distribution.percentByZone.zone2.toFixed(1)}%)`
-  // )
-  // console.log(
-  //   `  Зона 3 (Выраженный отклик):  ${distribution.zone3_pronounced} (${distribution.percentByZone.zone3.toFixed(1)}%)`
-  // )
-  // console.log(
-  //   `  Зона 4 (Критический):        ${distribution.zone4_critical} (${distribution.percentByZone.zone4.toFixed(1)}%)`
-  // )
 
   //// Калькулятор
 
@@ -362,7 +253,7 @@ export async function runModel(params: {
       dR: { min: -0.583, max: 0.336 },
     },
   }
-
+  //  console.log('modelArtifacts:', modelArtifacts)
   // Индивидуальный профиль спортсмена
   const athleteBaseline: AthleteBaseline = {
     V: 8000, // объём
@@ -379,42 +270,13 @@ export async function runModel(params: {
 
   // Прогноз
   const forecast = forecastSession(athleteBaseline, proposedSession, modelArtifacts)
+  // console.log('forecast:', forecast)
   // решение прямой задачи: прогноз PC₁ для данной тренировки
 
   // Когда мы решим обратную задачу и предложим тренеру варианты нагрузки,
   // нужно проверить: попадают ли эти варианты в диапазон обучения?
 
   // Вывод
-  // console.log('=== ПРОГНОЗ ТРЕНИРОВКИ ===')
-  // console.log()
-  // console.log('Относительные отклонения:')
-  // console.log(`  Объём:           ${(forecast.deltas.dV * 100).toFixed(1)}%`)
-  // console.log(`  Интенсивность:   ${(forecast.deltas.dP * 100).toFixed(1)}%`)
-  // console.log(`  Восстановление:  ${(forecast.deltas.dR * 100).toFixed(1)}%`)
-  // console.log()
-  // console.log(`Прогноз PC₁: ${forecast.predictedPC1.toFixed(2)}`)
-  // console.log(
-  //   `Доверительный интервал: [${forecast.confidenceInterval.lower.toFixed(2)}, ${forecast.confidenceInterval.upper.toFixed(2)}]`
-  // )
-  // console.log()
-  // console.log(`Зона ${forecast.zone.code}: ${forecast.zone.name} (${forecast.zone.color})`)
-  // console.log(`  ${forecast.zone.description}`)
-  // console.log()
-  // console.log('Раскладка прогноза по факторам:')
-  // console.log(
-  //   `  Объём:           ${forecast.contributions.volume.value.toFixed(2)} (${forecast.contributions.volume.percent}%)`
-  // )
-  // console.log(
-  //   `  Интенсивность:   ${forecast.contributions.pace.value.toFixed(2)} (${forecast.contributions.pace.percent}%)`
-  // )
-  // console.log(
-  //   `  Восстановление:  ${forecast.contributions.recovery.value.toFixed(2)} (${forecast.contributions.recovery.percent}%)`
-  // )
-  // console.log()
-  // console.log(`Главный фактор: ${forecast.dominantFactor}`)
-  // console.log()
-  // console.log('Рекомендация:')
-  // console.log(`  ${forecast.recommendation}`)
 
   //// Тестируем сценарии
 
@@ -422,107 +284,8 @@ export async function runModel(params: {
 
   // Считаем диапазоны реалистичности
   const loadRangesData = calculateLoadRanges(normalized)
-
+  // console.log('loadRangesData:', loadRangesData)
   // Печатаем
-  // console.log('=== Диапазоны обучающих нагрузок ===')
-  // console.log()
-  // console.log('В долях от индивидуальной нормы:')
-  // console.log(`  dV: [${loadRanges.dV.min.toFixed(3)}, ${loadRanges.dV.max.toFixed(3)}]`)
-  // console.log(`  dP: [${loadRanges.dP.min.toFixed(3)}, ${loadRanges.dP.max.toFixed(3)}]`)
-  // console.log(`  dR: [${loadRanges.dR.min.toFixed(3)}, ${loadRanges.dR.max.toFixed(3)}]`)
-  // console.log()
-  // console.log('В процентах:')
-  // console.log(
-  //   `  Объём:           ${(loadRanges.dV.min * 100).toFixed(1)}% ... ${(loadRanges.dV.max * 100).toFixed(1)}%`
-  // )
-  // console.log(
-  //   `  Интенсивность:   ${(loadRanges.dP.min * 100).toFixed(1)}% ... ${(loadRanges.dP.max * 100).toFixed(1)}%`
-  // )
-  // console.log(
-  //   `  Восстановление:  ${(loadRanges.dR.min * 100).toFixed(1)}% ... ${(loadRanges.dR.max * 100).toFixed(1)}%`
-  // )
-  ///
-
-  /// 4 стратгии для каждой из 4 зон кроме вариативной, которая будет подбирать нагрузку с учётом реалистичности
-
-  // const beta: Beta = { V: 7.4787, P: 7.7872, R: -2.5402 }
-  // const loadStds: LoadStds = { dV: 0.14, dP: 0.138, dR: 0.263 }
-  // const loadRanges: LoadRanges = {
-  //   dV: { min: -0.256, max: 0.284 },
-  //   dP: { min: -0.3, max: 0.161 },
-  //   dR: { min: -0.583, max: 0.336 },
-  // }
-  // // Центры всех четырёх зон
-  // const zones = [
-  //   { num: 1, name: 'Норма', targetDelta: -2.5 },
-  //   { num: 2, name: 'Умеренный отклик', targetDelta: -0.66 },
-  //   { num: 3, name: 'Выраженный отклик', targetDelta: 1.04 },
-  //   { num: 4, name: 'Критический отклик', targetDelta: 1.7 },
-  // ]
-
-  // const allStrategies: Array<{
-  //   name: string
-  //   fn: (t: number, b: Beta) => LoadDeltas
-  // }> = [
-  //   { name: 'Только объём', fn: strategyVolumeOnly },
-  //   { name: 'Только интенсивность', fn: strategyPaceOnly },
-  //   { name: 'Только восстановление', fn: strategyRecoveryOnly },
-  //   { name: 'Сбалансированная', fn: strategyBalanced },
-  // ]
-
-  // for (const zone of zones) {
-  //   console.log(`=== Зона ${zone.num}: ${zone.name} (target = ${zone.targetDelta}) ===`)
-
-  //   for (const s of allStrategies) {
-  //     const deltas = s.fn(zone.targetDelta, beta)
-  //     const realism = checkRealism(deltas, loadStds, loadRanges)
-
-  //     console.log(`  ${s.name}:`)
-  //     console.log(
-  //       `    dV: ${(deltas.dV * 100).toFixed(2)}%, dP: ${(deltas.dP * 100).toFixed(2)}%, dR: ${(deltas.dR * 100).toFixed(2)}%`
-  //     )
-  //     console.log(`    Статус: ${realism.status.toUpperCase()}`)
-  //     console.log(`    Причина: ${realism.reason}`)
-  //   }
-  //   console.log()
-  // }
-
-  //// -- Вариативная стратегия, которая подбирает нагрузку с учётом реалистичности
-
-  // const beta: Beta = { V: 7.4787, P: 7.7872, R: -2.5402 }
-  // const loadStds: LoadStds = { dV: 0.14, dP: 0.138, dR: 0.263 }
-  // const loadRanges: LoadRanges = {
-  //   dV: { min: -0.256, max: 0.284 },
-  //   dP: { min: -0.3, max: 0.161 },
-  //   dR: { min: -0.583, max: 0.336 },
-  // }
-
-  // const zones = [
-  //   { num: 1, name: 'Норма', targetDelta: -2.5 },
-  //   { num: 2, name: 'Умеренный отклик', targetDelta: -0.66 },
-  //   { num: 3, name: 'Выраженный отклик', targetDelta: 1.04 },
-  //   { num: 4, name: 'Критический отклик', targetDelta: 1.7 },
-  // ]
-
-  // console.log('=== Вариативная стратегия для всех зон ===')
-  // console.log()
-
-  // for (const zone of zones) {
-  //   const deltas = strategyVariative(zone.targetDelta, beta, loadStds)
-  //   const realism = checkRealism(deltas, loadStds, loadRanges)
-
-  //   // Проверка математики
-  //   const checkPC1 = beta.V * deltas.dV + beta.P * deltas.dP + beta.R * deltas.dR
-
-  //   console.log(`Зона ${zone.num} (${zone.name}, target = ${zone.targetDelta}):`)
-  //   console.log(
-  //     `  dV: ${(deltas.dV * 100).toFixed(2)}%, dP: ${(deltas.dP * 100).toFixed(2)}%, dR: ${(deltas.dR * 100).toFixed(2)}%`
-  //   )
-  //   console.log(`  Проверка PC1: ${checkPC1.toFixed(4)} (должно быть ${zone.targetDelta})`)
-  //   console.log(`  Статус: ${realism.status.toUpperCase()}`)
-  //   console.log(`  Причина: ${realism.reason}`)
-  //   console.log()
-  // }
 
   const resultus = exploreStrategy({
     baseline: { V: 8000, P: 75, R: 210 },
@@ -542,36 +305,8 @@ export async function runModel(params: {
       },
     },
   })
-
+  // console.log('resultus:', resultus)
   // Вывод результата
-  console.log('=== ОБРАТНАЯ ЗАДАЧА ===')
-  console.log()
-  console.log(
-    `Baseline: V=${resultus.baseline.V}кг, P=${resultus.baseline.P}%, R=${resultus.baseline.R}мин`
-  )
-  console.log(`Опорная точка PC₁: ${resultus.fromPC1}`)
-  console.log()
-
-  for (const strategy of resultus.strategies) {
-    console.log(`━━━ ${strategy.name.toUpperCase()} ━━━`)
-    console.log(`${strategy.description}`)
-    console.log()
-
-    for (const variant of strategy.variants) {
-      console.log(`Зона ${variant.targetZone}: ${variant.zoneName}`)
-      console.log(
-        `  Тренировка: V=${variant.session.V.toFixed(0)}кг, P=${variant.session.P.toFixed(1)}%, R=${variant.session.R.toFixed(0)}мин`
-      )
-      console.log(`  Изменение: ${variant.description}`)
-      console.log(
-        `  Прогноз PC₁: ${variant.predictedPC1.toFixed(2)} (целевое ${variant.targetPC1})`
-      )
-      console.log(`  Определяющий маркер зоны: ${variant.drivingMarker}`)
-      console.log(`  Статус: ${variant.realism.status.toUpperCase()}`)
-      console.log(`  Причина: ${variant.realism.reason}`)
-      console.log()
-    }
-  }
 
   params.ensureRowsForAllAthletes()
 
