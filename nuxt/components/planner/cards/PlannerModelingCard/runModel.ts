@@ -308,6 +308,50 @@ export async function runModel(params: {
   // console.log('resultus:', resultus)
   // Вывод результата
 
+  // for (const athlete of athletesDataAll) {
+  //   // const baseline = calculateIndividualBaseline(athlete)
+  //   // const plan = exploreStrategy({ baseline, artifacts: modelArtifacts })
+  // }
+
+  // console.log('relativeMarkersFromBaselineByAthletes:', relativeMarkersFromBaselineByAthletes)
+
+  const allAthletePlans = relativeMarkersFromBaselineByAthletes.map((athlete) => {
+    // 1. Считаем индивидуальную норму V̄, P̄, R̄ по 16 сессиям этого спортсмена
+    const n = athlete.rows.length // 16
+
+    let sumV = 0
+    let sumP = 0
+    let sumR = 0
+
+    for (const row of athlete.rows) {
+      sumV += row.V
+      sumP += row.P
+      sumR += row.R
+    }
+
+    const baseline = {
+      V: sumV / n,
+      P: sumP / n,
+      R: sumR / n,
+    }
+
+    // 2. Применяем exploreStrategy с этим baseline
+    const plan = exploreStrategy({
+      baseline,
+      artifacts: modelArtifacts,
+    })
+
+    // 3. Возвращаем результат с привязкой к спортсмену
+    return {
+      athleteId: athlete.athleteId,
+      name: athlete.name,
+      baseline,
+      plan,
+    }
+  })
+
+  console.log('allAthletePlans:', allAthletePlans)
+
   params.ensureRowsForAllAthletes()
 
   const next: Record<string, Partial<Record<PlanVariantId, Plan>>> = {
