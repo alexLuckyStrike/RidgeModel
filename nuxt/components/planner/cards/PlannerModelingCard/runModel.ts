@@ -65,6 +65,8 @@ import {
 
 import { calculateLoadRanges, exploreStrategy } from './Inverse_task_function'
 
+import { createCatalogForAll } from './microcycle'
+
 export async function runModel(params: {
   athletes: Athlete[]
   athletePlans: Record<string, Partial<Record<PlanVariantId, Plan>>>
@@ -351,6 +353,18 @@ export async function runModel(params: {
   })
 
   console.log('allAthletePlans:', allAthletePlans)
+  // 'recovery_intro' | 'base' | 'shock' | 'taper' | 'recovery'
+  const shockCatalogs = createCatalogForAll(allAthletePlans, 'shock')
+  const recoveryIntroCatalogs = createCatalogForAll(allAthletePlans, 'recovery_intro')
+  const baseCatalogs = createCatalogForAll(allAthletePlans, 'base')
+  const taperCatalogs = createCatalogForAll(allAthletePlans, 'taper')
+  const recoveryCatalogs = createCatalogForAll(allAthletePlans, 'recovery')
+
+  console.log('shockCatalogs:', shockCatalogs)
+  console.log('recoveryIntroCatalogs:', recoveryIntroCatalogs)
+  console.log('baseCatalogs:', baseCatalogs)
+  console.log('taperCatalogs:', taperCatalogs)
+  console.log('recoveryCatalogs:', recoveryCatalogs)
 
   params.ensureRowsForAllAthletes()
 

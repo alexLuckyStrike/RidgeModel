@@ -34,8 +34,8 @@ interface _GlobalComponents {
     'PlannerCardsPlannerModelingCardHelpers': typeof import("../components/planner/cards/PlannerModelingCard/PlannerModelingCard.helpers")['default']
     'PlannerCardsPlannerModelingCard': typeof import("../components/planner/cards/PlannerModelingCard/PlannerModelingCard.vue")['default']
     'PlannerCardsPlannerModelingCardRidgeRegressionFunctions': typeof import("../components/planner/cards/PlannerModelingCard/Ridge_regression_functions")['default']
-    'PlannerCardsPlannerModelingCardCreateMicroCycle': typeof import("../components/planner/cards/PlannerModelingCard/createMicroCycle")['default']
     'PlannerCardsPlannerModelingCardLoadsAndMatrix': typeof import("../components/planner/cards/PlannerModelingCard/loads_and_matrix")['default']
+    'PlannerCardsPlannerModelingCardMicrocycle': typeof import("../components/planner/cards/PlannerModelingCard/microcycle")['default']
     'PlannerCardsPlannerModelingCardRunModel': typeof import("../components/planner/cards/PlannerModelingCard/runModel")['default']
     'PlannerCardsPlannerPeriodCard': typeof import("../components/planner/cards/PlannerPeriodCard.vue")['default']
     'PlannerMvpAfterLoadCard': typeof import("../components/planner/mvp/PlannerMvpAfterLoadCard.vue")['default']
@@ -88,8 +88,8 @@ interface _GlobalComponents {
     'LazyPlannerCardsPlannerModelingCardHelpers': LazyComponent<typeof import("../components/planner/cards/PlannerModelingCard/PlannerModelingCard.helpers")['default']>
     'LazyPlannerCardsPlannerModelingCard': LazyComponent<typeof import("../components/planner/cards/PlannerModelingCard/PlannerModelingCard.vue")['default']>
     'LazyPlannerCardsPlannerModelingCardRidgeRegressionFunctions': LazyComponent<typeof import("../components/planner/cards/PlannerModelingCard/Ridge_regression_functions")['default']>
-    'LazyPlannerCardsPlannerModelingCardCreateMicroCycle': LazyComponent<typeof import("../components/planner/cards/PlannerModelingCard/createMicroCycle")['default']>
     'LazyPlannerCardsPlannerModelingCardLoadsAndMatrix': LazyComponent<typeof import("../components/planner/cards/PlannerModelingCard/loads_and_matrix")['default']>
+    'LazyPlannerCardsPlannerModelingCardMicrocycle': LazyComponent<typeof import("../components/planner/cards/PlannerModelingCard/microcycle")['default']>
     'LazyPlannerCardsPlannerModelingCardRunModel': LazyComponent<typeof import("../components/planner/cards/PlannerModelingCard/runModel")['default']>
     'LazyPlannerCardsPlannerPeriodCard': LazyComponent<typeof import("../components/planner/cards/PlannerPeriodCard.vue")['default']>
     'LazyPlannerMvpAfterLoadCard': LazyComponent<typeof import("../components/planner/mvp/PlannerMvpAfterLoadCard.vue")['default']>
@@ -148,8 +148,8 @@ export const PlannerCardsPlannerModelingCardPCAPipelineFunctions: typeof import(
 export const PlannerCardsPlannerModelingCardHelpers: typeof import("../components/planner/cards/PlannerModelingCard/PlannerModelingCard.helpers")['default']
 export const PlannerCardsPlannerModelingCard: typeof import("../components/planner/cards/PlannerModelingCard/PlannerModelingCard.vue")['default']
 export const PlannerCardsPlannerModelingCardRidgeRegressionFunctions: typeof import("../components/planner/cards/PlannerModelingCard/Ridge_regression_functions")['default']
-export const PlannerCardsPlannerModelingCardCreateMicroCycle: typeof import("../components/planner/cards/PlannerModelingCard/createMicroCycle")['default']
 export const PlannerCardsPlannerModelingCardLoadsAndMatrix: typeof import("../components/planner/cards/PlannerModelingCard/loads_and_matrix")['default']
+export const PlannerCardsPlannerModelingCardMicrocycle: typeof import("../components/planner/cards/PlannerModelingCard/microcycle")['default']
 export const PlannerCardsPlannerModelingCardRunModel: typeof import("../components/planner/cards/PlannerModelingCard/runModel")['default']
 export const PlannerCardsPlannerPeriodCard: typeof import("../components/planner/cards/PlannerPeriodCard.vue")['default']
 export const PlannerMvpAfterLoadCard: typeof import("../components/planner/mvp/PlannerMvpAfterLoadCard.vue")['default']
@@ -202,8 +202,8 @@ export const LazyPlannerCardsPlannerModelingCardPCAPipelineFunctions: LazyCompon
 export const LazyPlannerCardsPlannerModelingCardHelpers: LazyComponent<typeof import("../components/planner/cards/PlannerModelingCard/PlannerModelingCard.helpers")['default']>
 export const LazyPlannerCardsPlannerModelingCard: LazyComponent<typeof import("../components/planner/cards/PlannerModelingCard/PlannerModelingCard.vue")['default']>
 export const LazyPlannerCardsPlannerModelingCardRidgeRegressionFunctions: LazyComponent<typeof import("../components/planner/cards/PlannerModelingCard/Ridge_regression_functions")['default']>
-export const LazyPlannerCardsPlannerModelingCardCreateMicroCycle: LazyComponent<typeof import("../components/planner/cards/PlannerModelingCard/createMicroCycle")['default']>
 export const LazyPlannerCardsPlannerModelingCardLoadsAndMatrix: LazyComponent<typeof import("../components/planner/cards/PlannerModelingCard/loads_and_matrix")['default']>
+export const LazyPlannerCardsPlannerModelingCardMicrocycle: LazyComponent<typeof import("../components/planner/cards/PlannerModelingCard/microcycle")['default']>
 export const LazyPlannerCardsPlannerModelingCardRunModel: LazyComponent<typeof import("../components/planner/cards/PlannerModelingCard/runModel")['default']>
 export const LazyPlannerCardsPlannerPeriodCard: LazyComponent<typeof import("../components/planner/cards/PlannerPeriodCard.vue")['default']>
 export const LazyPlannerMvpAfterLoadCard: LazyComponent<typeof import("../components/planner/mvp/PlannerMvpAfterLoadCard.vue")['default']>
