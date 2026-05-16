@@ -354,7 +354,7 @@ export async function runModel(params: {
     }
   })
 
-  console.log('allAthletePlans:', allAthletePlans)
+  // console.log('allAthletePlans:', allAthletePlans)
   // 'recovery_intro' | 'base' | 'shock' | 'taper' | 'recovery'
   const shockCatalogs = createCatalogForAll(allAthletePlans, 'shock')
   const recoveryIntroCatalogs = createCatalogForAll(allAthletePlans, 'recovery_intro')
@@ -362,11 +362,31 @@ export async function runModel(params: {
   const taperCatalogs = createCatalogForAll(allAthletePlans, 'taper')
   const recoveryCatalogs = createCatalogForAll(allAthletePlans, 'recovery')
 
-  console.log('shockCatalogs:', shockCatalogs)
-  console.log('recoveryIntroCatalogs:', recoveryIntroCatalogs)
+  //console.log('shockCatalogs:', shockCatalogs)
+  // console.log('recoveryIntroCatalogs:', recoveryIntroCatalogs)
   console.log('baseCatalogs:', baseCatalogs)
-  console.log('taperCatalogs:', taperCatalogs)
-  console.log('recoveryCatalogs:', recoveryCatalogs)
+  // console.log('taperCatalogs:', taperCatalogs)
+  // console.log('recoveryCatalogs:', recoveryCatalogs)
+
+  //// Мезоциклы
+  // Мезоциклы (например, для 4 тренировок в неделю)
+  const sessionsPerWeek = 4
+
+  const mesoRecoveryIntro = createMesoCatalogForAll(
+    allAthletePlans,
+    'recovery_intro',
+    sessionsPerWeek
+  )
+  const mesoBase = createMesoCatalogForAll(allAthletePlans, 'base', sessionsPerWeek)
+  const mesoShock = createMesoCatalogForAll(allAthletePlans, 'shock', sessionsPerWeek)
+  const mesoTaper = createMesoCatalogForAll(allAthletePlans, 'taper', sessionsPerWeek)
+  const mesoRecovery = createMesoCatalogForAll(allAthletePlans, 'recovery', sessionsPerWeek)
+
+  // console.log('mesoRecoveryIntro:', mesoRecoveryIntro)
+  //console.log('mesoBase:', mesoBase)
+  // console.log('mesoShock:', mesoShock)
+  // console.log('mesoTaper:', mesoTaper)
+  // console.log('mesoRecovery:', mesoRecovery)
 
   params.ensureRowsForAllAthletes()
 

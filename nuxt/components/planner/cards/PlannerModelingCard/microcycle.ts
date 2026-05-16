@@ -21,7 +21,8 @@ function isAllowedRealism(variant) {
   return ALLOWED_REALISM.has(variant.realism.status)
 }
 
-function buildSession(sessionIndex, zone, strategyId, variant) {
+function buildSession(sessionIndex, zone, strategyId, variant, baseline) {
+  const { dV, dP, dR } = variant.deltas
   return {
     sessionIndex,
     zone,
@@ -29,6 +30,11 @@ function buildSession(sessionIndex, zone, strategyId, variant) {
     predictedPC1: variant.predictedPC1,
     realism: variant.realism.status,
     deltas: variant.deltas,
+    absoluteLoad: {
+      V: Math.round(baseline.V * (1 + dV) * 100) / 100,
+      P: Math.round(baseline.P * (1 + dP) * 100) / 100,
+      R: Math.round(baseline.R * (1 + dR) * 100) / 100,
+    },
     description: variant.description,
   }
 }
@@ -1336,7 +1342,7 @@ function getRecoveryTemplates() {
 
 function materializeTemplate(template, athletePlan, type) {
   const sessions = []
-
+  const baseline = athletePlan.baseline
   for (let i = 0; i < template.sessions.length; i++) {
     const { zone, strategy } = template.sessions[i]
     const variant = lookupVariant(athletePlan, strategy, zone)
@@ -1344,7 +1350,7 @@ function materializeTemplate(template, athletePlan, type) {
     if (!variant) return null
     if (!isAllowedRealism(variant)) return null
 
-    sessions.push(buildSession(i, zone, strategy, variant))
+    sessions.push(buildSession(i, zone, strategy, variant, baseline))
   }
 
   return {
