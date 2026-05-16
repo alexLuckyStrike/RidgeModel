@@ -30,6 +30,24 @@ export type Athlete = {
   restBaseline: RestBaseline;
 };
 
+export type SessionCountKey = "3" | "4" | "5" | "6";
+
+export type MicrocycleCatalogByLength = Partial<Record<SessionCountKey, unknown[]>>;
+
+export type MicrocycleCatalogRow = {
+  athleteId: string;
+  name: string;
+  catalog: MicrocycleCatalogByLength;
+};
+
+export type AllCatalogsByType = {
+  recovery_intro: MicrocycleCatalogRow[];
+  base: MicrocycleCatalogRow[];
+  shock: MicrocycleCatalogRow[];
+  taper: MicrocycleCatalogRow[];
+  recovery: MicrocycleCatalogRow[];
+};
+
 const createId = () => {
   try {
     const c = globalThis.crypto as Crypto | undefined;
@@ -65,6 +83,7 @@ const normalizeCount = (count: number) =>
 export const useAthletesStore = defineStore("athletes", {
   state: () => ({
     athletes: [createAthlete(1)] as Athlete[],
+    allCatalogsByType: null as AllCatalogsByType | null,
   }),
   actions: {
     setAthleteCount(count: number) {
@@ -114,6 +133,10 @@ export const useAthletesStore = defineStore("athletes", {
       this.athletes.forEach((a, i) => {
         a.name = `Спортсмен ${i + 1}`;
       });
+    },
+
+    setAllCatalogsByType(payload: AllCatalogsByType | null) {
+      this.allCatalogsByType = payload;
     },
   },
 });

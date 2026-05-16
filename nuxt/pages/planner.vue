@@ -10,7 +10,7 @@
       </div>
 
       <UiForm :cards="uiFormCards" />
-      <div class="flex items-center justify-between gap-3">
+      <!-- <div class="flex items-center justify-between gap-3">
         <div class="text-sm text-slate-600">Нажмите, чтобы скрыть или раскрыть блок MVP.</div>
         <button
           type="button"
@@ -33,7 +33,7 @@
             />
           </svg>
         </button>
-      </div>
+      </div> -->
       <!-- <transition name="mvp-collapse">
         <NuxtLink
           v-show="!mvpCollapsed"
@@ -63,6 +63,7 @@
 
     <section class="grid gap-6">
       <div>
+        <ShowMicroCycle />
         <!-- <UiCard title="Ввод данных по неделям" subtitle="Каждая тренировка: V, P, R и маркеры">
           <div class="flex items-center justify-between gap-3">
             <div class="text-sm text-slate-600">Нажмите, чтобы скрыть или раскрыть блок ввода.</div>
@@ -179,6 +180,7 @@
 import { computed, ref } from 'vue'
 import UiCard from '~/components/UiCard.vue'
 import UiForm from '~/components/UiForm.vue'
+import ShowMicroCycle from '~/components/ShowMicroCycle.vue'
 import PlannerCharts from '~/components/planner/PlannerCharts.vue'
 import PlanWeekCard from '~/components/planner/PlanWeekCard.vue'
 import ObservationWeek from '~/components/planner/ObservationWeek.vue'

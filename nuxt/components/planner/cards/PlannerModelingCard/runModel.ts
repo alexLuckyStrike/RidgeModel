@@ -1,5 +1,5 @@
 import { nextTick } from 'vue'
-import type { Athlete } from '../../../../stores/athletes'
+import { useAthletesStore, type AllCatalogsByType, type Athlete } from '../../../../stores/athletes'
 import { useDataPreperationPCAStore } from '../../../../stores/DataPreperationPCA'
 import type { Plan, PlanVariantId } from '../../../../utils/plannerTypes'
 import {
@@ -81,6 +81,7 @@ export async function runModel(params: {
   drawCharts: () => void
 }) {
   const dataPreperationPCAStore = useDataPreperationPCAStore()
+  const athletesStore = useAthletesStore()
   const athletesDataAll = await dataPreperationPCAStore.fetchAllAthletesFromDb()
 
   //console.log('athletesDataAll:', athletesDataAll)
@@ -93,7 +94,7 @@ export async function runModel(params: {
     rows: logRelativeToBaseLine(athlete.rows, athlete.restBaseline),
   }))
 
-  console.log('relativeMarkersFromBaselineByAthletes:', relativeMarkersFromBaselineByAthletes)
+  //console.log('relativeMarkersFromBaselineByAthletes:', relativeMarkersFromBaselineByAthletes)
 
   // Это операция выравнивания (flattening) — преобразование иерархической структуры (спортсмены → их сессии) в плоскую таблицу всех наблюдений.После этой операции мы получаем 576 строк в виде единого массива, готового для дальнейшей статистической обработки.
   const flatRows = relativeMarkersFromBaselineByAthletes.flatMap((athlete) =>
@@ -232,10 +233,10 @@ export async function runModel(params: {
 
   // 2. Берём массив всех 576 значений PC₁
   const pc1Values = projected.map((r) => r.PC1)
-  console.log('pc1Values:', pc1Values)
+  //  console.log('pc1Values:', pc1Values)
   // 3. Распределяем по зонам
   const distribution = distributeByZones(pc1Values, zoneSystem.thresholds)
-  console.log('distribution:', distribution)
+  // console.log('distribution:', distribution)
   // 4. Печатаем результат
 
   //// Калькулятор
@@ -363,6 +364,17 @@ export async function runModel(params: {
   const recoveryCatalogs = createCatalogForAll(allAthletePlans, 'recovery')
 
   console.log('shockCatalogs:', shockCatalogs)
+
+  const allCatalogsByType: AllCatalogsByType = {
+    recovery_intro: recoveryIntroCatalogs,
+    base: baseCatalogs,
+    shock: shockCatalogs,
+    taper: taperCatalogs,
+    recovery: recoveryCatalogs,
+  }
+
+  console.log('allCatalogsByType:', allCatalogsByType)
+  athletesStore.setAllCatalogsByType(allCatalogsByType)
   // console.log('recoveryIntroCatalogs:', recoveryIntroCatalogs)
   // console.log('baseCatalogs:', baseCatalogs)
   // console.log('taperCatalogs:', taperCatalogs)

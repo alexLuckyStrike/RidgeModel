@@ -243,7 +243,7 @@ declare global {
   export type { RidgeResult } from '../../utils/ridge'
   import('../../utils/ridge')
   // @ts-ignore
-  export type { Row, RestBaseline, Athlete } from '../../stores/athletes'
+  export type { Row, RestBaseline, Athlete, SessionCountKey, MicrocycleCatalogByLength, MicrocycleCatalogRow, AllCatalogsByType } from '../../stores/athletes'
   import('../../stores/athletes')
   // @ts-ignore
   export type { MvpPreview, MvpLoad5Set, MedicalTestResult, OcrItem, MvpAnalysisResult } from '../../stores/mvp'
