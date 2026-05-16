@@ -67,6 +67,8 @@ import { calculateLoadRanges, exploreStrategy } from './Inverse_task_function'
 
 import { createCatalogForAll } from './microcycle'
 
+import { createMesoCatalogForAll } from './mezocycle'
+
 export async function runModel(params: {
   athletes: Athlete[]
   athletePlans: Record<string, Partial<Record<PlanVariantId, Plan>>>
