@@ -2,26 +2,22 @@
   <div class="space-y-6">
     <section class="flex flex-col gap-4">
       <div>
-        <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">
-          Моделирование микроциклов
-        </h1>
+        <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">Моделирование микроциклов</h1>
         <p class="text-slate-700 mt-2">
-          Вводите параметры нагрузки (V/P/R) и маркеры. Текущий модуль
-          расчёта временно отключён и очищен для полной переработки.
+          Вводите параметры нагрузки (V/P/R) и маркеры. Текущий модуль расчёта временно отключён и
+          очищен для полной переработки.
         </p>
       </div>
 
       <UiForm :cards="uiFormCards" />
       <div class="flex items-center justify-between gap-3">
-        <div class="text-sm text-slate-600">
-          Нажмите, чтобы скрыть или раскрыть блок MVP.
-        </div>
+        <div class="text-sm text-slate-600">Нажмите, чтобы скрыть или раскрыть блок MVP.</div>
         <button
           type="button"
           class="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
           @click="toggleMvpBlock"
         >
-          <span>{{ mvpCollapsed ? "Показать" : "Скрыть" }}</span>
+          <span>{{ mvpCollapsed ? 'Показать' : 'Скрыть' }}</span>
           <svg
             class="h-4 w-4 transition-transform"
             :class="mvpCollapsed ? '' : 'rotate-180'"
@@ -38,39 +34,44 @@
           </svg>
         </button>
       </div>
-      <transition name="mvp-collapse">
+      <!-- <transition name="mvp-collapse">
         <NuxtLink
           v-show="!mvpCollapsed"
           to="/cv"
           class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm hover:bg-slate-50 transition"
         >
           <svg class="h-5 w-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
           </svg>
           MVP 0.1 — Индикаторные полоски
           <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M9 5l7 7-7 7"
+            />
           </svg>
         </NuxtLink>
-      </transition>
+      </transition> -->
     </section>
 
     <section class="grid gap-6">
       <div>
-        <UiCard
-          title="Ввод данных по неделям"
-          subtitle="Каждая тренировка: V, P, R и маркеры"
-        >
+        <!-- <UiCard title="Ввод данных по неделям" subtitle="Каждая тренировка: V, P, R и маркеры">
           <div class="flex items-center justify-between gap-3">
-            <div class="text-sm text-slate-600">
-              Нажмите, чтобы скрыть или раскрыть блок ввода.
-            </div>
+            <div class="text-sm text-slate-600">Нажмите, чтобы скрыть или раскрыть блок ввода.</div>
             <button
               type="button"
               class="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
               @click="toggleWeeksInput"
             >
-              <span>{{ weeksInputCollapsed ? "Показать" : "Скрыть" }}</span>
+              <span>{{ weeksInputCollapsed ? 'Показать' : 'Скрыть' }}</span>
               <svg
                 class="h-4 w-4 transition-transform"
                 :class="weeksInputCollapsed ? '' : 'rotate-180'"
@@ -100,9 +101,7 @@
                   class="cursor-pointer select-none flex items-center justify-between gap-3"
                   @click="setActiveAthlete(athlete.id)"
                 >
-                  <div class="font-semibold">
-                    Спортсмен {{ athleteIndex + 1 }}
-                  </div>
+                  <div class="font-semibold">Спортсмен {{ athleteIndex + 1 }}</div>
                   <div class="text-xs text-slate-600">
                     Недели: {{ athlete.period.observationWeeks }}
                   </div>
@@ -120,33 +119,29 @@
                     :chip-text="chipText"
                     :chip-class="chipClass"
                     :key-of="keyOf"
-                    @update="(week, session, field, val) => athlete.rows[keyOf(week, session)][field] = val"
+                    @update="
+                      (week, session, field, val) =>
+                        (athlete.rows[keyOf(week, session)][field] = val)
+                    "
                   />
                 </div>
               </details>
             </div>
           </transition>
-        </UiCard>
+        </UiCard> -->
       </div>
 
       <div class="space-y-6 w-full">
-        <UiCard
-          title="Расчёт"
-          subtitle="Модуль расчёта очищен для полной переработки"
-        >
+        <!-- <UiCard title="Расчёт" subtitle="Модуль расчёта очищен для полной переработки">
           <div class="text-sm text-slate-600">
-            Текущая вычислительная логика временно отключена. После утверждения новой
-            схемы здесь подключим переработанный расчёт.
+            Текущая вычислительная логика временно отключена. После утверждения новой схемы здесь
+            подключим переработанный расчёт.
           </div>
-        </UiCard>
+        </UiCard> -->
 
-        <PlannerCharts
-          ref="chartsRef"
-          :has-plan="Boolean(activePlan)"
-          :sessions="flatPlan"
-        />
+        <!-- <PlannerCharts ref="chartsRef" :has-plan="Boolean(activePlan)" :sessions="flatPlan" /> -->
 
-        <UiCard
+        <!-- <UiCard
           title="Пояснение выбранного плана"
           subtitle="Подробная математика + ссылки на постулаты"
         >
@@ -159,9 +154,9 @@
             </div>
             <div class="mt-2" v-html="activeVariant?.explanationHtml" />
           </div>
-        </UiCard>
+        </UiCard> -->
 
-        <UiCard title="План" subtitle="Красивое отображение микроциклов">
+        <!-- <UiCard title="План" subtitle="Красивое отображение микроциклов">
           <div v-if="!activePlan" class="text-slate-600 text-sm">
             После получения вариантов здесь появится выбранный план микроциклов.
           </div>
@@ -174,12 +169,11 @@
               :dates="weekDates(idx)"
             />
           </div>
-        </UiCard>
+        </UiCard> -->
       </div>
     </section>
   </div>
 </template>
-
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
@@ -195,9 +189,7 @@ import { keyOf } from '~/utils/plannerHelpers'
 import type { PlanVariantId, Plan } from '~/utils/plannerTypes'
 
 // ─── Shared state (owned by orchestrator) ───
-const athletePlans = ref<
-  Record<string, Partial<Record<PlanVariantId, Plan>>>
->({})
+const athletePlans = ref<Record<string, Partial<Record<PlanVariantId, Plan>>>>({})
 const activePlanId = ref<PlanVariantId>('balanced')
 const chartsRef = ref<InstanceType<typeof PlannerCharts> | null>(null)
 
@@ -211,11 +203,9 @@ const toggleWeeksInput = () => {
   weeksInputCollapsed.value = !weeksInputCollapsed.value
 }
 
-
 const drawCharts = () => chartsRef.value?.drawCharts?.()
 const destroyCharts = () => chartsRef.value?.destroyCharts?.()
-const getPngDataUrls = () =>
-  chartsRef.value?.getPngDataUrls?.() ?? { V: '', P: '', R: '' }
+const getPngDataUrls = () => chartsRef.value?.getPngDataUrls?.() ?? { V: '', P: '', R: '' }
 
 // ─── Group 1: Data Preparation ───
 const data = usePlannerData({ athletePlans, destroyCharts })
@@ -260,7 +250,6 @@ const display = usePlannerDisplay({
   startDate: data.startDate,
   drawCharts,
   getPngDataUrls,
-
 })
 
 // ─── Re-export for template compatibility ───
@@ -280,11 +269,7 @@ const {
   getRow,
 } = data
 
-const {
-  canModel,
-  hasFilledData,
-  flatPlan,
-} = processing
+const { canModel, hasFilledData, flatPlan } = processing
 
 const {
   activeVariant,
@@ -296,15 +281,14 @@ const {
   weekDates,
   exportPdf,
 } = display
-
-
 </script>
-
 
 <style scoped>
 :deep(.mvp-collapse-enter-active),
 :deep(.mvp-collapse-leave-active) {
-  transition: max-height 0.3s ease, opacity 0.3s ease;
+  transition:
+    max-height 0.3s ease,
+    opacity 0.3s ease;
 }
 :deep(.mvp-collapse-enter-from),
 :deep(.mvp-collapse-leave-to) {

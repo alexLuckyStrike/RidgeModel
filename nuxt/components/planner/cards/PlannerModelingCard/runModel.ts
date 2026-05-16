@@ -362,9 +362,9 @@ export async function runModel(params: {
   const taperCatalogs = createCatalogForAll(allAthletePlans, 'taper')
   const recoveryCatalogs = createCatalogForAll(allAthletePlans, 'recovery')
 
-  //console.log('shockCatalogs:', shockCatalogs)
+  console.log('shockCatalogs:', shockCatalogs)
   // console.log('recoveryIntroCatalogs:', recoveryIntroCatalogs)
-  console.log('baseCatalogs:', baseCatalogs)
+  // console.log('baseCatalogs:', baseCatalogs)
   // console.log('taperCatalogs:', taperCatalogs)
   // console.log('recoveryCatalogs:', recoveryCatalogs)
 
