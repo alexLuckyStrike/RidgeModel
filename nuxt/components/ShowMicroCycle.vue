@@ -45,7 +45,7 @@
         </button>
       </div>
     </div>
-    {{ buildAthletesFromTypeObject }}
+
     <ShowMicroCycleView
       :microcycle="currentVariant"
       :sessions="currentSessions"

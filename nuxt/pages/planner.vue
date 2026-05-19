@@ -133,6 +133,7 @@
       </div>
 
       <div class="space-y-6 w-full">
+        <ShowMezoCycle />
         <!-- <UiCard title="Расчёт" subtitle="Модуль расчёта очищен для полной переработки">
           <div class="text-sm text-slate-600">
             Текущая вычислительная логика временно отключена. После утверждения новой схемы здесь
@@ -181,6 +182,7 @@ import { computed, ref } from 'vue'
 import UiCard from '~/components/UiCard.vue'
 import UiForm from '~/components/UiForm.vue'
 import ShowMicroCycle from '~/components/ShowMicroCycle.vue'
+import ShowMezoCycle from '~/components/ShowMezoCycle.vue'
 import PlannerCharts from '~/components/planner/PlannerCharts.vue'
 import PlanWeekCard from '~/components/planner/PlanWeekCard.vue'
 import ObservationWeek from '~/components/planner/ObservationWeek.vue'

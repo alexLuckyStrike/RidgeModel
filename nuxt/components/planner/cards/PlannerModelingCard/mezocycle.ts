@@ -4,6 +4,7 @@
 // Один файл, один импорт
 // ============================================================
 
+// const { createCatalog } = require('./createMicroCycle')
 import { createCatalog } from './microcycle'
 // ======================== ХЕЛПЕРЫ ==========================
 
@@ -207,7 +208,6 @@ function getMesoTemplates(type) {
 function getRecoveryIntroMesoTemplates() {
   return {
     2: [
-      // --- НАРАСТАЮЩАЯ ---
       {
         variantId: 'v1',
         name: 'Линейный разгон',
@@ -228,8 +228,6 @@ function getRecoveryIntroMesoTemplates() {
           { weekNumber: 2, level: 'bridge' },
         ],
       },
-
-      // --- УБЫВАЮЩАЯ ---
       {
         variantId: 'v3',
         name: 'Осторожный вход',
@@ -240,8 +238,6 @@ function getRecoveryIntroMesoTemplates() {
           { weekNumber: 2, level: 'lowest' },
         ],
       },
-
-      // --- СТУПЕНЧАТАЯ ---
       {
         variantId: 'v4',
         name: 'Равномерный низкий',
@@ -265,7 +261,6 @@ function getRecoveryIntroMesoTemplates() {
     ],
 
     3: [
-      // --- НАРАСТАЮЩАЯ ---
       {
         variantId: 'v1',
         name: 'Классический трёхнедельный',
@@ -277,8 +272,6 @@ function getRecoveryIntroMesoTemplates() {
           { weekNumber: 3, level: 'medium' },
         ],
       },
-
-      // --- МАЯТНИКОВАЯ ---
       {
         variantId: 'v2',
         name: 'Маятниковый вход',
@@ -290,8 +283,6 @@ function getRecoveryIntroMesoTemplates() {
           { weekNumber: 3, level: 'medium' },
         ],
       },
-
-      // --- СТУПЕНЧАТАЯ ---
       {
         variantId: 'v3',
         name: 'Ступенчатый разгон',
@@ -303,8 +294,6 @@ function getRecoveryIntroMesoTemplates() {
           { weekNumber: 3, level: 'medium' },
         ],
       },
-
-      // --- УБЫВАЮЩАЯ ---
       {
         variantId: 'v4',
         name: 'Затухающий после перегрузки',
@@ -316,8 +305,6 @@ function getRecoveryIntroMesoTemplates() {
           { weekNumber: 3, level: 'lowest' },
         ],
       },
-
-      // --- НАРАСТАЮЩАЯ С МОСТИКОМ ---
       {
         variantId: 'v5',
         name: 'С мостиком к базовому',
@@ -332,7 +319,6 @@ function getRecoveryIntroMesoTemplates() {
     ],
 
     4: [
-      // --- НАРАСТАЮЩАЯ ---
       {
         variantId: 'v1',
         name: 'Длинный линейный разгон',
@@ -345,8 +331,6 @@ function getRecoveryIntroMesoTemplates() {
           { weekNumber: 4, level: 'high' },
         ],
       },
-
-      // --- МАЯТНИКОВАЯ ---
       {
         variantId: 'v2',
         name: 'Двойной маятник',
@@ -359,8 +343,6 @@ function getRecoveryIntroMesoTemplates() {
           { weekNumber: 4, level: 'low' },
         ],
       },
-
-      // --- СТУПЕНЧАТАЯ ---
       {
         variantId: 'v3',
         name: 'Двухступенчатый',
@@ -373,8 +355,6 @@ function getRecoveryIntroMesoTemplates() {
           { weekNumber: 4, level: 'medium' },
         ],
       },
-
-      // --- УБЫВАЮЩАЯ ---
       {
         variantId: 'v4',
         name: 'Длинное затухание',
@@ -387,8 +367,6 @@ function getRecoveryIntroMesoTemplates() {
           { weekNumber: 4, level: 'lowest' },
         ],
       },
-
-      // --- С МОСТИКОМ ---
       {
         variantId: 'v5',
         name: 'Трёхнедельный с мостиком',
@@ -402,26 +380,315 @@ function getRecoveryIntroMesoTemplates() {
         ],
       },
     ],
+
+    5: [
+      {
+        variantId: 'v1',
+        name: 'Пятинедельная прогрессия',
+        dynamics: 'ascending',
+        context: 'Плавное нарастание через 5 ступеней. Долгий перерыв.',
+        weeks: [
+          { weekNumber: 1, level: 'lowest' },
+          { weekNumber: 2, level: 'low' },
+          { weekNumber: 3, level: 'medium' },
+          { weekNumber: 4, level: 'high' },
+          { weekNumber: 5, level: 'bridge' },
+        ],
+      },
+      {
+        variantId: 'v2',
+        name: 'Маятник с плато',
+        dynamics: 'pendulum',
+        context: 'Средний → минимальный → средний → низкий → средний. Волнообразное втягивание.',
+        weeks: [
+          { weekNumber: 1, level: 'medium' },
+          { weekNumber: 2, level: 'lowest' },
+          { weekNumber: 3, level: 'medium' },
+          { weekNumber: 4, level: 'low' },
+          { weekNumber: 5, level: 'medium' },
+        ],
+      },
+      {
+        variantId: 'v3',
+        name: 'Трёхступенчатый',
+        dynamics: 'step',
+        context: 'Два минимальных → два средних → мостик. Три ступени.',
+        weeks: [
+          { weekNumber: 1, level: 'lowest' },
+          { weekNumber: 2, level: 'lowest' },
+          { weekNumber: 3, level: 'medium' },
+          { weekNumber: 4, level: 'medium' },
+          { weekNumber: 5, level: 'bridge' },
+        ],
+      },
+      {
+        variantId: 'v4',
+        name: 'Длинное затухание с плато',
+        dynamics: 'descending',
+        context: 'Высокий → средний → средний → низкий → минимальный. Глубокая разгрузка.',
+        weeks: [
+          { weekNumber: 1, level: 'high' },
+          { weekNumber: 2, level: 'medium' },
+          { weekNumber: 3, level: 'medium' },
+          { weekNumber: 4, level: 'low' },
+          { weekNumber: 5, level: 'lowest' },
+        ],
+      },
+      {
+        variantId: 'v5',
+        name: 'Двойная волна с мостиком',
+        dynamics: 'pendulum',
+        context: 'Низкий → средний → низкий → средний → мостик. Два подъёма.',
+        weeks: [
+          { weekNumber: 1, level: 'lowest' },
+          { weekNumber: 2, level: 'medium' },
+          { weekNumber: 3, level: 'low' },
+          { weekNumber: 4, level: 'medium' },
+          { weekNumber: 5, level: 'bridge' },
+        ],
+      },
+    ],
+
+    6: [
+      {
+        variantId: 'v1',
+        name: 'Шестинедельная прогрессия',
+        dynamics: 'ascending',
+        context: 'Плавное нарастание через 6 ступеней. Максимально щадящий вход.',
+        weeks: [
+          { weekNumber: 1, level: 'lowest' },
+          { weekNumber: 2, level: 'lowest' },
+          { weekNumber: 3, level: 'low' },
+          { weekNumber: 4, level: 'medium' },
+          { weekNumber: 5, level: 'high' },
+          { weekNumber: 6, level: 'bridge' },
+        ],
+      },
+      {
+        variantId: 'v2',
+        name: 'Тройная волна',
+        dynamics: 'pendulum',
+        context: 'Три волны нагрузки: подъём-спад × 3. Нестабильная адаптация.',
+        weeks: [
+          { weekNumber: 1, level: 'medium' },
+          { weekNumber: 2, level: 'lowest' },
+          { weekNumber: 3, level: 'medium' },
+          { weekNumber: 4, level: 'low' },
+          { weekNumber: 5, level: 'medium' },
+          { weekNumber: 6, level: 'lowest' },
+        ],
+      },
+      {
+        variantId: 'v3',
+        name: 'Двухступенчатый длинный',
+        dynamics: 'step',
+        context: 'Три минимальных → три средних. Блочная адаптация.',
+        weeks: [
+          { weekNumber: 1, level: 'lowest' },
+          { weekNumber: 2, level: 'lowest' },
+          { weekNumber: 3, level: 'lowest' },
+          { weekNumber: 4, level: 'medium' },
+          { weekNumber: 5, level: 'medium' },
+          { weekNumber: 6, level: 'medium' },
+        ],
+      },
+      {
+        variantId: 'v4',
+        name: 'Длинное убывание',
+        dynamics: 'descending',
+        context: 'Мостик → средний → средний → низкий → минимальный → минимальный.',
+        weeks: [
+          { weekNumber: 1, level: 'bridge' },
+          { weekNumber: 2, level: 'medium' },
+          { weekNumber: 3, level: 'medium' },
+          { weekNumber: 4, level: 'low' },
+          { weekNumber: 5, level: 'lowest' },
+          { weekNumber: 6, level: 'lowest' },
+        ],
+      },
+      {
+        variantId: 'v5',
+        name: 'Прогрессия 4+2 с мостиком',
+        dynamics: 'ascending',
+        context: 'Четыре недели нарастания → два мостика к базовому.',
+        weeks: [
+          { weekNumber: 1, level: 'lowest' },
+          { weekNumber: 2, level: 'low' },
+          { weekNumber: 3, level: 'medium' },
+          { weekNumber: 4, level: 'high' },
+          { weekNumber: 5, level: 'bridge' },
+          { weekNumber: 6, level: 'bridge' },
+        ],
+      },
+    ],
+
+    7: [
+      {
+        variantId: 'v1',
+        name: 'Семинедельная прогрессия',
+        dynamics: 'ascending',
+        context: 'Максимально плавное нарастание. Реабилитация после тяжёлой травмы.',
+        weeks: [
+          { weekNumber: 1, level: 'lowest' },
+          { weekNumber: 2, level: 'lowest' },
+          { weekNumber: 3, level: 'low' },
+          { weekNumber: 4, level: 'low' },
+          { weekNumber: 5, level: 'medium' },
+          { weekNumber: 6, level: 'high' },
+          { weekNumber: 7, level: 'bridge' },
+        ],
+      },
+      {
+        variantId: 'v2',
+        name: 'Волнообразный длинный',
+        dynamics: 'pendulum',
+        context: 'Три с половиной волны. Хроническая нестабильность восстановления.',
+        weeks: [
+          { weekNumber: 1, level: 'medium' },
+          { weekNumber: 2, level: 'lowest' },
+          { weekNumber: 3, level: 'medium' },
+          { weekNumber: 4, level: 'lowest' },
+          { weekNumber: 5, level: 'medium' },
+          { weekNumber: 6, level: 'low' },
+          { weekNumber: 7, level: 'medium' },
+        ],
+      },
+      {
+        variantId: 'v3',
+        name: 'Трёхступенчатый длинный',
+        dynamics: 'step',
+        context: 'Три блока: минимальные → низкие → средние. Постепенная ступенчатая адаптация.',
+        weeks: [
+          { weekNumber: 1, level: 'lowest' },
+          { weekNumber: 2, level: 'lowest' },
+          { weekNumber: 3, level: 'low' },
+          { weekNumber: 4, level: 'low' },
+          { weekNumber: 5, level: 'medium' },
+          { weekNumber: 6, level: 'medium' },
+          { weekNumber: 7, level: 'high' },
+        ],
+      },
+      {
+        variantId: 'v4',
+        name: 'Длинное убывание с плато',
+        dynamics: 'descending',
+        context: 'Высокий → средний → средний → низкий → низкий → минимальный → минимальный.',
+        weeks: [
+          { weekNumber: 1, level: 'high' },
+          { weekNumber: 2, level: 'medium' },
+          { weekNumber: 3, level: 'medium' },
+          { weekNumber: 4, level: 'low' },
+          { weekNumber: 5, level: 'low' },
+          { weekNumber: 6, level: 'lowest' },
+          { weekNumber: 7, level: 'lowest' },
+        ],
+      },
+      {
+        variantId: 'v5',
+        name: 'Прогрессия 5+2 с мостиком',
+        dynamics: 'ascending',
+        context: 'Пять недель нарастания → два мостика. Длинный вход в базовый блок.',
+        weeks: [
+          { weekNumber: 1, level: 'lowest' },
+          { weekNumber: 2, level: 'low' },
+          { weekNumber: 3, level: 'medium' },
+          { weekNumber: 4, level: 'medium' },
+          { weekNumber: 5, level: 'high' },
+          { weekNumber: 6, level: 'bridge' },
+          { weekNumber: 7, level: 'bridge' },
+        ],
+      },
+    ],
+
+    8: [
+      {
+        variantId: 'v1',
+        name: 'Восьминедельная прогрессия',
+        dynamics: 'ascending',
+        context: 'Максимально длинное втягивание. После операции или длительной болезни.',
+        weeks: [
+          { weekNumber: 1, level: 'lowest' },
+          { weekNumber: 2, level: 'lowest' },
+          { weekNumber: 3, level: 'low' },
+          { weekNumber: 4, level: 'low' },
+          { weekNumber: 5, level: 'medium' },
+          { weekNumber: 6, level: 'medium' },
+          { weekNumber: 7, level: 'high' },
+          { weekNumber: 8, level: 'bridge' },
+        ],
+      },
+      {
+        variantId: 'v2',
+        name: 'Четверная волна',
+        dynamics: 'pendulum',
+        context: 'Четыре волны подъёма-спада. Сложная адаптация.',
+        weeks: [
+          { weekNumber: 1, level: 'medium' },
+          { weekNumber: 2, level: 'lowest' },
+          { weekNumber: 3, level: 'medium' },
+          { weekNumber: 4, level: 'lowest' },
+          { weekNumber: 5, level: 'medium' },
+          { weekNumber: 6, level: 'low' },
+          { weekNumber: 7, level: 'medium' },
+          { weekNumber: 8, level: 'lowest' },
+        ],
+      },
+      {
+        variantId: 'v3',
+        name: 'Четырёхступенчатый',
+        dynamics: 'step',
+        context: 'Четыре блока по 2 недели: минимальный → низкий → средний → мостик.',
+        weeks: [
+          { weekNumber: 1, level: 'lowest' },
+          { weekNumber: 2, level: 'lowest' },
+          { weekNumber: 3, level: 'low' },
+          { weekNumber: 4, level: 'low' },
+          { weekNumber: 5, level: 'medium' },
+          { weekNumber: 6, level: 'medium' },
+          { weekNumber: 7, level: 'bridge' },
+          { weekNumber: 8, level: 'bridge' },
+        ],
+      },
+      {
+        variantId: 'v4',
+        name: 'Длинное убывание глубокое',
+        dynamics: 'descending',
+        context:
+          'Мостик → высокий → средний → средний → низкий → низкий → минимальный → минимальный.',
+        weeks: [
+          { weekNumber: 1, level: 'bridge' },
+          { weekNumber: 2, level: 'high' },
+          { weekNumber: 3, level: 'medium' },
+          { weekNumber: 4, level: 'medium' },
+          { weekNumber: 5, level: 'low' },
+          { weekNumber: 6, level: 'low' },
+          { weekNumber: 7, level: 'lowest' },
+          { weekNumber: 8, level: 'lowest' },
+        ],
+      },
+      {
+        variantId: 'v5',
+        name: 'Прогрессия 6+2 с мостиком',
+        dynamics: 'ascending',
+        context: 'Шесть недель нарастания → два мостика к базовому блоку.',
+        weeks: [
+          { weekNumber: 1, level: 'lowest' },
+          { weekNumber: 2, level: 'lowest' },
+          { weekNumber: 3, level: 'low' },
+          { weekNumber: 4, level: 'medium' },
+          { weekNumber: 5, level: 'medium' },
+          { weekNumber: 6, level: 'high' },
+          { weekNumber: 7, level: 'bridge' },
+          { weekNumber: 8, level: 'bridge' },
+        ],
+      },
+    ],
   }
 }
 
-/**
- * Шаблоны базового мезоцикла.
- *
- * Базовый мезоцикл — ядро тренировочного процесса.
- * Основная работа в Зоне 2 (базовая), допускаются Зоны 3 (развивающая).
- * Разгрузочные недели — recovery_intro.
- *
- * Уровни нагрузки:
- *   unload    → recovery_intro  (PC1 ≈ −2.0..−1.0)  — разгрузочная
- *   base_low  → base без Z3     (PC1 ≈ −0.8..−0.4)  — лёгкая базовая
- *   base_mid  → base            (PC1 ≈ −0.8..0.0)   — средняя базовая
- *   base_high → base/shock      (PC1 ≈ −0.3..+0.5)  — тяжёлая базовая
- */
 function getBaseMesoTemplates() {
   return {
     2: [
-      // --- НАРАСТАЮЩАЯ ---
       {
         variantId: 'v1',
         name: 'Линейный базовый',
@@ -442,8 +709,6 @@ function getBaseMesoTemplates() {
           { weekNumber: 2, level: 'base_high' },
         ],
       },
-
-      // --- УБЫВАЮЩАЯ ---
       {
         variantId: 'v3',
         name: 'Базовый с разгрузкой',
@@ -454,8 +719,6 @@ function getBaseMesoTemplates() {
           { weekNumber: 2, level: 'unload' },
         ],
       },
-
-      // --- СТУПЕНЧАТАЯ ---
       {
         variantId: 'v4',
         name: 'Равномерный базовый',
@@ -479,7 +742,6 @@ function getBaseMesoTemplates() {
     ],
 
     3: [
-      // --- НАРАСТАЮЩАЯ ---
       {
         variantId: 'v1',
         name: 'Классический трёхнедельный',
@@ -491,8 +753,6 @@ function getBaseMesoTemplates() {
           { weekNumber: 3, level: 'base_high' },
         ],
       },
-
-      // --- МАЯТНИКОВАЯ ---
       {
         variantId: 'v2',
         name: 'Маятниковый базовый',
@@ -504,8 +764,6 @@ function getBaseMesoTemplates() {
           { weekNumber: 3, level: 'base_high' },
         ],
       },
-
-      // --- СТУПЕНЧАТАЯ ---
       {
         variantId: 'v3',
         name: 'Ступенчатый базовый',
@@ -517,8 +775,6 @@ function getBaseMesoTemplates() {
           { weekNumber: 3, level: 'base_high' },
         ],
       },
-
-      // --- УБЫВАЮЩАЯ ---
       {
         variantId: 'v4',
         name: 'Базовый с затуханием',
@@ -530,8 +786,6 @@ function getBaseMesoTemplates() {
           { weekNumber: 3, level: 'unload' },
         ],
       },
-
-      // --- НАРАСТАЮЩАЯ С РАЗГРУЗКОЙ ---
       {
         variantId: 'v5',
         name: 'Два базовых + разгрузка',
@@ -546,7 +800,6 @@ function getBaseMesoTemplates() {
     ],
 
     4: [
-      // --- НАРАСТАЮЩАЯ ---
       {
         variantId: 'v1',
         name: 'Четырёхнедельная прогрессия',
@@ -559,8 +812,6 @@ function getBaseMesoTemplates() {
           { weekNumber: 4, level: 'base_high' },
         ],
       },
-
-      // --- МАЯТНИКОВАЯ ---
       {
         variantId: 'v2',
         name: 'Двойная волна',
@@ -573,8 +824,6 @@ function getBaseMesoTemplates() {
           { weekNumber: 4, level: 'base_low' },
         ],
       },
-
-      // --- СТУПЕНЧАТАЯ ---
       {
         variantId: 'v3',
         name: 'Двухступенчатый базовый',
@@ -587,8 +836,6 @@ function getBaseMesoTemplates() {
           { weekNumber: 4, level: 'base_high' },
         ],
       },
-
-      // --- УБЫВАЮЩАЯ ---
       {
         variantId: 'v4',
         name: 'Базовый с длинной разгрузкой',
@@ -601,8 +848,6 @@ function getBaseMesoTemplates() {
           { weekNumber: 4, level: 'unload' },
         ],
       },
-
-      // --- КЛАССИКА 3+1 ---
       {
         variantId: 'v5',
         name: 'Три рабочих + разгрузка',
@@ -616,27 +861,314 @@ function getBaseMesoTemplates() {
         ],
       },
     ],
+
+    5: [
+      {
+        variantId: 'v1',
+        name: 'Пятинедельная прогрессия',
+        dynamics: 'ascending',
+        context: 'Разгрузочная → лёгкая → лёгкая → средняя → тяжёлая. Длинный подъём.',
+        weeks: [
+          { weekNumber: 1, level: 'unload' },
+          { weekNumber: 2, level: 'base_low' },
+          { weekNumber: 3, level: 'base_low' },
+          { weekNumber: 4, level: 'base_mid' },
+          { weekNumber: 5, level: 'base_high' },
+        ],
+      },
+      {
+        variantId: 'v2',
+        name: 'Двойная волна с разгрузкой',
+        dynamics: 'pendulum',
+        context: 'Средняя → разгрузка → тяжёлая → лёгкая → средняя. Две волны.',
+        weeks: [
+          { weekNumber: 1, level: 'base_mid' },
+          { weekNumber: 2, level: 'unload' },
+          { weekNumber: 3, level: 'base_high' },
+          { weekNumber: 4, level: 'base_low' },
+          { weekNumber: 5, level: 'base_mid' },
+        ],
+      },
+      {
+        variantId: 'v3',
+        name: 'Трёхступенчатый базовый',
+        dynamics: 'step',
+        context: 'Разгрузка → два лёгких → два средних. Три ступени.',
+        weeks: [
+          { weekNumber: 1, level: 'unload' },
+          { weekNumber: 2, level: 'base_low' },
+          { weekNumber: 3, level: 'base_low' },
+          { weekNumber: 4, level: 'base_mid' },
+          { weekNumber: 5, level: 'base_high' },
+        ],
+      },
+      {
+        variantId: 'v4',
+        name: 'Длинное затухание',
+        dynamics: 'descending',
+        context: 'Тяжёлая → средняя → средняя → лёгкая → разгрузочная.',
+        weeks: [
+          { weekNumber: 1, level: 'base_high' },
+          { weekNumber: 2, level: 'base_mid' },
+          { weekNumber: 3, level: 'base_mid' },
+          { weekNumber: 4, level: 'base_low' },
+          { weekNumber: 5, level: 'unload' },
+        ],
+      },
+      {
+        variantId: 'v5',
+        name: 'Четыре рабочих + разгрузка',
+        dynamics: 'pendulum',
+        context: 'Лёгкая → лёгкая → средняя → тяжёлая → разгрузочная. Классика 4+1.',
+        weeks: [
+          { weekNumber: 1, level: 'base_low' },
+          { weekNumber: 2, level: 'base_low' },
+          { weekNumber: 3, level: 'base_mid' },
+          { weekNumber: 4, level: 'base_high' },
+          { weekNumber: 5, level: 'unload' },
+        ],
+      },
+    ],
+
+    6: [
+      {
+        variantId: 'v1',
+        name: 'Шестинедельная прогрессия',
+        dynamics: 'ascending',
+        context: 'Разгрузка → три ступени подъёма → два высоких. Длинный базовый блок.',
+        weeks: [
+          { weekNumber: 1, level: 'unload' },
+          { weekNumber: 2, level: 'base_low' },
+          { weekNumber: 3, level: 'base_low' },
+          { weekNumber: 4, level: 'base_mid' },
+          { weekNumber: 5, level: 'base_mid' },
+          { weekNumber: 6, level: 'base_high' },
+        ],
+      },
+      {
+        variantId: 'v2',
+        name: 'Тройная волна',
+        dynamics: 'pendulum',
+        context: 'Три волны: средняя-разгрузка × 3. Волнообразная периодизация.',
+        weeks: [
+          { weekNumber: 1, level: 'base_mid' },
+          { weekNumber: 2, level: 'unload' },
+          { weekNumber: 3, level: 'base_high' },
+          { weekNumber: 4, level: 'base_low' },
+          { weekNumber: 5, level: 'base_mid' },
+          { weekNumber: 6, level: 'unload' },
+        ],
+      },
+      {
+        variantId: 'v3',
+        name: 'Блочный 3+3',
+        dynamics: 'step',
+        context: 'Три лёгких → три тяжёлых. Блочная периодизация.',
+        weeks: [
+          { weekNumber: 1, level: 'base_low' },
+          { weekNumber: 2, level: 'base_low' },
+          { weekNumber: 3, level: 'base_low' },
+          { weekNumber: 4, level: 'base_mid' },
+          { weekNumber: 5, level: 'base_mid' },
+          { weekNumber: 6, level: 'base_high' },
+        ],
+      },
+      {
+        variantId: 'v4',
+        name: 'Длинное убывание',
+        dynamics: 'descending',
+        context: 'Тяжёлая → средняя → средняя → лёгкая → лёгкая → разгрузка.',
+        weeks: [
+          { weekNumber: 1, level: 'base_high' },
+          { weekNumber: 2, level: 'base_mid' },
+          { weekNumber: 3, level: 'base_mid' },
+          { weekNumber: 4, level: 'base_low' },
+          { weekNumber: 5, level: 'base_low' },
+          { weekNumber: 6, level: 'unload' },
+        ],
+      },
+      {
+        variantId: 'v5',
+        name: 'Классика 5+1',
+        dynamics: 'pendulum',
+        context: 'Пять рабочих → разгрузочная. Нарастающая прогрессия с финальным отдыхом.',
+        weeks: [
+          { weekNumber: 1, level: 'base_low' },
+          { weekNumber: 2, level: 'base_low' },
+          { weekNumber: 3, level: 'base_mid' },
+          { weekNumber: 4, level: 'base_mid' },
+          { weekNumber: 5, level: 'base_high' },
+          { weekNumber: 6, level: 'unload' },
+        ],
+      },
+    ],
+
+    7: [
+      {
+        variantId: 'v1',
+        name: 'Семинедельная прогрессия',
+        dynamics: 'ascending',
+        context: 'Разгрузка → плавное нарастание через 6 ступеней. Длинный подъём.',
+        weeks: [
+          { weekNumber: 1, level: 'unload' },
+          { weekNumber: 2, level: 'base_low' },
+          { weekNumber: 3, level: 'base_low' },
+          { weekNumber: 4, level: 'base_mid' },
+          { weekNumber: 5, level: 'base_mid' },
+          { weekNumber: 6, level: 'base_high' },
+          { weekNumber: 7, level: 'base_high' },
+        ],
+      },
+      {
+        variantId: 'v2',
+        name: 'Волнообразный длинный',
+        dynamics: 'pendulum',
+        context: 'Три с половиной волны нагрузки. Волнообразная периодизация.',
+        weeks: [
+          { weekNumber: 1, level: 'base_mid' },
+          { weekNumber: 2, level: 'unload' },
+          { weekNumber: 3, level: 'base_high' },
+          { weekNumber: 4, level: 'base_low' },
+          { weekNumber: 5, level: 'base_mid' },
+          { weekNumber: 6, level: 'unload' },
+          { weekNumber: 7, level: 'base_high' },
+        ],
+      },
+      {
+        variantId: 'v3',
+        name: 'Трёхступенчатый длинный',
+        dynamics: 'step',
+        context: 'Разгрузка → два лёгких → два средних → два тяжёлых.',
+        weeks: [
+          { weekNumber: 1, level: 'unload' },
+          { weekNumber: 2, level: 'base_low' },
+          { weekNumber: 3, level: 'base_low' },
+          { weekNumber: 4, level: 'base_mid' },
+          { weekNumber: 5, level: 'base_mid' },
+          { weekNumber: 6, level: 'base_high' },
+          { weekNumber: 7, level: 'base_high' },
+        ],
+      },
+      {
+        variantId: 'v4',
+        name: 'Длинное убывание с плато',
+        dynamics: 'descending',
+        context: 'Тяжёлая → тяжёлая → средняя → средняя → лёгкая → лёгкая → разгрузка.',
+        weeks: [
+          { weekNumber: 1, level: 'base_high' },
+          { weekNumber: 2, level: 'base_high' },
+          { weekNumber: 3, level: 'base_mid' },
+          { weekNumber: 4, level: 'base_mid' },
+          { weekNumber: 5, level: 'base_low' },
+          { weekNumber: 6, level: 'base_low' },
+          { weekNumber: 7, level: 'unload' },
+        ],
+      },
+      {
+        variantId: 'v5',
+        name: 'Классика 3+1+3',
+        dynamics: 'pendulum',
+        context: 'Три рабочих → разгрузка → три рабочих. Двухблочная периодизация.',
+        weeks: [
+          { weekNumber: 1, level: 'base_low' },
+          { weekNumber: 2, level: 'base_mid' },
+          { weekNumber: 3, level: 'base_high' },
+          { weekNumber: 4, level: 'unload' },
+          { weekNumber: 5, level: 'base_low' },
+          { weekNumber: 6, level: 'base_mid' },
+          { weekNumber: 7, level: 'base_high' },
+        ],
+      },
+    ],
+
+    8: [
+      {
+        variantId: 'v1',
+        name: 'Восьминедельная прогрессия',
+        dynamics: 'ascending',
+        context: 'Максимально длинный базовый блок. Два месяца нарастания.',
+        weeks: [
+          { weekNumber: 1, level: 'unload' },
+          { weekNumber: 2, level: 'base_low' },
+          { weekNumber: 3, level: 'base_low' },
+          { weekNumber: 4, level: 'base_mid' },
+          { weekNumber: 5, level: 'base_mid' },
+          { weekNumber: 6, level: 'base_high' },
+          { weekNumber: 7, level: 'base_high' },
+          { weekNumber: 8, level: 'base_high' },
+        ],
+      },
+      {
+        variantId: 'v2',
+        name: 'Четверная волна',
+        dynamics: 'pendulum',
+        context: 'Четыре волны: рабочая-разгрузка × 4.',
+        weeks: [
+          { weekNumber: 1, level: 'base_mid' },
+          { weekNumber: 2, level: 'unload' },
+          { weekNumber: 3, level: 'base_high' },
+          { weekNumber: 4, level: 'base_low' },
+          { weekNumber: 5, level: 'base_mid' },
+          { weekNumber: 6, level: 'unload' },
+          { weekNumber: 7, level: 'base_high' },
+          { weekNumber: 8, level: 'base_low' },
+        ],
+      },
+      {
+        variantId: 'v3',
+        name: 'Четырёхступенчатый базовый',
+        dynamics: 'step',
+        context: 'Четыре блока по 2 недели: разгрузка → лёгкий → средний → тяжёлый.',
+        weeks: [
+          { weekNumber: 1, level: 'unload' },
+          { weekNumber: 2, level: 'unload' },
+          { weekNumber: 3, level: 'base_low' },
+          { weekNumber: 4, level: 'base_low' },
+          { weekNumber: 5, level: 'base_mid' },
+          { weekNumber: 6, level: 'base_mid' },
+          { weekNumber: 7, level: 'base_high' },
+          { weekNumber: 8, level: 'base_high' },
+        ],
+      },
+      {
+        variantId: 'v4',
+        name: 'Длинное убывание глубокое',
+        dynamics: 'descending',
+        context: 'Тяжёлая → тяжёлая → средняя → средняя → лёгкая → лёгкая → разгрузка → разгрузка.',
+        weeks: [
+          { weekNumber: 1, level: 'base_high' },
+          { weekNumber: 2, level: 'base_high' },
+          { weekNumber: 3, level: 'base_mid' },
+          { weekNumber: 4, level: 'base_mid' },
+          { weekNumber: 5, level: 'base_low' },
+          { weekNumber: 6, level: 'base_low' },
+          { weekNumber: 7, level: 'unload' },
+          { weekNumber: 8, level: 'unload' },
+        ],
+      },
+      {
+        variantId: 'v5',
+        name: 'Классика 3+1+3+1',
+        dynamics: 'pendulum',
+        context: 'Два блока 3+1: три рабочих + разгрузка × 2.',
+        weeks: [
+          { weekNumber: 1, level: 'base_low' },
+          { weekNumber: 2, level: 'base_mid' },
+          { weekNumber: 3, level: 'base_high' },
+          { weekNumber: 4, level: 'unload' },
+          { weekNumber: 5, level: 'base_low' },
+          { weekNumber: 6, level: 'base_mid' },
+          { weekNumber: 7, level: 'base_high' },
+          { weekNumber: 8, level: 'unload' },
+        ],
+      },
+    ],
   }
 }
 
-/**
- * Шаблоны развивающего мезоцикла.
- *
- * Развивающий мезоцикл — блок максимальной нагрузки.
- * Ядро — ударные микроциклы (Зоны 3+4).
- * Обязательны разгрузочные или базовые недели для восстановления.
- *
- * Уровни нагрузки:
- *   shock_unload  → recovery_intro  (PC1 ≈ −1.58)  — разгрузочная
- *   shock_support → base без Z3     (PC1 ≈ −0.66)  — поддерживающая
- *   shock_low     → shock           (PC1 ≈ −0.14..0) — лёгкий ударный
- *   shock_mid     → shock           (PC1 ≈ 0..+0.2)  — средний ударный
- *   shock_high    → shock           (PC1 ≈ +0.2..+0.5) — тяжёлый ударный
- */
 function getShockMesoTemplates() {
   return {
     2: [
-      // --- НАРАСТАЮЩАЯ ---
       {
         variantId: 'v1',
         name: 'Ударный разгон',
@@ -657,8 +1189,6 @@ function getShockMesoTemplates() {
           { weekNumber: 2, level: 'shock_high' },
         ],
       },
-
-      // --- УБЫВАЮЩАЯ ---
       {
         variantId: 'v3',
         name: 'Удар + восстановление',
@@ -669,8 +1199,6 @@ function getShockMesoTemplates() {
           { weekNumber: 2, level: 'shock_support' },
         ],
       },
-
-      // --- СТУПЕНЧАТАЯ ---
       {
         variantId: 'v4',
         name: 'Равномерный ударный',
@@ -694,7 +1222,6 @@ function getShockMesoTemplates() {
     ],
 
     3: [
-      // --- НАРАСТАЮЩАЯ ---
       {
         variantId: 'v1',
         name: 'Трёхнедельный разгон',
@@ -706,8 +1233,6 @@ function getShockMesoTemplates() {
           { weekNumber: 3, level: 'shock_high' },
         ],
       },
-
-      // --- МАЯТНИКОВАЯ ---
       {
         variantId: 'v2',
         name: 'Маятниковый ударный',
@@ -719,8 +1244,6 @@ function getShockMesoTemplates() {
           { weekNumber: 3, level: 'shock_high' },
         ],
       },
-
-      // --- СТУПЕНЧАТАЯ ---
       {
         variantId: 'v3',
         name: 'Ступенчатый ударный',
@@ -732,8 +1255,6 @@ function getShockMesoTemplates() {
           { weekNumber: 3, level: 'shock_high' },
         ],
       },
-
-      // --- УБЫВАЮЩАЯ ---
       {
         variantId: 'v4',
         name: 'Ударный с затуханием',
@@ -745,8 +1266,6 @@ function getShockMesoTemplates() {
           { weekNumber: 3, level: 'shock_unload' },
         ],
       },
-
-      // --- МАЯТНИКОВАЯ (удар-поддержка-удар) ---
       {
         variantId: 'v5',
         name: 'Двойной удар с поддержкой',
@@ -761,7 +1280,6 @@ function getShockMesoTemplates() {
     ],
 
     4: [
-      // --- НАРАСТАЮЩАЯ ---
       {
         variantId: 'v1',
         name: 'Длинная прогрессия к пику',
@@ -774,8 +1292,6 @@ function getShockMesoTemplates() {
           { weekNumber: 4, level: 'shock_high' },
         ],
       },
-
-      // --- МАЯТНИКОВАЯ ---
       {
         variantId: 'v2',
         name: 'Волнообразный ударный',
@@ -788,8 +1304,6 @@ function getShockMesoTemplates() {
           { weekNumber: 4, level: 'shock_support' },
         ],
       },
-
-      // --- СТУПЕНЧАТАЯ ---
       {
         variantId: 'v3',
         name: 'Двухступенчатый ударный',
@@ -802,8 +1316,6 @@ function getShockMesoTemplates() {
           { weekNumber: 4, level: 'shock_high' },
         ],
       },
-
-      // --- УБЫВАЮЩАЯ ---
       {
         variantId: 'v4',
         name: 'Ударный с длинным восстановлением',
@@ -816,8 +1328,6 @@ function getShockMesoTemplates() {
           { weekNumber: 4, level: 'shock_unload' },
         ],
       },
-
-      // --- КЛАССИКА 2+1+1 ---
       {
         variantId: 'v5',
         name: 'Два ударных + поддержка + разгрузка',
@@ -831,26 +1341,314 @@ function getShockMesoTemplates() {
         ],
       },
     ],
+
+    5: [
+      {
+        variantId: 'v1',
+        name: 'Пятинедельная прогрессия',
+        dynamics: 'ascending',
+        context: 'Разгрузка → поддержка → лёгкий → средний → тяжёлый. Длинный подъём к пику.',
+        weeks: [
+          { weekNumber: 1, level: 'shock_unload' },
+          { weekNumber: 2, level: 'shock_support' },
+          { weekNumber: 3, level: 'shock_low' },
+          { weekNumber: 4, level: 'shock_mid' },
+          { weekNumber: 5, level: 'shock_high' },
+        ],
+      },
+      {
+        variantId: 'v2',
+        name: 'Двойная волна ударная',
+        dynamics: 'pendulum',
+        context: 'Средний → разгрузка → тяжёлый → поддержка → средний. Две волны шока.',
+        weeks: [
+          { weekNumber: 1, level: 'shock_mid' },
+          { weekNumber: 2, level: 'shock_unload' },
+          { weekNumber: 3, level: 'shock_high' },
+          { weekNumber: 4, level: 'shock_support' },
+          { weekNumber: 5, level: 'shock_mid' },
+        ],
+      },
+      {
+        variantId: 'v3',
+        name: 'Ступенчатый 2+3',
+        dynamics: 'step',
+        context: 'Две поддерживающих → три ударных. Блочный удар.',
+        weeks: [
+          { weekNumber: 1, level: 'shock_support' },
+          { weekNumber: 2, level: 'shock_support' },
+          { weekNumber: 3, level: 'shock_low' },
+          { weekNumber: 4, level: 'shock_mid' },
+          { weekNumber: 5, level: 'shock_high' },
+        ],
+      },
+      {
+        variantId: 'v4',
+        name: 'Длинное затухание после шока',
+        dynamics: 'descending',
+        context: 'Тяжёлая → средняя → лёгкая → поддержка → разгрузка. Глубокое восстановление.',
+        weeks: [
+          { weekNumber: 1, level: 'shock_high' },
+          { weekNumber: 2, level: 'shock_mid' },
+          { weekNumber: 3, level: 'shock_low' },
+          { weekNumber: 4, level: 'shock_support' },
+          { weekNumber: 5, level: 'shock_unload' },
+        ],
+      },
+      {
+        variantId: 'v5',
+        name: 'Три ударных + 2 восстановления',
+        dynamics: 'pendulum',
+        context: 'Лёгкий → средний → тяжёлый → поддержка → разгрузка. Классика 3+2.',
+        weeks: [
+          { weekNumber: 1, level: 'shock_low' },
+          { weekNumber: 2, level: 'shock_mid' },
+          { weekNumber: 3, level: 'shock_high' },
+          { weekNumber: 4, level: 'shock_support' },
+          { weekNumber: 5, level: 'shock_unload' },
+        ],
+      },
+    ],
+
+    6: [
+      {
+        variantId: 'v1',
+        name: 'Шестинедельная прогрессия',
+        dynamics: 'ascending',
+        context: 'Разгрузка → поддержка → поддержка → лёгкий → средний → тяжёлый.',
+        weeks: [
+          { weekNumber: 1, level: 'shock_unload' },
+          { weekNumber: 2, level: 'shock_support' },
+          { weekNumber: 3, level: 'shock_support' },
+          { weekNumber: 4, level: 'shock_low' },
+          { weekNumber: 5, level: 'shock_mid' },
+          { weekNumber: 6, level: 'shock_high' },
+        ],
+      },
+      {
+        variantId: 'v2',
+        name: 'Тройная волна ударная',
+        dynamics: 'pendulum',
+        context: 'Три волны: удар → разгрузка × 3.',
+        weeks: [
+          { weekNumber: 1, level: 'shock_mid' },
+          { weekNumber: 2, level: 'shock_unload' },
+          { weekNumber: 3, level: 'shock_high' },
+          { weekNumber: 4, level: 'shock_support' },
+          { weekNumber: 5, level: 'shock_mid' },
+          { weekNumber: 6, level: 'shock_unload' },
+        ],
+      },
+      {
+        variantId: 'v3',
+        name: 'Блочный 3+3 ударный',
+        dynamics: 'step',
+        context: 'Три поддерживающих → три ударных. Блочная стимуляция.',
+        weeks: [
+          { weekNumber: 1, level: 'shock_support' },
+          { weekNumber: 2, level: 'shock_support' },
+          { weekNumber: 3, level: 'shock_support' },
+          { weekNumber: 4, level: 'shock_low' },
+          { weekNumber: 5, level: 'shock_mid' },
+          { weekNumber: 6, level: 'shock_high' },
+        ],
+      },
+      {
+        variantId: 'v4',
+        name: 'Длинное убывание ударное',
+        dynamics: 'descending',
+        context: 'Тяжёлая → средняя → лёгкая → поддержка → поддержка → разгрузка.',
+        weeks: [
+          { weekNumber: 1, level: 'shock_high' },
+          { weekNumber: 2, level: 'shock_mid' },
+          { weekNumber: 3, level: 'shock_low' },
+          { weekNumber: 4, level: 'shock_support' },
+          { weekNumber: 5, level: 'shock_support' },
+          { weekNumber: 6, level: 'shock_unload' },
+        ],
+      },
+      {
+        variantId: 'v5',
+        name: 'Двойной блок 2+1',
+        dynamics: 'pendulum',
+        context: 'Два ударных + разгрузка + два ударных + разгрузка.',
+        weeks: [
+          { weekNumber: 1, level: 'shock_low' },
+          { weekNumber: 2, level: 'shock_high' },
+          { weekNumber: 3, level: 'shock_unload' },
+          { weekNumber: 4, level: 'shock_low' },
+          { weekNumber: 5, level: 'shock_high' },
+          { weekNumber: 6, level: 'shock_support' },
+        ],
+      },
+    ],
+
+    7: [
+      {
+        variantId: 'v1',
+        name: 'Семинедельная прогрессия',
+        dynamics: 'ascending',
+        context: 'Разгрузка → поддержка × 2 → лёгкий → лёгкий → средний → тяжёлый.',
+        weeks: [
+          { weekNumber: 1, level: 'shock_unload' },
+          { weekNumber: 2, level: 'shock_support' },
+          { weekNumber: 3, level: 'shock_support' },
+          { weekNumber: 4, level: 'shock_low' },
+          { weekNumber: 5, level: 'shock_low' },
+          { weekNumber: 6, level: 'shock_mid' },
+          { weekNumber: 7, level: 'shock_high' },
+        ],
+      },
+      {
+        variantId: 'v2',
+        name: 'Волнообразный длинный ударный',
+        dynamics: 'pendulum',
+        context: 'Три с половиной волны шока.',
+        weeks: [
+          { weekNumber: 1, level: 'shock_mid' },
+          { weekNumber: 2, level: 'shock_unload' },
+          { weekNumber: 3, level: 'shock_high' },
+          { weekNumber: 4, level: 'shock_support' },
+          { weekNumber: 5, level: 'shock_mid' },
+          { weekNumber: 6, level: 'shock_unload' },
+          { weekNumber: 7, level: 'shock_high' },
+        ],
+      },
+      {
+        variantId: 'v3',
+        name: 'Трёхступенчатый ударный',
+        dynamics: 'step',
+        context: 'Три блока: поддержка → лёгкий → тяжёлый.',
+        weeks: [
+          { weekNumber: 1, level: 'shock_support' },
+          { weekNumber: 2, level: 'shock_support' },
+          { weekNumber: 3, level: 'shock_low' },
+          { weekNumber: 4, level: 'shock_low' },
+          { weekNumber: 5, level: 'shock_mid' },
+          { weekNumber: 6, level: 'shock_high' },
+          { weekNumber: 7, level: 'shock_high' },
+        ],
+      },
+      {
+        variantId: 'v4',
+        name: 'Длинное убывание с плато',
+        dynamics: 'descending',
+        context: 'Тяжёлая × 2 → средняя × 2 → поддержка × 2 → разгрузка.',
+        weeks: [
+          { weekNumber: 1, level: 'shock_high' },
+          { weekNumber: 2, level: 'shock_high' },
+          { weekNumber: 3, level: 'shock_mid' },
+          { weekNumber: 4, level: 'shock_low' },
+          { weekNumber: 5, level: 'shock_support' },
+          { weekNumber: 6, level: 'shock_support' },
+          { weekNumber: 7, level: 'shock_unload' },
+        ],
+      },
+      {
+        variantId: 'v5',
+        name: 'Блок 3+1+3',
+        dynamics: 'pendulum',
+        context: 'Три ударных → разгрузка → три ударных. Двухблочный шок.',
+        weeks: [
+          { weekNumber: 1, level: 'shock_low' },
+          { weekNumber: 2, level: 'shock_mid' },
+          { weekNumber: 3, level: 'shock_high' },
+          { weekNumber: 4, level: 'shock_unload' },
+          { weekNumber: 5, level: 'shock_low' },
+          { weekNumber: 6, level: 'shock_mid' },
+          { weekNumber: 7, level: 'shock_high' },
+        ],
+      },
+    ],
+
+    8: [
+      {
+        variantId: 'v1',
+        name: 'Восьминедельная прогрессия',
+        dynamics: 'ascending',
+        context: 'Разгрузка → поддержка × 2 → лёгкий × 2 → средний → тяжёлый × 2.',
+        weeks: [
+          { weekNumber: 1, level: 'shock_unload' },
+          { weekNumber: 2, level: 'shock_support' },
+          { weekNumber: 3, level: 'shock_support' },
+          { weekNumber: 4, level: 'shock_low' },
+          { weekNumber: 5, level: 'shock_low' },
+          { weekNumber: 6, level: 'shock_mid' },
+          { weekNumber: 7, level: 'shock_high' },
+          { weekNumber: 8, level: 'shock_high' },
+        ],
+      },
+      {
+        variantId: 'v2',
+        name: 'Четверная волна ударная',
+        dynamics: 'pendulum',
+        context: 'Четыре волны: удар-разгрузка × 4.',
+        weeks: [
+          { weekNumber: 1, level: 'shock_mid' },
+          { weekNumber: 2, level: 'shock_unload' },
+          { weekNumber: 3, level: 'shock_high' },
+          { weekNumber: 4, level: 'shock_support' },
+          { weekNumber: 5, level: 'shock_mid' },
+          { weekNumber: 6, level: 'shock_unload' },
+          { weekNumber: 7, level: 'shock_high' },
+          { weekNumber: 8, level: 'shock_support' },
+        ],
+      },
+      {
+        variantId: 'v3',
+        name: 'Четырёхступенчатый ударный',
+        dynamics: 'step',
+        context: 'Четыре блока по 2: разгрузка → поддержка → лёгкий → тяжёлый.',
+        weeks: [
+          { weekNumber: 1, level: 'shock_unload' },
+          { weekNumber: 2, level: 'shock_unload' },
+          { weekNumber: 3, level: 'shock_support' },
+          { weekNumber: 4, level: 'shock_support' },
+          { weekNumber: 5, level: 'shock_low' },
+          { weekNumber: 6, level: 'shock_mid' },
+          { weekNumber: 7, level: 'shock_high' },
+          { weekNumber: 8, level: 'shock_high' },
+        ],
+      },
+      {
+        variantId: 'v4',
+        name: 'Длинное убывание глубокое',
+        dynamics: 'descending',
+        context: 'Тяжёлая × 2 → средняя × 2 → лёгкая × 2 → разгрузка × 2.',
+        weeks: [
+          { weekNumber: 1, level: 'shock_high' },
+          { weekNumber: 2, level: 'shock_high' },
+          { weekNumber: 3, level: 'shock_mid' },
+          { weekNumber: 4, level: 'shock_low' },
+          { weekNumber: 5, level: 'shock_support' },
+          { weekNumber: 6, level: 'shock_support' },
+          { weekNumber: 7, level: 'shock_unload' },
+          { weekNumber: 8, level: 'shock_unload' },
+        ],
+      },
+      {
+        variantId: 'v5',
+        name: 'Двойной блок 3+1',
+        dynamics: 'pendulum',
+        context: 'Два блока 3+1: три ударных + разгрузка × 2.',
+        weeks: [
+          { weekNumber: 1, level: 'shock_low' },
+          { weekNumber: 2, level: 'shock_mid' },
+          { weekNumber: 3, level: 'shock_high' },
+          { weekNumber: 4, level: 'shock_unload' },
+          { weekNumber: 5, level: 'shock_low' },
+          { weekNumber: 6, level: 'shock_mid' },
+          { weekNumber: 7, level: 'shock_high' },
+          { weekNumber: 8, level: 'shock_support' },
+        ],
+      },
+    ],
   }
 }
 
-/**
- * Шаблоны предсоревновательного мезоцикла.
- *
- * Предсоревновательный мезоцикл — подведение к старту.
- * Ключевая особенность: убывающая нагрузка. Последняя неделя — самая лёгкая.
- * Допускается начало с базовой или подводящей нагрузки.
- *
- * Уровни нагрузки:
- *   taper_start  → base            (PC1 ≈ −0.66) — начальная нагрузка
- *   taper_mid    → taper           (PC1 ≈ −1.27) — подводящая
- *   taper_low    → taper/rec_intro (PC1 ≈ −1.58) — лёгкая подводящая
- *   taper_finish → recovery/rec_intro (PC1 ≈ −2.0..−2.5) — финальная разгрузка
- */
 function getTaperMesoTemplates() {
   return {
     2: [
-      // --- УБЫВАЮЩАЯ (основная для предсоревновательного) ---
       {
         variantId: 'v1',
         name: 'Классическая подводка',
@@ -881,8 +1679,6 @@ function getTaperMesoTemplates() {
           { weekNumber: 2, level: 'taper_finish' },
         ],
       },
-
-      // --- СТУПЕНЧАТАЯ ---
       {
         variantId: 'v4',
         name: 'Равномерная подводка',
@@ -906,7 +1702,6 @@ function getTaperMesoTemplates() {
     ],
 
     3: [
-      // --- УБЫВАЮЩАЯ ---
       {
         variantId: 'v1',
         name: 'Линейная подводка',
@@ -918,8 +1713,6 @@ function getTaperMesoTemplates() {
           { weekNumber: 3, level: 'taper_finish' },
         ],
       },
-
-      // --- МАЯТНИКОВАЯ ---
       {
         variantId: 'v2',
         name: 'Подводка с напоминанием',
@@ -931,8 +1724,6 @@ function getTaperMesoTemplates() {
           { weekNumber: 3, level: 'taper_finish' },
         ],
       },
-
-      // --- СТУПЕНЧАТАЯ ---
       {
         variantId: 'v3',
         name: 'Ступенчатая подводка',
@@ -944,8 +1735,6 @@ function getTaperMesoTemplates() {
           { weekNumber: 3, level: 'taper_finish' },
         ],
       },
-
-      // --- УБЫВАЮЩАЯ ПЛАВНАЯ ---
       {
         variantId: 'v4',
         name: 'Плавная подводка',
@@ -957,8 +1746,6 @@ function getTaperMesoTemplates() {
           { weekNumber: 3, level: 'taper_finish' },
         ],
       },
-
-      // --- НАРАСТАЮЩАЯ (от лёгкого к базовому — «разгон к старту») ---
       {
         variantId: 'v5',
         name: 'Подводка с выходом на пик',
@@ -973,7 +1760,6 @@ function getTaperMesoTemplates() {
     ],
 
     4: [
-      // --- УБЫВАЮЩАЯ ---
       {
         variantId: 'v1',
         name: 'Длинная линейная подводка',
@@ -986,8 +1772,6 @@ function getTaperMesoTemplates() {
           { weekNumber: 4, level: 'taper_finish' },
         ],
       },
-
-      // --- МАЯТНИКОВАЯ ---
       {
         variantId: 'v2',
         name: 'Волнообразная подводка',
@@ -1000,8 +1784,6 @@ function getTaperMesoTemplates() {
           { weekNumber: 4, level: 'taper_finish' },
         ],
       },
-
-      // --- СТУПЕНЧАТАЯ ---
       {
         variantId: 'v3',
         name: 'Двухступенчатая подводка',
@@ -1014,8 +1796,6 @@ function getTaperMesoTemplates() {
           { weekNumber: 4, level: 'taper_finish' },
         ],
       },
-
-      // --- УБЫВАЮЩАЯ ГЛУБОКАЯ ---
       {
         variantId: 'v4',
         name: 'Глубокая подводка',
@@ -1029,8 +1809,6 @@ function getTaperMesoTemplates() {
           { weekNumber: 4, level: 'taper_finish' },
         ],
       },
-
-      // --- НАРАСТАЮЩАЯ К ПИКУ ---
       {
         variantId: 'v5',
         name: 'Подводка с финальным пиком',
@@ -1044,27 +1822,314 @@ function getTaperMesoTemplates() {
         ],
       },
     ],
+
+    5: [
+      {
+        variantId: 'v1',
+        name: 'Пятинедельная подводка',
+        dynamics: 'descending',
+        context: 'Базовая → базовая → подводящая → лёгкая → разгрузочная. Плавное снижение.',
+        weeks: [
+          { weekNumber: 1, level: 'taper_start' },
+          { weekNumber: 2, level: 'taper_start' },
+          { weekNumber: 3, level: 'taper_mid' },
+          { weekNumber: 4, level: 'taper_low' },
+          { weekNumber: 5, level: 'taper_finish' },
+        ],
+      },
+      {
+        variantId: 'v2',
+        name: 'Волнообразная с напоминанием',
+        dynamics: 'pendulum',
+        context: 'Подводящая → базовая → лёгкая → подводящая → разгрузочная. Волна с напоминанием.',
+        weeks: [
+          { weekNumber: 1, level: 'taper_mid' },
+          { weekNumber: 2, level: 'taper_start' },
+          { weekNumber: 3, level: 'taper_low' },
+          { weekNumber: 4, level: 'taper_mid' },
+          { weekNumber: 5, level: 'taper_finish' },
+        ],
+      },
+      {
+        variantId: 'v3',
+        name: 'Трёхступенчатая подводка',
+        dynamics: 'step',
+        context: 'Два базовых → два подводящих → разгрузочная. Три ступени.',
+        weeks: [
+          { weekNumber: 1, level: 'taper_start' },
+          { weekNumber: 2, level: 'taper_start' },
+          { weekNumber: 3, level: 'taper_mid' },
+          { weekNumber: 4, level: 'taper_low' },
+          { weekNumber: 5, level: 'taper_finish' },
+        ],
+      },
+      {
+        variantId: 'v4',
+        name: 'Глубокая длинная подводка',
+        dynamics: 'descending',
+        context: 'Подводящая → подводящая → лёгкая → лёгкая → разгрузочная.',
+        weeks: [
+          { weekNumber: 1, level: 'taper_mid' },
+          { weekNumber: 2, level: 'taper_mid' },
+          { weekNumber: 3, level: 'taper_low' },
+          { weekNumber: 4, level: 'taper_low' },
+          { weekNumber: 5, level: 'taper_finish' },
+        ],
+      },
+      {
+        variantId: 'v5',
+        name: 'Подводка с финальным нарастанием',
+        dynamics: 'ascending',
+        context: 'Разгрузочная → лёгкая → лёгкая → подводящая → базовая. Выход на пик.',
+        weeks: [
+          { weekNumber: 1, level: 'taper_finish' },
+          { weekNumber: 2, level: 'taper_low' },
+          { weekNumber: 3, level: 'taper_low' },
+          { weekNumber: 4, level: 'taper_mid' },
+          { weekNumber: 5, level: 'taper_start' },
+        ],
+      },
+    ],
+
+    6: [
+      {
+        variantId: 'v1',
+        name: 'Шестинедельная подводка',
+        dynamics: 'descending',
+        context: 'Базовая × 2 → подводящая × 2 → лёгкая → разгрузочная.',
+        weeks: [
+          { weekNumber: 1, level: 'taper_start' },
+          { weekNumber: 2, level: 'taper_start' },
+          { weekNumber: 3, level: 'taper_mid' },
+          { weekNumber: 4, level: 'taper_mid' },
+          { weekNumber: 5, level: 'taper_low' },
+          { weekNumber: 6, level: 'taper_finish' },
+        ],
+      },
+      {
+        variantId: 'v2',
+        name: 'Двойная волна подводящая',
+        dynamics: 'pendulum',
+        context: 'Две волны: базовая → подводящая → базовая → лёгкая → подводящая → разгрузочная.',
+        weeks: [
+          { weekNumber: 1, level: 'taper_start' },
+          { weekNumber: 2, level: 'taper_mid' },
+          { weekNumber: 3, level: 'taper_start' },
+          { weekNumber: 4, level: 'taper_low' },
+          { weekNumber: 5, level: 'taper_mid' },
+          { weekNumber: 6, level: 'taper_finish' },
+        ],
+      },
+      {
+        variantId: 'v3',
+        name: 'Блочная подводка 3+3',
+        dynamics: 'step',
+        context: 'Три базовых → три лёгких. Блочное снижение.',
+        weeks: [
+          { weekNumber: 1, level: 'taper_start' },
+          { weekNumber: 2, level: 'taper_start' },
+          { weekNumber: 3, level: 'taper_start' },
+          { weekNumber: 4, level: 'taper_low' },
+          { weekNumber: 5, level: 'taper_low' },
+          { weekNumber: 6, level: 'taper_finish' },
+        ],
+      },
+      {
+        variantId: 'v4',
+        name: 'Длинное убывание подводящее',
+        dynamics: 'descending',
+        context: 'Базовая → подводящая → подводящая → лёгкая → лёгкая → разгрузочная.',
+        weeks: [
+          { weekNumber: 1, level: 'taper_start' },
+          { weekNumber: 2, level: 'taper_mid' },
+          { weekNumber: 3, level: 'taper_mid' },
+          { weekNumber: 4, level: 'taper_low' },
+          { weekNumber: 5, level: 'taper_low' },
+          { weekNumber: 6, level: 'taper_finish' },
+        ],
+      },
+      {
+        variantId: 'v5',
+        name: 'Нарастание к финальному пику',
+        dynamics: 'ascending',
+        context: 'Разгрузочная → лёгкая × 2 → подводящая × 2 → базовая. Выход на пик формы.',
+        weeks: [
+          { weekNumber: 1, level: 'taper_finish' },
+          { weekNumber: 2, level: 'taper_low' },
+          { weekNumber: 3, level: 'taper_low' },
+          { weekNumber: 4, level: 'taper_mid' },
+          { weekNumber: 5, level: 'taper_mid' },
+          { weekNumber: 6, level: 'taper_start' },
+        ],
+      },
+    ],
+
+    7: [
+      {
+        variantId: 'v1',
+        name: 'Семинедельная подводка',
+        dynamics: 'descending',
+        context: 'Базовая × 2 → подводящая × 2 → лёгкая × 2 → разгрузочная.',
+        weeks: [
+          { weekNumber: 1, level: 'taper_start' },
+          { weekNumber: 2, level: 'taper_start' },
+          { weekNumber: 3, level: 'taper_mid' },
+          { weekNumber: 4, level: 'taper_mid' },
+          { weekNumber: 5, level: 'taper_low' },
+          { weekNumber: 6, level: 'taper_low' },
+          { weekNumber: 7, level: 'taper_finish' },
+        ],
+      },
+      {
+        variantId: 'v2',
+        name: 'Волнообразная длинная подводка',
+        dynamics: 'pendulum',
+        context: 'Три волны снижения с напоминаниями.',
+        weeks: [
+          { weekNumber: 1, level: 'taper_start' },
+          { weekNumber: 2, level: 'taper_mid' },
+          { weekNumber: 3, level: 'taper_start' },
+          { weekNumber: 4, level: 'taper_low' },
+          { weekNumber: 5, level: 'taper_mid' },
+          { weekNumber: 6, level: 'taper_low' },
+          { weekNumber: 7, level: 'taper_finish' },
+        ],
+      },
+      {
+        variantId: 'v3',
+        name: 'Трёхступенчатая длинная подводка',
+        dynamics: 'step',
+        context: 'Три блока: базовый → подводящий → разгрузочный.',
+        weeks: [
+          { weekNumber: 1, level: 'taper_start' },
+          { weekNumber: 2, level: 'taper_start' },
+          { weekNumber: 3, level: 'taper_mid' },
+          { weekNumber: 4, level: 'taper_mid' },
+          { weekNumber: 5, level: 'taper_low' },
+          { weekNumber: 6, level: 'taper_low' },
+          { weekNumber: 7, level: 'taper_finish' },
+        ],
+      },
+      {
+        variantId: 'v4',
+        name: 'Глубокая семинедельная подводка',
+        dynamics: 'descending',
+        context: 'Базовая → подводящая × 2 → лёгкая × 2 → разгрузочная × 2.',
+        weeks: [
+          { weekNumber: 1, level: 'taper_start' },
+          { weekNumber: 2, level: 'taper_mid' },
+          { weekNumber: 3, level: 'taper_mid' },
+          { weekNumber: 4, level: 'taper_low' },
+          { weekNumber: 5, level: 'taper_low' },
+          { weekNumber: 6, level: 'taper_finish' },
+          { weekNumber: 7, level: 'taper_finish' },
+        ],
+      },
+      {
+        variantId: 'v5',
+        name: 'Длинное нарастание к пику',
+        dynamics: 'ascending',
+        context: 'Разгрузочная × 2 → лёгкая × 2 → подводящая × 2 → базовая.',
+        weeks: [
+          { weekNumber: 1, level: 'taper_finish' },
+          { weekNumber: 2, level: 'taper_finish' },
+          { weekNumber: 3, level: 'taper_low' },
+          { weekNumber: 4, level: 'taper_low' },
+          { weekNumber: 5, level: 'taper_mid' },
+          { weekNumber: 6, level: 'taper_mid' },
+          { weekNumber: 7, level: 'taper_start' },
+        ],
+      },
+    ],
+
+    8: [
+      {
+        variantId: 'v1',
+        name: 'Восьминедельная подводка',
+        dynamics: 'descending',
+        context: 'Базовая × 2 → подводящая × 2 → лёгкая × 2 → разгрузочная × 2.',
+        weeks: [
+          { weekNumber: 1, level: 'taper_start' },
+          { weekNumber: 2, level: 'taper_start' },
+          { weekNumber: 3, level: 'taper_mid' },
+          { weekNumber: 4, level: 'taper_mid' },
+          { weekNumber: 5, level: 'taper_low' },
+          { weekNumber: 6, level: 'taper_low' },
+          { weekNumber: 7, level: 'taper_finish' },
+          { weekNumber: 8, level: 'taper_finish' },
+        ],
+      },
+      {
+        variantId: 'v2',
+        name: 'Четверная волна подводящая',
+        dynamics: 'pendulum',
+        context: 'Четыре волны снижения с напоминаниями.',
+        weeks: [
+          { weekNumber: 1, level: 'taper_start' },
+          { weekNumber: 2, level: 'taper_mid' },
+          { weekNumber: 3, level: 'taper_start' },
+          { weekNumber: 4, level: 'taper_low' },
+          { weekNumber: 5, level: 'taper_mid' },
+          { weekNumber: 6, level: 'taper_low' },
+          { weekNumber: 7, level: 'taper_finish' },
+          { weekNumber: 8, level: 'taper_finish' },
+        ],
+      },
+      {
+        variantId: 'v3',
+        name: 'Четырёхступенчатая подводка',
+        dynamics: 'step',
+        context: 'Четыре блока по 2: базовый → подводящий → лёгкий → разгрузочный.',
+        weeks: [
+          { weekNumber: 1, level: 'taper_start' },
+          { weekNumber: 2, level: 'taper_start' },
+          { weekNumber: 3, level: 'taper_mid' },
+          { weekNumber: 4, level: 'taper_mid' },
+          { weekNumber: 5, level: 'taper_low' },
+          { weekNumber: 6, level: 'taper_low' },
+          { weekNumber: 7, level: 'taper_finish' },
+          { weekNumber: 8, level: 'taper_finish' },
+        ],
+      },
+      {
+        variantId: 'v4',
+        name: 'Глубокая восьминедельная подводка',
+        dynamics: 'descending',
+        context: 'Базовая → подводящая × 2 → лёгкая × 2 → разгрузочная × 3.',
+        weeks: [
+          { weekNumber: 1, level: 'taper_start' },
+          { weekNumber: 2, level: 'taper_mid' },
+          { weekNumber: 3, level: 'taper_mid' },
+          { weekNumber: 4, level: 'taper_low' },
+          { weekNumber: 5, level: 'taper_low' },
+          { weekNumber: 6, level: 'taper_finish' },
+          { weekNumber: 7, level: 'taper_finish' },
+          { weekNumber: 8, level: 'taper_finish' },
+        ],
+      },
+      {
+        variantId: 'v5',
+        name: 'Длинное нарастание 8 недель',
+        dynamics: 'ascending',
+        context: 'Разгрузочная × 2 → лёгкая × 2 → подводящая × 2 → базовая × 2.',
+        weeks: [
+          { weekNumber: 1, level: 'taper_finish' },
+          { weekNumber: 2, level: 'taper_finish' },
+          { weekNumber: 3, level: 'taper_low' },
+          { weekNumber: 4, level: 'taper_low' },
+          { weekNumber: 5, level: 'taper_mid' },
+          { weekNumber: 6, level: 'taper_mid' },
+          { weekNumber: 7, level: 'taper_start' },
+          { weekNumber: 8, level: 'taper_start' },
+        ],
+      },
+    ],
   }
 }
 
-/**
- * Шаблоны восстановительного (разгрузочного) мезоцикла.
- *
- * Восстановительный мезоцикл — блок глубокого восстановления.
- * Применяется после развивающего блока, после соревнований,
- * при перетренировке, травмах, в межсезонье.
- * Преобладают Зоны 1+2, Зоны 3+4 исключены.
- *
- * Уровни нагрузки:
- *   rec_deep   → recovery            (PC1 ≈ −2.50)  — глубокий отдых
- *   rec_mid    → recovery            (PC1 ≈ −2.0)   — средний отдых
- *   rec_light  → recovery/rec_intro  (PC1 ≈ −1.58)  — лёгкое восстановление
- *   rec_exit   → recovery_intro      (PC1 ≈ −1.27)  — выход из разгрузки
- */
 function getRecoveryMesoTemplates() {
   return {
     2: [
-      // --- НАРАСТАЮЩАЯ ---
       {
         variantId: 'v1',
         name: 'Восстановление с выходом',
@@ -1085,8 +2150,6 @@ function getRecoveryMesoTemplates() {
           { weekNumber: 2, level: 'rec_exit' },
         ],
       },
-
-      // --- УБЫВАЮЩАЯ ---
       {
         variantId: 'v3',
         name: 'Погружение в отдых',
@@ -1097,8 +2160,6 @@ function getRecoveryMesoTemplates() {
           { weekNumber: 2, level: 'rec_deep' },
         ],
       },
-
-      // --- СТУПЕНЧАТАЯ ---
       {
         variantId: 'v4',
         name: 'Равномерный глубокий',
@@ -1122,7 +2183,6 @@ function getRecoveryMesoTemplates() {
     ],
 
     3: [
-      // --- НАРАСТАЮЩАЯ ---
       {
         variantId: 'v1',
         name: 'Линейный выход из разгрузки',
@@ -1134,8 +2194,6 @@ function getRecoveryMesoTemplates() {
           { weekNumber: 3, level: 'rec_exit' },
         ],
       },
-
-      // --- МАЯТНИКОВАЯ ---
       {
         variantId: 'v2',
         name: 'Маятниковое восстановление',
@@ -1147,8 +2205,6 @@ function getRecoveryMesoTemplates() {
           { weekNumber: 3, level: 'rec_exit' },
         ],
       },
-
-      // --- СТУПЕНЧАТАЯ ---
       {
         variantId: 'v3',
         name: 'Ступенчатый выход',
@@ -1160,8 +2216,6 @@ function getRecoveryMesoTemplates() {
           { weekNumber: 3, level: 'rec_exit' },
         ],
       },
-
-      // --- УБЫВАЮЩАЯ ---
       {
         variantId: 'v4',
         name: 'Погружение в глубокий отдых',
@@ -1173,8 +2227,6 @@ function getRecoveryMesoTemplates() {
           { weekNumber: 3, level: 'rec_deep' },
         ],
       },
-
-      // --- НАРАСТАЮЩАЯ С ВЫХОДОМ ---
       {
         variantId: 'v5',
         name: 'Глубокий отдых с выходом',
@@ -1189,12 +2241,11 @@ function getRecoveryMesoTemplates() {
     ],
 
     4: [
-      // --- НАРАСТАЮЩАЯ ---
       {
         variantId: 'v1',
         name: 'Длинный выход из разгрузки',
         dynamics: 'ascending',
-        context: 'Глубокий → глубокий → средний → выход. Четыре ступени подъёма.',
+        context: 'Глубокий → средний → лёгкий → выход. Четыре ступени подъёма.',
         weeks: [
           { weekNumber: 1, level: 'rec_deep' },
           { weekNumber: 2, level: 'rec_mid' },
@@ -1202,8 +2253,6 @@ function getRecoveryMesoTemplates() {
           { weekNumber: 4, level: 'rec_exit' },
         ],
       },
-
-      // --- МАЯТНИКОВАЯ ---
       {
         variantId: 'v2',
         name: 'Волнообразное восстановление',
@@ -1216,8 +2265,6 @@ function getRecoveryMesoTemplates() {
           { weekNumber: 4, level: 'rec_mid' },
         ],
       },
-
-      // --- СТУПЕНЧАТАЯ ---
       {
         variantId: 'v3',
         name: 'Двухступенчатое восстановление',
@@ -1230,8 +2277,6 @@ function getRecoveryMesoTemplates() {
           { weekNumber: 4, level: 'rec_exit' },
         ],
       },
-
-      // --- УБЫВАЮЩАЯ ---
       {
         variantId: 'v4',
         name: 'Длинное погружение',
@@ -1244,8 +2289,6 @@ function getRecoveryMesoTemplates() {
           { weekNumber: 4, level: 'rec_deep' },
         ],
       },
-
-      // --- ГЛУБОКИЙ С ВЫХОДОМ ---
       {
         variantId: 'v5',
         name: 'Глубокий блок с выходом',
@@ -1256,6 +2299,308 @@ function getRecoveryMesoTemplates() {
           { weekNumber: 2, level: 'rec_deep' },
           { weekNumber: 3, level: 'rec_mid' },
           { weekNumber: 4, level: 'rec_exit' },
+        ],
+      },
+    ],
+
+    5: [
+      {
+        variantId: 'v1',
+        name: 'Пятинедельный выход',
+        dynamics: 'ascending',
+        context: 'Два глубоких → средний → лёгкий → выход. Плавный длинный подъём.',
+        weeks: [
+          { weekNumber: 1, level: 'rec_deep' },
+          { weekNumber: 2, level: 'rec_deep' },
+          { weekNumber: 3, level: 'rec_mid' },
+          { weekNumber: 4, level: 'rec_light' },
+          { weekNumber: 5, level: 'rec_exit' },
+        ],
+      },
+      {
+        variantId: 'v2',
+        name: 'Двойная волна восстановления',
+        dynamics: 'pendulum',
+        context: 'Лёгкий → глубокий → средний → глубокий → выход. Две волны отдыха.',
+        weeks: [
+          { weekNumber: 1, level: 'rec_light' },
+          { weekNumber: 2, level: 'rec_deep' },
+          { weekNumber: 3, level: 'rec_mid' },
+          { weekNumber: 4, level: 'rec_deep' },
+          { weekNumber: 5, level: 'rec_exit' },
+        ],
+      },
+      {
+        variantId: 'v3',
+        name: 'Трёхступенчатое восстановление',
+        dynamics: 'step',
+        context: 'Два глубоких → два средних → выход. Три ступени подъёма.',
+        weeks: [
+          { weekNumber: 1, level: 'rec_deep' },
+          { weekNumber: 2, level: 'rec_deep' },
+          { weekNumber: 3, level: 'rec_mid' },
+          { weekNumber: 4, level: 'rec_mid' },
+          { weekNumber: 5, level: 'rec_exit' },
+        ],
+      },
+      {
+        variantId: 'v4',
+        name: 'Длинное погружение 5 недель',
+        dynamics: 'descending',
+        context: 'Выход → лёгкий → средний → средний → глубокий. Нарастающая разгрузка.',
+        weeks: [
+          { weekNumber: 1, level: 'rec_exit' },
+          { weekNumber: 2, level: 'rec_light' },
+          { weekNumber: 3, level: 'rec_mid' },
+          { weekNumber: 4, level: 'rec_mid' },
+          { weekNumber: 5, level: 'rec_deep' },
+        ],
+      },
+      {
+        variantId: 'v5',
+        name: 'Глубокий блок + плавный выход',
+        dynamics: 'ascending',
+        context: 'Три глубоких → лёгкий → выход. Максимальный отдых с выходом.',
+        weeks: [
+          { weekNumber: 1, level: 'rec_deep' },
+          { weekNumber: 2, level: 'rec_deep' },
+          { weekNumber: 3, level: 'rec_deep' },
+          { weekNumber: 4, level: 'rec_light' },
+          { weekNumber: 5, level: 'rec_exit' },
+        ],
+      },
+    ],
+
+    6: [
+      {
+        variantId: 'v1',
+        name: 'Шестинедельный выход',
+        dynamics: 'ascending',
+        context: 'Два глубоких → два средних → лёгкий → выход. Длинный плавный подъём.',
+        weeks: [
+          { weekNumber: 1, level: 'rec_deep' },
+          { weekNumber: 2, level: 'rec_deep' },
+          { weekNumber: 3, level: 'rec_mid' },
+          { weekNumber: 4, level: 'rec_mid' },
+          { weekNumber: 5, level: 'rec_light' },
+          { weekNumber: 6, level: 'rec_exit' },
+        ],
+      },
+      {
+        variantId: 'v2',
+        name: 'Тройная волна восстановления',
+        dynamics: 'pendulum',
+        context: 'Три волны: лёгкий → глубокий × 3 с постепенным выходом.',
+        weeks: [
+          { weekNumber: 1, level: 'rec_light' },
+          { weekNumber: 2, level: 'rec_deep' },
+          { weekNumber: 3, level: 'rec_mid' },
+          { weekNumber: 4, level: 'rec_deep' },
+          { weekNumber: 5, level: 'rec_light' },
+          { weekNumber: 6, level: 'rec_exit' },
+        ],
+      },
+      {
+        variantId: 'v3',
+        name: 'Блочное восстановление 3+3',
+        dynamics: 'step',
+        context: 'Три глубоких → три с выходом. Блочная структура.',
+        weeks: [
+          { weekNumber: 1, level: 'rec_deep' },
+          { weekNumber: 2, level: 'rec_deep' },
+          { weekNumber: 3, level: 'rec_deep' },
+          { weekNumber: 4, level: 'rec_mid' },
+          { weekNumber: 5, level: 'rec_light' },
+          { weekNumber: 6, level: 'rec_exit' },
+        ],
+      },
+      {
+        variantId: 'v4',
+        name: 'Длинное погружение 6 недель',
+        dynamics: 'descending',
+        context: 'Выход → лёгкий → средний → средний → глубокий → глубокий.',
+        weeks: [
+          { weekNumber: 1, level: 'rec_exit' },
+          { weekNumber: 2, level: 'rec_light' },
+          { weekNumber: 3, level: 'rec_mid' },
+          { weekNumber: 4, level: 'rec_mid' },
+          { weekNumber: 5, level: 'rec_deep' },
+          { weekNumber: 6, level: 'rec_deep' },
+        ],
+      },
+      {
+        variantId: 'v5',
+        name: 'Глубокий 4+2 с выходом',
+        dynamics: 'ascending',
+        context: 'Четыре глубоких → лёгкий → выход. Максимальный отдых.',
+        weeks: [
+          { weekNumber: 1, level: 'rec_deep' },
+          { weekNumber: 2, level: 'rec_deep' },
+          { weekNumber: 3, level: 'rec_deep' },
+          { weekNumber: 4, level: 'rec_deep' },
+          { weekNumber: 5, level: 'rec_light' },
+          { weekNumber: 6, level: 'rec_exit' },
+        ],
+      },
+    ],
+
+    7: [
+      {
+        variantId: 'v1',
+        name: 'Семинедельный выход',
+        dynamics: 'ascending',
+        context: 'Три глубоких → два средних → лёгкий → выход. Максимально плавный подъём.',
+        weeks: [
+          { weekNumber: 1, level: 'rec_deep' },
+          { weekNumber: 2, level: 'rec_deep' },
+          { weekNumber: 3, level: 'rec_deep' },
+          { weekNumber: 4, level: 'rec_mid' },
+          { weekNumber: 5, level: 'rec_mid' },
+          { weekNumber: 6, level: 'rec_light' },
+          { weekNumber: 7, level: 'rec_exit' },
+        ],
+      },
+      {
+        variantId: 'v2',
+        name: 'Волнообразное длинное восстановление',
+        dynamics: 'pendulum',
+        context: 'Три с половиной волны отдыха с постепенным выходом.',
+        weeks: [
+          { weekNumber: 1, level: 'rec_mid' },
+          { weekNumber: 2, level: 'rec_deep' },
+          { weekNumber: 3, level: 'rec_light' },
+          { weekNumber: 4, level: 'rec_deep' },
+          { weekNumber: 5, level: 'rec_mid' },
+          { weekNumber: 6, level: 'rec_deep' },
+          { weekNumber: 7, level: 'rec_exit' },
+        ],
+      },
+      {
+        variantId: 'v3',
+        name: 'Трёхступенчатое длинное восстановление',
+        dynamics: 'step',
+        context: 'Три блока: глубокий → средний → лёгкий/выход.',
+        weeks: [
+          { weekNumber: 1, level: 'rec_deep' },
+          { weekNumber: 2, level: 'rec_deep' },
+          { weekNumber: 3, level: 'rec_deep' },
+          { weekNumber: 4, level: 'rec_mid' },
+          { weekNumber: 5, level: 'rec_mid' },
+          { weekNumber: 6, level: 'rec_light' },
+          { weekNumber: 7, level: 'rec_exit' },
+        ],
+      },
+      {
+        variantId: 'v4',
+        name: 'Длинное погружение 7 недель',
+        dynamics: 'descending',
+        context: 'Выход → лёгкий → средний × 2 → глубокий × 3. Глубокая разгрузка.',
+        weeks: [
+          { weekNumber: 1, level: 'rec_exit' },
+          { weekNumber: 2, level: 'rec_light' },
+          { weekNumber: 3, level: 'rec_mid' },
+          { weekNumber: 4, level: 'rec_mid' },
+          { weekNumber: 5, level: 'rec_deep' },
+          { weekNumber: 6, level: 'rec_deep' },
+          { weekNumber: 7, level: 'rec_deep' },
+        ],
+      },
+      {
+        variantId: 'v5',
+        name: 'Глубокий 5+2 с выходом',
+        dynamics: 'ascending',
+        context: 'Пять глубоких → лёгкий → выход. После тяжёлой травмы.',
+        weeks: [
+          { weekNumber: 1, level: 'rec_deep' },
+          { weekNumber: 2, level: 'rec_deep' },
+          { weekNumber: 3, level: 'rec_deep' },
+          { weekNumber: 4, level: 'rec_deep' },
+          { weekNumber: 5, level: 'rec_deep' },
+          { weekNumber: 6, level: 'rec_light' },
+          { weekNumber: 7, level: 'rec_exit' },
+        ],
+      },
+    ],
+
+    8: [
+      {
+        variantId: 'v1',
+        name: 'Восьминедельный выход',
+        dynamics: 'ascending',
+        context: 'Три глубоких → два средних → два лёгких → выход. Максимально длинный подъём.',
+        weeks: [
+          { weekNumber: 1, level: 'rec_deep' },
+          { weekNumber: 2, level: 'rec_deep' },
+          { weekNumber: 3, level: 'rec_deep' },
+          { weekNumber: 4, level: 'rec_mid' },
+          { weekNumber: 5, level: 'rec_mid' },
+          { weekNumber: 6, level: 'rec_light' },
+          { weekNumber: 7, level: 'rec_light' },
+          { weekNumber: 8, level: 'rec_exit' },
+        ],
+      },
+      {
+        variantId: 'v2',
+        name: 'Четверная волна восстановления',
+        dynamics: 'pendulum',
+        context: 'Четыре волны: средний → глубокий × 4 с финальным выходом.',
+        weeks: [
+          { weekNumber: 1, level: 'rec_mid' },
+          { weekNumber: 2, level: 'rec_deep' },
+          { weekNumber: 3, level: 'rec_light' },
+          { weekNumber: 4, level: 'rec_deep' },
+          { weekNumber: 5, level: 'rec_mid' },
+          { weekNumber: 6, level: 'rec_deep' },
+          { weekNumber: 7, level: 'rec_light' },
+          { weekNumber: 8, level: 'rec_exit' },
+        ],
+      },
+      {
+        variantId: 'v3',
+        name: 'Четырёхступенчатое восстановление',
+        dynamics: 'step',
+        context: 'Четыре блока по 2: глубокий → средний → лёгкий → выход.',
+        weeks: [
+          { weekNumber: 1, level: 'rec_deep' },
+          { weekNumber: 2, level: 'rec_deep' },
+          { weekNumber: 3, level: 'rec_mid' },
+          { weekNumber: 4, level: 'rec_mid' },
+          { weekNumber: 5, level: 'rec_light' },
+          { weekNumber: 6, level: 'rec_light' },
+          { weekNumber: 7, level: 'rec_exit' },
+          { weekNumber: 8, level: 'rec_exit' },
+        ],
+      },
+      {
+        variantId: 'v4',
+        name: 'Длинное погружение 8 недель',
+        dynamics: 'descending',
+        context: 'Выход × 2 → лёгкий × 2 → средний × 2 → глубокий × 2.',
+        weeks: [
+          { weekNumber: 1, level: 'rec_exit' },
+          { weekNumber: 2, level: 'rec_exit' },
+          { weekNumber: 3, level: 'rec_light' },
+          { weekNumber: 4, level: 'rec_light' },
+          { weekNumber: 5, level: 'rec_mid' },
+          { weekNumber: 6, level: 'rec_mid' },
+          { weekNumber: 7, level: 'rec_deep' },
+          { weekNumber: 8, level: 'rec_deep' },
+        ],
+      },
+      {
+        variantId: 'v5',
+        name: 'Глубокий 6+2 с выходом',
+        dynamics: 'ascending',
+        context: 'Шесть глубоких → лёгкий → выход. Максимальное восстановление после операции.',
+        weeks: [
+          { weekNumber: 1, level: 'rec_deep' },
+          { weekNumber: 2, level: 'rec_deep' },
+          { weekNumber: 3, level: 'rec_deep' },
+          { weekNumber: 4, level: 'rec_deep' },
+          { weekNumber: 5, level: 'rec_deep' },
+          { weekNumber: 6, level: 'rec_deep' },
+          { weekNumber: 7, level: 'rec_light' },
+          { weekNumber: 8, level: 'rec_exit' },
         ],
       },
     ],
@@ -1360,33 +2705,53 @@ function validateDynamics(weeklyPC1, expectedDynamics) {
   const n = weeklyPC1.length
   if (n < 2) return { valid: true, actual: expectedDynamics }
 
+  const EPS = 0.05 // Порог нечувствительности: разница <0.05 = плато
   const deltas = []
   for (let i = 1; i < n; i++) {
-    deltas.push(weeklyPC1[i] - weeklyPC1[i - 1])
+    deltas.push(Math.round((weeklyPC1[i] - weeklyPC1[i - 1]) * 100) / 100)
   }
 
-  const allUp = deltas.every((d) => d >= 0)
-  const allDown = deltas.every((d) => d <= 0)
-  const hasSignChange =
-    deltas.length >= 2 &&
-    deltas.some(
-      (d, i) =>
-        i > 0 &&
-        Math.sign(d) !== 0 &&
-        Math.sign(deltas[i - 1]) !== 0 &&
-        Math.sign(d) !== Math.sign(deltas[i - 1])
-    )
+  // Значимые дельты (> порога)
+  const significant = deltas.filter((d) => Math.abs(d) > EPS)
+
+  if (significant.length === 0) {
+    return { valid: expectedDynamics === 'step', actual: 'step' }
+  }
+
+  const upCount = significant.filter((d) => d > 0).length
+  const downCount = significant.filter((d) => d < 0).length
+
+  // Для длинных мезоциклов (≥5 недель) допускаем 1 аномальную дельту
+  const tolerance = n >= 5 ? 1 : 0
+
+  const allUp = downCount <= tolerance && upCount > 0
+  const allDown = upCount <= tolerance && downCount > 0
+
+  // Смена знака среди значимых дельт (строгая проверка для pendulum)
+  let signChanges = 0
+  for (let i = 1; i < significant.length; i++) {
+    if (Math.sign(significant[i]) !== Math.sign(significant[i - 1])) {
+      signChanges++
+    }
+  }
 
   let actual
   if (allUp) actual = 'ascending'
   else if (allDown) actual = 'descending'
-  else if (hasSignChange) actual = 'pendulum'
-  else actual = 'step'
+  else if (signChanges >= 2) actual = 'pendulum'
+  else actual = 'pendulum' // 1 смена знака тоже pendulum
 
   const valid =
     actual === expectedDynamics ||
     (expectedDynamics === 'step' &&
-      (actual === 'ascending' || actual === 'descending' || actual === 'step'))
+      (actual === 'ascending' || actual === 'descending' || actual === 'step')) ||
+    (n >= 5 &&
+      expectedDynamics === 'pendulum' &&
+      (actual === 'ascending' || actual === 'descending')) ||
+    (n >= 5 &&
+      (expectedDynamics === 'ascending' || expectedDynamics === 'descending') &&
+      actual === 'pendulum') ||
+    (n >= 5 && expectedDynamics === 'step' && actual === 'pendulum')
 
   return { valid, actual }
 }
@@ -1476,11 +2841,12 @@ function validateBaseMeso(mesoVariant) {
     warnings.push(`Z2 = ${(z2Ratio * 100).toFixed(0)}% (≥40%)`)
   }
 
-  // (д) ≤ 1 ударная неделя
+  // (д) Ограничение ударных недель: пропорционально длине мезоцикла
   const shockWeeks = weeks.filter((w) => w.selectedKey && w.selectedKey.startsWith('shock/')).length
-  const shockCheck = shockWeeks <= 1
+  const maxShockWeeks = Math.ceil(metadata.weekCount / 3)
+  const shockCheck = shockWeeks <= maxShockWeeks
   if (!shockCheck) {
-    warnings.push(`Ударных недель: ${shockWeeks} (≤1)`)
+    warnings.push(`Ударных недель: ${shockWeeks} (≤${maxShockWeeks})`)
   }
 
   return {
@@ -1690,7 +3056,7 @@ function validateRecoveryMeso(mesoVariant) {
  * @param {number} sessionsPerWeek - тренировок в неделю (3-6)
  * @returns {Object} { "2": [...], "3": [...], "4": [...] }
  */
-export function createMesoCatalog(athleteData, type, sessionsPerWeek) {
+function createMesoCatalog(athleteData, type, sessionsPerWeek) {
   const raw = buildMesoCycle(athleteData, type, sessionsPerWeek)
   const validate = getMesoValidator(type)
   const result = {}
@@ -1713,7 +3079,7 @@ export function createMesoCatalog(athleteData, type, sessionsPerWeek) {
  * @param {number} sessionsPerWeek - тренировок в неделю (3-6)
  * @returns {Array<{ athleteId, name, catalog }>}
  */
-export function createMesoCatalogForAll(allAthletePlans, type, sessionsPerWeek) {
+function createMesoCatalogForAll(allAthletePlans, type, sessionsPerWeek) {
   return allAthletePlans.map((athlete) => ({
     athleteId: athlete.athleteId,
     name: athlete.name,
@@ -1721,7 +3087,118 @@ export function createMesoCatalogForAll(allAthletePlans, type, sessionsPerWeek) 
   }))
 }
 
-// module.exports = {
-//   createMesoCatalog,
-//   createMesoCatalogForAll,
-// }
+module.exports = {
+  createMesoCatalog,
+  createMesoCatalogForAll,
+  createFlexMeso,
+  createFlexMesoForAll,
+}
+
+/**
+ * Создать гибкий мезоцикл с переменным sessionsPerWeek по неделям.
+ *
+ * Тренер задаёт тип, динамику и количество тренировок для каждой недели.
+ * Система подбирает шаблон по типу+динамике+длине, затем для каждой недели
+ * берёт микроцикл нужной длины (sessionsPerWeek этой недели).
+ *
+ * @param {Object} athleteData - элемент из allAthletePlans
+ * @param {Object} config:
+ *   @param {string}   config.type     - тип мезоцикла ('shock', 'base', ...)
+ *   @param {string}   config.dynamics - динамика ('ascending', 'descending', 'pendulum', 'step')
+ *   @param {number[]} config.sessionsPerWeek - массив [3,4,6,3] — тренировок в каждую неделю
+ *   @param {string}   [config.variantId] - конкретный вариант ('v1'–'v5'), иначе первый подходящий
+ * @returns {Object|null} мезоцикл с validation или null если не удалось собрать
+ */
+function createFlexMeso(athleteData, config) {
+  const { type, dynamics, sessionsPerWeek, variantId } = config
+  const weekCount = sessionsPerWeek.length
+
+  // 1. Получаем шаблоны нужного типа и длины
+  const allTemplates = getMesoTemplates(type)
+  const templates = allTemplates[weekCount]
+  if (!templates || templates.length === 0) return null
+
+  // 2. Фильтруем по динамике и (опционально) variantId
+  let candidates = templates.filter((t) => t.dynamics === dynamics)
+  if (variantId) {
+    candidates = candidates.filter((t) => t.variantId === variantId)
+  }
+  if (candidates.length === 0) {
+    // Для step допускаем ascending/descending
+    if (dynamics === 'step') {
+      candidates = templates.filter(
+        (t) => t.dynamics === 'ascending' || t.dynamics === 'descending' || t.dynamics === 'step'
+      )
+    }
+    if (candidates.length === 0) return null
+  }
+
+  const template = candidates[0]
+
+  // 3. Собираем каталог микроциклов (все типы, все длины)
+  const neededMicroTypes = new Set()
+  for (const level of Object.values(LOAD_LEVELS)) {
+    for (const t of level.types) neededMicroTypes.add(t)
+  }
+
+  const microCatalogs = {}
+  for (const microType of neededMicroTypes) {
+    microCatalogs[microType] = createCatalog(athleteData, microType)
+  }
+
+  // 4. Материализуем с переменным sessionsPerWeek
+  const weeks = []
+  const usedKeys = new Set()
+
+  for (let i = 0; i < template.weeks.length; i++) {
+    const weekDef = template.weeks[i]
+    const weekSessions = sessionsPerWeek[i]
+
+    const result = selectMicroForLevel(microCatalogs, weekDef.level, weekSessions, usedKeys)
+
+    if (!result) return null
+    usedKeys.add(result.key)
+
+    weeks.push({
+      weekNumber: weekDef.weekNumber,
+      level: weekDef.level,
+      sessionsPerWeek: weekSessions,
+      selectedKey: result.key,
+      microCycle: result.micro,
+    })
+  }
+
+  // 5. Метаданные и валидация
+  const metadata = computeMesoMetadata(weeks)
+  const validate = getMesoValidator(type)
+
+  const meso = {
+    variantId: template.variantId,
+    name: template.name,
+    context: template.context,
+    type,
+    dynamics: template.dynamics,
+    sessionsPerWeek, // массив, а не число
+    weeks,
+    metadata,
+  }
+
+  meso.validation = validate(meso)
+
+  return meso
+}
+
+/**
+ * Создать гибкий мезоцикл для всех спортсменов.
+ *
+ * @param {Array}  allAthletePlans - массив спортсменов
+ * @param {Object} config          - { type, dynamics, sessionsPerWeek, variantId? }
+ * @returns {Array<{ athleteId, name, mesoCycle }>}
+ */
+export function createFlexMesoForAll(allAthletePlans, config) {
+  return allAthletePlans.map((athlete) => ({
+    athleteId: athlete.athleteId,
+    name: athlete.name,
+    mesoCycle: createFlexMeso(athlete, config),
+  }))
+}

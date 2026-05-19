@@ -48,6 +48,17 @@ export type AllCatalogsByType = {
   recovery: MicrocycleCatalogRow[];
 };
 
+export type ComputedAthletePlan = {
+  athleteId: string;
+  name: string;
+  baseline: {
+    V: number;
+    P: number;
+    R: number;
+  };
+  plan: unknown;
+};
+
 const createId = () => {
   try {
     const c = globalThis.crypto as Crypto | undefined;
@@ -84,6 +95,7 @@ export const useAthletesStore = defineStore("athletes", {
   state: () => ({
     athletes: [createAthlete(1)] as Athlete[],
     allCatalogsByType: null as AllCatalogsByType | null,
+    allAthletePlans: null as ComputedAthletePlan[] | null,
   }),
   actions: {
     setAthleteCount(count: number) {
@@ -137,6 +149,10 @@ export const useAthletesStore = defineStore("athletes", {
 
     setAllCatalogsByType(payload: AllCatalogsByType | null) {
       this.allCatalogsByType = payload;
+    },
+
+    setAllAthletePlans(payload: ComputedAthletePlan[] | null) {
+      this.allAthletePlans = payload;
     },
   },
 });

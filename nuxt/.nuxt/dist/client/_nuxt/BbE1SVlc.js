@@ -1,1 +1,0 @@
-import{C as e}from"./DM-vm3pj.js";import{j as o,C as t,o as s}from"./DsoWlV74.js";const p=o({__name:"models",setup(a){return(n,r)=>(s(),t(e,{slug:"models",title:"Модели микроциклов"}))}});export{p as default};

@@ -41,7 +41,7 @@ export { PlannedSession, PlannedWeek, Plan, MarkerKey, Coeffs, VariantSettings, 
 export { postulateIds, planVariants } from '../utils/plannerVariants';
 export { ridgeFit, loocvLambda, RidgeResult } from '../utils/ridge';
 export { useDataPreperationPCAStore } from '../stores/DataPreperationPCA';
-export { useAthletesStore, Row, RestBaseline, Athlete, SessionCountKey, MicrocycleCatalogByLength, MicrocycleCatalogRow, AllCatalogsByType } from '../stores/athletes';
+export { useAthletesStore, Row, RestBaseline, Athlete, SessionCountKey, MicrocycleCatalogByLength, MicrocycleCatalogRow, AllCatalogsByType, ComputedAthletePlan } from '../stores/athletes';
 export { useMvpStore, MvpPreview, MvpLoad5Set, MedicalTestResult, OcrItem, MvpAnalysisResult } from '../stores/mvp';
 export { defineStore, acceptHMRUpdate, usePinia, storeToRefs } from '../node_modules/@pinia/nuxt/dist/runtime/composables';
 export { useNuxtDevTools } from '../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools';

@@ -1,5 +1,10 @@
 import { nextTick } from 'vue'
-import { useAthletesStore, type AllCatalogsByType, type Athlete } from '../../../../stores/athletes'
+import {
+  useAthletesStore,
+  type AllCatalogsByType,
+  type Athlete,
+  type ComputedAthletePlan,
+} from '../../../../stores/athletes'
 import { useDataPreperationPCAStore } from '../../../../stores/DataPreperationPCA'
 import type { Plan, PlanVariantId } from '../../../../utils/plannerTypes'
 import {
@@ -67,7 +72,7 @@ import { calculateLoadRanges, exploreStrategy } from './Inverse_task_function'
 
 import { createCatalogForAll } from './microcycle'
 
-import { createMesoCatalogForAll } from './mezocycle'
+import { createFlexMesoForAll } from './mezocycle'
 
 export async function runModel(params: {
   athletes: Athlete[]
@@ -354,6 +359,7 @@ export async function runModel(params: {
       plan,
     }
   })
+  athletesStore.setAllAthletePlans(allAthletePlans as ComputedAthletePlan[])
 
   // console.log('allAthletePlans:', allAthletePlans)
   // 'recovery_intro' | 'base' | 'shock' | 'taper' | 'recovery'
@@ -375,30 +381,71 @@ export async function runModel(params: {
 
   console.log('allCatalogsByType:', allCatalogsByType)
   athletesStore.setAllCatalogsByType(allCatalogsByType)
+
+  //createFlexMesoForAll
+
   // console.log('recoveryIntroCatalogs:', recoveryIntroCatalogs)
   // console.log('baseCatalogs:', baseCatalogs)
   // console.log('taperCatalogs:', taperCatalogs)
   // console.log('recoveryCatalogs:', recoveryCatalogs)
 
   //// Мезоциклы
+
   // Мезоциклы (например, для 4 тренировок в неделю)
-  const sessionsPerWeek = 4
+  // const sessionsPerWeek = 4
 
-  const mesoRecoveryIntro = createMesoCatalogForAll(
-    allAthletePlans,
-    'recovery_intro',
-    sessionsPerWeek
-  )
-  const mesoBase = createMesoCatalogForAll(allAthletePlans, 'base', sessionsPerWeek)
-  const mesoShock = createMesoCatalogForAll(allAthletePlans, 'shock', sessionsPerWeek)
-  const mesoTaper = createMesoCatalogForAll(allAthletePlans, 'taper', sessionsPerWeek)
-  const mesoRecovery = createMesoCatalogForAll(allAthletePlans, 'recovery', sessionsPerWeek)
+  // const mesoRecoveryIntro = createMesoCatalogForAll(
+  //   allAthletePlans,
+  //   'recovery_intro',
+  //   sessionsPerWeek
+  // )
 
-  // console.log('mesoRecoveryIntro:', mesoRecoveryIntro)
-  //console.log('mesoBase:', mesoBase)
-  // console.log('mesoShock:', mesoShock)
-  // console.log('mesoTaper:', mesoTaper)
-  // console.log('mesoRecovery:', mesoRecovery)
+  // const mesoBase = createMesoCatalogForAll(allAthletePlans, 'base', sessionsPerWeek)
+  // const mesoShock = createMesoCatalogForAll(allAthletePlans, 'shock', sessionsPerWeek)
+  // const mesoTaper = createMesoCatalogForAll(allAthletePlans, 'taper', sessionsPerWeek)
+  // const mesoRecovery = createMesoCatalogForAll(allAthletePlans, 'recovery', sessionsPerWeek)
+
+  // // console.log('mesoRecoveryIntro:', mesoRecoveryIntro)
+  // //console.log('mesoBase:', mesoBase)
+  // // console.log('mesoShock:', mesoShock)
+  // // console.log('mesoTaper:', mesoTaper)
+  // // console.log('mesoRecovery:', mesoRecovery)
+
+  // // Собираем для всех возможных частот (3-6 трен./нед.) и группируем по длине цикла (2-8 недель)
+  // const mesoTypes = ['recovery_intro', 'base', 'shock', 'taper', 'recovery'] as const
+  // const sessionsPerWeekOptions = [3, 4, 5, 6] as const
+  // const mesoWeekKeys = ['2', '3', '4', '5', '6', '7', '8'] as const
+
+  // const mesoCatalogsByWeek: Record<string, unknown[]> = Object.fromEntries(
+  //   mesoWeekKeys.map((week) => [week, [] as unknown[]])
+  // )
+
+  // for (const sessionsPerWeek of sessionsPerWeekOptions) {
+  //   for (const mesoType of mesoTypes) {
+  //     const mesoCatalogForType = createMesoCatalogForAll(allAthletePlans, mesoType, sessionsPerWeek)
+
+  //     for (const athleteCatalog of mesoCatalogForType) {
+  //       const catalogByWeeks = athleteCatalog.catalog ?? {}
+
+  //       for (const [weekCount, variants] of Object.entries(catalogByWeeks)) {
+  //         if (!Array.isArray(variants)) continue
+  //         if (!mesoCatalogsByWeek[weekCount]) mesoCatalogsByWeek[weekCount] = []
+
+  //         for (const variant of variants) {
+  //           mesoCatalogsByWeek[weekCount].push({
+  //             athleteId: athleteCatalog.athleteId,
+  //             name: athleteCatalog.name,
+  //             type: mesoType,
+  //             sessionsPerWeek,
+  //             ...(variant as Record<string, unknown>),
+  //           })
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+
+  // console.log('mesoCatalogsByWeek:', mesoCatalogsByWeek)
 
   params.ensureRowsForAllAthletes()
 
